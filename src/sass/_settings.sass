@@ -1,0 +1,36 @@
+*
+  box-sizing: border-box
+  &::-webkit-scrollbar
+    width: 10px
+    background-color: rgba(26, 24, 47, 0.15)
+    border-radius: 5px
+    height: 200px
+  &::-webkit-scrollbar-thumb
+    background: darken($main, 5)
+    border-radius: 5px
+    width: 5px
+    transition: 200ms
+  &::-webkit-scrollbar-track
+    background: $black
+  &::-webkit-scrollbar-thumb:hover
+    background: darken($main, 10)
+  &::selection
+    background: $contrast
+    color: $black
+
+@font-face
+  font-family: 'Druk Wide'
+  src: url('../fonts/DrukCyr-Medium.eot')
+  src: local('Druk Cyr Medium'), local('DrukCyr-Medium'), url('../fonts/DrukCyr-Medium.eot?#iefix') format('embedded-opentype'), url('../fonts/DrukCyr-Medium.woff2') format('woff2'), url('../fonts/DrukCyr-Medium.woff') format('woff'), url('../fonts/DrukCyr-Medium.ttf') format('truetype')
+  font-weight: 500
+  font-style: normal
+
+body
+  margin: 0
+  font-family: 'Montserrat', sans-serif
+  background: $white
+  overflow-x: hidden
+
+.container
+  width: 94.5%
+  margin: auto
