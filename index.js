@@ -5,7 +5,7 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 
 const url500 = 'https://admiralmarkets.com/ru/education/articles/trading-instruments/index-sp500-trading';
-const urlTrade = 'https://ru.tradingview.com/chart/?symbol=NASDAQ%3A';
+const urlTrade = 'https://ru.tradingview.com/chart/?symbol=';
 
 let table500 = [];
 
@@ -42,9 +42,7 @@ let getTradingData = (html, i) => {
 //get s&p500 table
 
 async function get500() {
-  const nightmare = Nightmare({
-    show: true
-  });
+  const nightmare = Nightmare();
 
   await nightmare
     .goto(url500)
@@ -62,9 +60,7 @@ async function get500() {
 //get price from trading view
 
 async function getPrices(url, i) {
-  const nightmare = Nightmare({
-    show: true
-  });
+  const nightmare = Nightmare();
 
   await nightmare
     .goto(url)
