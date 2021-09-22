@@ -1,5 +1,17 @@
 .greetings
-  position: relative
-  display: flex
-  align-items: center
-  height: 110vh
+  display: grid
+  grid-template-columns: 1fr
+  background: black
+  grid-row-gap: 2px
+  width: 980px
+  margin: auto
+  border: 2px solid black
+
+.row
+  display: grid
+  grid-auto-flow: column
+  grid-auto-columns: 1fr
+  grid-column-gap: 2px
+  &>*
+    padding: 10px
+    background: white
