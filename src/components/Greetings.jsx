@@ -5,6 +5,9 @@ import React, {Suspense, useEffect, useState} from 'react';
 const Table = ({data}) => data.map((element, i) => (
       <div key={i} className="row">
         <span>
+          {i+1}
+        </span>
+        <span>
           {element.symbol}
         </span>
         <span>
