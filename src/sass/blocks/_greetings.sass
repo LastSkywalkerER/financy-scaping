@@ -10,11 +10,11 @@
 .row
   display: grid
   grid-auto-flow: column
-  grid-template-columns: 50px
+  grid-template-columns: 50px 100px 300px
   grid-auto-columns: 1fr
   grid-column-gap: 2px
   &>*
     padding: 10px
     background: white
-    &:nth-child(1)
+    &:nth-child(1), &:nth-child(2)
       text-align: center

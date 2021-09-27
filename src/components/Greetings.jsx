@@ -7,18 +7,22 @@ const Table = ({data}) => data.map((element, i) => (
         <span>
           {i+1}
         </span>
-        <span>
-          {element.symbol}
-        </span>
-        <span>
-          {element.sector}
-        </span>
-        <span>
-          {element.price}
-        </span>
-        <span>
-          {element.currency}
-        </span>
+        {
+          (() => {
+            let row = [];
+
+            for (let key in element) {
+
+              row.push(<span key={key}>
+                {element[key]}
+              </span>);
+
+              
+            }
+
+            return row;
+          })()
+        }
       </div>
     ))
 

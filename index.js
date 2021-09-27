@@ -5,7 +5,7 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 
 const url500 = 'https://admiralmarkets.com/ru/education/articles/trading-instruments/index-sp500-trading';
-const urlTrade = 'https://ru.tradingview.com/chart/?symbol=';
+const urlTrade = 'https://finviz.com/quote.ashx?t=';
 
 let table500 = [];
 
@@ -29,13 +29,29 @@ let getData500 = html => {
 let getTradingData = (html, i) => {
   const $ = cheerio.load(html);
 
-  let price = $('span.priceWrapper-3PT2D-PK').find('span.highlight-2GhssDiZ.price-3PT2D-PK').text();
-  let currency = $('span.priceWrapper-3PT2D-PK').find('span.currency-3PT2D-PK').text();
+  let price = $('div.fv-container').find('table:nth-child(2) tr:nth-child(11) td:last-child b').text();
+  let pe = $('div.fv-container').find('table:nth-child(2) tr:nth-child(1) td:nth-child(4) b').text();
+  let lt = $('div.fv-container').find('table:nth-child(2) tr:nth-child(11) td:nth-child(4) span').text();
+  let eps = $('div.fv-container').find('table:nth-child(2) tr:nth-child(1) td:nth-child(6) b').text();
+  let roa = $('div.fv-container').find('table:nth-child(2) tr:nth-child(5) td:nth-child(8) span').text();
+  let roe = $('div.fv-container').find('table:nth-child(2) tr:nth-child(6) td:nth-child(8) span').text();
+  let roi = $('div.fv-container').find('table:nth-child(2) tr:nth-child(7) td:nth-child(8) span').text();
+  let payout = $('div.fv-container').find('table:nth-child(2) tr:nth-child(11) td:nth-child(8) b').text();
+  let volatility = $('div.fv-container').find('table:nth-child(2) tr:nth-child(9) td:last-child small').text();
 
   if (price) {
     table500[i].price = price;
-    table500[i].currency = currency;
+    table500[i].pe = pe;
+    table500[i].lt = lt;
+    table500[i].eps = eps;
+    table500[i].roa = roa;
+    table500[i].roe = roe;
+    table500[i].rdoi = roi;
+    table500[i].payout = payout;
+    table500[i].volatility = volatility;
   }
+
+  console.log(i + ' ' + table500[i].symbol + ' ' + price);
 
 }
 
@@ -65,7 +81,7 @@ async function getPrices(url, i) {
   await nightmare
     .goto(url)
     .wait('body')
-    .wait('span.priceWrapper-3PT2D-PK')
+    .wait('div.fv-container')
     .evaluate(() => document.querySelector('body').innerHTML)
     .end()
     .then(response => {
@@ -83,9 +99,12 @@ async function runScrap() {
     await getPrices(urlTrade + table500[i].symbol, i);
   }
 
-  await console.log(table500);
+  // await console.log(table500);
 
   await fs.writeFileSync('./src/static/db/table.json', JSON.stringify(table500));
+
+  await console.log("Info scraped succesfully!");
+
 
 }
 
