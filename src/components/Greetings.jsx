@@ -2,7 +2,21 @@
 
 import React, {Suspense, useEffect, useState} from 'react';
 
-const Table = ({data}) => data.map((element, i) => (
+const Table = ({data}) => {
+  return (
+    <>
+    <div className="row">
+      <span>
+        №
+      </span>
+    {Object.keys(data[0]).map(key => (
+      <span key={key}>
+        {key}
+      </span>
+    ))}
+    </div>
+  
+    {data.map((element, i) => (
       <div key={i} className="row">
         <span>
           {i+1}
@@ -24,7 +38,9 @@ const Table = ({data}) => data.map((element, i) => (
           })()
         }
       </div>
-    ))
+    ))}
+    </>
+    )}
 
 const Greetings = () => {  
 

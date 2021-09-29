@@ -9,6 +9,8 @@ const urlTrade = 'https://finviz.com/quote.ashx?t=';
 
 let table500 = [];
 
+let emptyCount = 0;
+
 let getData500 = html => {
   const $ = cheerio.load(html);
 
@@ -31,11 +33,11 @@ let getTradingData = (html, i) => {
 
   let price = $('div.fv-container').find('table:nth-child(2) tr:nth-child(11) td:last-child b').text();
   let pe = $('div.fv-container').find('table:nth-child(2) tr:nth-child(1) td:nth-child(4) b').text();
-  let lt = $('div.fv-container').find('table:nth-child(2) tr:nth-child(11) td:nth-child(4) span').text();
+  let lt = $('div.fv-container').find('table:nth-child(2) tr:nth-child(11) td:nth-child(4) b').text();
   let eps = $('div.fv-container').find('table:nth-child(2) tr:nth-child(1) td:nth-child(6) b').text();
-  let roa = $('div.fv-container').find('table:nth-child(2) tr:nth-child(5) td:nth-child(8) span').text();
-  let roe = $('div.fv-container').find('table:nth-child(2) tr:nth-child(6) td:nth-child(8) span').text();
-  let roi = $('div.fv-container').find('table:nth-child(2) tr:nth-child(7) td:nth-child(8) span').text();
+  let roa = $('div.fv-container').find('table:nth-child(2) tr:nth-child(5) td:nth-child(8) b').text();
+  let roe = $('div.fv-container').find('table:nth-child(2) tr:nth-child(6) td:nth-child(8) b').text();
+  let roi = $('div.fv-container').find('table:nth-child(2) tr:nth-child(7) td:nth-child(8) b').text();
   let payout = $('div.fv-container').find('table:nth-child(2) tr:nth-child(11) td:nth-child(8) b').text();
   let volatility = $('div.fv-container').find('table:nth-child(2) tr:nth-child(9) td:last-child small').text();
 
@@ -46,12 +48,12 @@ let getTradingData = (html, i) => {
     table500[i].eps = eps;
     table500[i].roa = roa;
     table500[i].roe = roe;
-    table500[i].rdoi = roi;
+    table500[i].roi = roi;
     table500[i].payout = payout;
     table500[i].volatility = volatility;
+  } else {
+    emptyCount++;
   }
-
-  console.log(i + ' ' + table500[i].symbol + ' ' + price);
 
 }
 
@@ -101,10 +103,11 @@ async function runScrap() {
 
   // await console.log(table500);
 
-  await fs.writeFileSync('./src/static/db/table.json', JSON.stringify(table500));
+  // await fs.writeFileSync('./src/static/db/table.json', JSON.stringify(table500));
 
   await console.log("Info scraped succesfully!");
-
+  await console.log("Empty tokens are" + emptyCount);
+  emptyCount = 0;
 
 }
 
