@@ -105,4 +105,6 @@ async function runScrap() {
 
 }
 
-runScrap();
+setInterval(() => {
+  runScrap();
+}, 3600000);
