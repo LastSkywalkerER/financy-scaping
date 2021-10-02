@@ -9,8 +9,6 @@ const urlTrade = 'https://finviz.com/quote.ashx?t=';
 
 let table500 = [];
 
-let emptyCount = 0;
-
 let getData500 = html => {
   const $ = cheerio.load(html);
 
@@ -21,6 +19,7 @@ let getData500 = html => {
 
     if (symbol && symbol !== 'Символ') {
       table500.push({
+        id: i,
         symbol: symbol,
         sector: sector
       });
@@ -41,19 +40,16 @@ let getTradingData = (html, i) => {
   let payout = $('div.fv-container').find('table:nth-child(2) tr:nth-child(11) td:nth-child(8) b').text();
   let volatility = $('div.fv-container').find('table:nth-child(2) tr:nth-child(9) td:last-child small').text();
 
-  if (price) {
-    table500[i].price = price;
-    table500[i].pe = pe;
-    table500[i].lt = lt;
-    table500[i].eps = eps;
-    table500[i].roa = roa;
-    table500[i].roe = roe;
-    table500[i].roi = roi;
-    table500[i].payout = payout;
-    table500[i].volatility = volatility;
-  } else {
-    emptyCount++;
-  }
+  table500[i].price = price;
+  table500[i].pe = pe;
+  table500[i].lt = lt;
+  table500[i].eps = eps;
+  table500[i].roa = roa;
+  table500[i].roe = roe;
+  table500[i].roi = roi;
+  table500[i].payout = payout;
+  table500[i].volatility = volatility;
+
 
 }
 
@@ -103,11 +99,9 @@ async function runScrap() {
 
   // await console.log(table500);
 
-  // await fs.writeFileSync('./src/static/db/table.json', JSON.stringify(table500));
+  await fs.writeFileSync('./src/static/db/table.json', JSON.stringify(table500));
 
   await console.log("Info scraped succesfully!");
-  await console.log("Empty tokens are" + emptyCount);
-  emptyCount = 0;
 
 }
 

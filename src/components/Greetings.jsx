@@ -1,84 +1,56 @@
 'use strict';
 
 import React, {Suspense, useEffect, useState} from 'react';
-
+import EnhancedTable from './EnhancedTable';
+import FilledInput from '@mui/material/FilledInput';
 
 
 const Greetings = () => {  
 
   const [data, updateData] = useState([]);
+  const [dataTable, updateDataTable] = useState({header: [], body: []});
+
+  const createTable = (rows) => {
+    let columns = [];
+
+    for (let key in rows[0]) {
+      columns.push(key);
+    }
+
+    updateDataTable({
+      header: columns,
+      body: rows
+    });
+  };
 
   useEffect(() => {
     const getData = async () => {
       const response = await fetch('../static/db/table.json');
       const json = await response.json();
       updateData(json);
+      createTable(json);
     };
 
     getData();
   }, []);
 
-  const sortColumn = (event) => {
-    const clickedText = event.nativeEvent.target.textContent;
 
-    const compareFunction = (a, b) => {
-      if (!isNaN(parseInt(a[clickedText])) && (parseInt(a[clickedText]) < parseInt(b[clickedText]))) {
-        return -1;
-      }
-      if (!isNaN(parseInt(b[clickedText])) && (parseInt(a[clickedText]) > parseInt(b[clickedText]))) {
-        return 1;
-      }
-      // a должно быть равным b
-      return 0;
-    };
-
-    updateData(data => [...data.sort(compareFunction)]);
-  };
-
-  const Table = () => {
-  
-    return (
-      <>
-      <div className="row">
-        <span>
-          №
-        </span>
-      {Object.keys(data[0]).map(key => (
-        <span style={{cursor: 'pointer', backgroundColor: 'gray'}} onClick={sortColumn} key={key}>
-          {key}
-        </span>
-      ))}
-      </div>
-    
-      {data.map((element, i) => (
-        <div key={i} className="row">
-          <span>
-            {i+1}
-          </span>
-          {
-            (() => {
-              let row = [];
-  
-              for (let key in element) {
-  
-                row.push(<span key={key}>
-                  {element[key]}
-                </span>);
-  
-                
-              }
-  
-              return row;
-            })()
-          }
-        </div>
-      ))}
-      </>
-      )}
+  const searchSector = (event) => {
+    updateDataTable(dataTable => ({
+      header: dataTable.header,
+      body: [...data.filter(elem => elem.sector.includes(event.target.value))]
+    }));
+  }
 
   return (
     <div className="greetings">
-      <input type="text" list='options'/>
+      <FilledInput
+            onChange={searchSector}
+            inputProps={{
+              list: 'options',
+              placeholder: 'Search sector'
+            }}
+          />
       <datalist id='options'>
         <option value="IT"></option>
         <option value="Интернет"></option>
@@ -87,9 +59,11 @@ const Greetings = () => {
         <option value="Здоровье"></option>
         <option value="Энергетика"></option>
       </datalist>
+      
       <Suspense fallback={<h1 style={{color: 'white'}} >Loading...</h1>}> 
-        {data.length && <Table/>}
+        {dataTable.header.length && <EnhancedTable dataTable={dataTable}/>}
       </Suspense>
+      
     </div>
     )
 }
