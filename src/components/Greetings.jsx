@@ -8,18 +8,25 @@ import FilledInput from '@mui/material/FilledInput';
 const Greetings = () => {  
 
   const [data, updateData] = useState([]);
-  const [dataTable, updateDataTable] = useState({header: [], body: []});
+  const [dataTable, updateDataTable] = useState({header: [], body: [], sectors: []});
 
   const createTable = (rows) => {
-    let columns = [];
+    let columns = [],
+        sectors = [];
 
     for (let key in rows[0]) {
       columns.push(key);
     }
 
+    rows.forEach(({sector}) => {
+      if (!Boolean(sectors.indexOf(sector)+1)) {
+        sectors.push(sector);
+      }
+    });
     updateDataTable({
       header: columns,
-      body: rows
+      body: rows,
+      sectors
     });
   };
 
@@ -38,9 +45,10 @@ const Greetings = () => {
   const searchSector = (event) => {
     updateDataTable(dataTable => ({
       header: dataTable.header,
-      body: [...data.filter(elem => elem.sector.includes(event.target.value))]
+      body: [...data.filter(elem => elem.sector.includes(event.target.value))],
+      sectors: dataTable.sectors
     }));
-  }
+  };
 
   return (
     <div className="greetings">
@@ -52,12 +60,7 @@ const Greetings = () => {
             }}
           />
       <datalist id='options'>
-        <option value="IT"></option>
-        <option value="Интернет"></option>
-        <option value="Банки"></option>
-        <option value="Финансы"></option>
-        <option value="Здоровье"></option>
-        <option value="Энергетика"></option>
+        {dataTable.sectors.map(sector => (<option key={sector} value={sector}></option>))}
       </datalist>
       
       <Suspense fallback={<h1 style={{color: 'white'}} >Loading...</h1>}> 
