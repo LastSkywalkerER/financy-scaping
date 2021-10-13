@@ -20,23 +20,31 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import { visuallyHidden } from '@mui/utils';
+import Filter from './Filter';
+import { ContextSelected } from './Context';
 
-export default function EnhancedTable({dataTable}) {
+export default function EnhancedTable({data}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('id');
-  const [selected, setSelected] = React.useState([]);
+  const [selected, setSelected] = React.useContext(ContextSelected);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  
-  const rows = dataTable.body;
-  const headCells = dataTable.header.map((name, i) => ({
+  const [dataTable, updateDataTable] = React.useState(data);
+
+  let rows = dataTable;
+  const headCells = Object.keys(data[0]).map((name, i) => ({
     id: name,
     numeric: ((name !== 'symbol') && (name !== 'sector') && (i !== 0)) ? true : false,
     disablePadding: false,
-    label: name,
+    label: name.toUpperCase(),
   }));
+
+  const filterTable = (filteredTable) => {
+      updateDataTable(filteredTable(data));
+  };
 
   function descendingComparator(a, b, orderBy) {
     if (!isNaN(parseInt(a[orderBy])) && (parseInt(a[orderBy]) < parseInt(b[orderBy]))) {
@@ -157,22 +165,17 @@ export default function EnhancedTable({dataTable}) {
             id="tableTitle"
             component="div"
           >
-            Nutrition
+            Stock Market
           </Typography>
         )}
   
         {numSelected > 0 ? (
-          <Tooltip title="Delete">
+          <Tooltip title="Add">
             <IconButton>
-              <DeleteIcon />
+              <AddBoxIcon />
             </IconButton>
           </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
+        ) : (null
         )}
       </Toolbar>
     );
@@ -309,15 +312,18 @@ export default function EnhancedTable({dataTable}) {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25, { value: -1, label: 'All' }]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <Filter data={data} updateDataTable={filterTable}/>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, { value: -1, label: 'All' }]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </div>
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
