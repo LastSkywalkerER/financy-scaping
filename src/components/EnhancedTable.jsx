@@ -25,17 +25,21 @@ import { visuallyHidden } from '@mui/utils';
 import Filter from './Filter';
 import { ContextSelected } from './Context';
 
-export default function EnhancedTable({data}) {
+export default function EnhancedTable({useSelection, header, handleCustomClick, data, customClickPurpose}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('id');
-  const [selected, setSelected] = React.useContext(ContextSelected);
+  const [selected, setSelected] = useSelection;
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dataTable, updateDataTable] = React.useState(data);
 
+  React.useEffect(() => {
+    updateDataTable([...data]);
+  }, [data]);
+
   let rows = dataTable;
-  const headCells = Object.keys(data[0]).map((name, i) => ({
+  const headCells = header.map((name, i) => ({
     id: name,
     numeric: ((name !== 'symbol') && (name !== 'sector') && (i !== 0)) ? true : false,
     disablePadding: false,
@@ -138,6 +142,18 @@ export default function EnhancedTable({data}) {
   const EnhancedTableToolbar = (props) => {
     const { numSelected } = props;
   
+    let CustomIcon = AddBoxIcon;
+
+    switch(customClickPurpose) {
+      case 'Buy': 
+        CustomIcon = AddBoxIcon;
+        break;
+      case 'Delete': 
+        CustomIcon = DeleteIcon;
+        break;
+
+    }
+
     return (
       <Toolbar
         sx={{
@@ -170,9 +186,9 @@ export default function EnhancedTable({data}) {
         )}
   
         {numSelected > 0 ? (
-          <Tooltip title="Add">
-            <IconButton>
-              <AddBoxIcon />
+          <Tooltip title={customClickPurpose}>
+            <IconButton onClick={handleCustomClick}>
+              <CustomIcon/>
             </IconButton>
           </Tooltip>
         ) : (null
