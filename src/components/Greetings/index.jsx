@@ -12,14 +12,12 @@ const Greetings = () => {
   const [selectedToBuy, setSelectedToBuy] = useState([]);
   const [selectedToDelete , setSelectedToDelete] = useState([]);
   const [purchasedToken, updatePurchasedToken] = useState([]);
-  const [header, updateHeader] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
       const response = await fetch('../static/db/table.json');
       const json = await response.json();
       updateData(json);
-      updateHeader(Object.keys(json[0]));
     };
 
     getData();
@@ -34,7 +32,7 @@ const Greetings = () => {
         }
       });
 
-      return [...data.filter(obj => newTokens.indexOf(obj.id) !== -1)];
+      return [...data.filter(obj => newTokens.indexOf(obj.id) !== -1).map(obj => ({...obj, buyPrice: null}))];
     });
 
     setSelectedToBuy([]);
@@ -50,15 +48,29 @@ const Greetings = () => {
     setSelectedToDelete([]);
   };
 
+  const editRow = (id) => {
+    let buyPrice = prompt('Цена покупки');
+    while (isNaN(buyPrice)) {
+      buyPrice = prompt('Цена покупки - число');
+    }
+    updatePurchasedToken(tokens => tokens.map(token => {
+      if (token.id === id) {
+        return {...token, buyPrice};
+      }
+      return token;
+    }));
+    console.log(purchasedToken);
+  }
+
   return (
     <div className={style.wrapper}>
 
           <div className={style.table}>
             <Suspense fallback={<h1>Loading...</h1>}> 
               {!!data.length && <EnhancedTable 
+                                  name='Stock Market'
                                   useSelection={[selectedToBuy, setSelectedToBuy]}
                                   handleCustomClick={handleBuyClick} 
-                                  header={header} 
                                   data={data}
                                   customClickPurpose='Buy'/>}
             </Suspense>
@@ -66,11 +78,13 @@ const Greetings = () => {
           <div className={style.table}>
             <Suspense fallback={<h1>Loading...</h1>}> 
               {!!purchasedToken.length && <EnhancedTable 
+                                      name='Purchaised Tokens'
                                       useSelection={[selectedToDelete , setSelectedToDelete]}
                                       handleCustomClick={handleDeleteClick}
-                                      header={header} 
                                       data={purchasedToken}
-                                      customClickPurpose='Delete'/>}
+                                      customClickPurpose='Delete'
+                                      editableRow
+                                      editRow={editRow}/>}
             </Suspense>
           </div>
 

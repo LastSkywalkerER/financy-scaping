@@ -23,9 +23,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { visuallyHidden } from '@mui/utils';
 import Filter from './Filter';
-import { ContextSelected } from './Context';
+import EditIcon from '@mui/icons-material/Edit';
 
-export default function EnhancedTable({useSelection, header, handleCustomClick, data, customClickPurpose}) {
+export default function EnhancedTable({name, useSelection, header, handleCustomClick, data, customClickPurpose, editableRow = false, editRow = () => {}}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('id');
   const [selected, setSelected] = useSelection;
@@ -39,12 +39,13 @@ export default function EnhancedTable({useSelection, header, handleCustomClick, 
   }, [data]);
 
   let rows = dataTable;
-  const headCells = header.map((name, i) => ({
+  const headCells = Object.keys(data[0]).map((name, i) => ({
     id: name,
     numeric: ((name !== 'symbol') && (name !== 'sector') && (i !== 0)) ? true : false,
     disablePadding: false,
     label: name.toUpperCase(),
   }));
+  const editClassName = 'edit-row';
 
   const filterTable = (filteredTable) => {
       updateDataTable(filteredTable(data));
@@ -181,7 +182,7 @@ export default function EnhancedTable({useSelection, header, handleCustomClick, 
             id="tableTitle"
             component="div"
           >
-            Stock Market
+            {name}
           </Typography>
         )}
   
@@ -220,6 +221,10 @@ export default function EnhancedTable({useSelection, header, handleCustomClick, 
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
+    if (editableRow && !!event.target.closest('.' + editClassName)) {
+      editRow(name);
+      return;
+    }
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
@@ -313,6 +318,11 @@ export default function EnhancedTable({useSelection, header, handleCustomClick, 
                       {Object.keys(row).map((key, i) => (
                         i !== 0 ? <TableCell key={`${key}-${i}`} align={((key !== 'symbol') && (key !== 'sector') && (i !== 0)) ? 'right' : 'left'}>{row.[key]}</TableCell> : null
                       ))}
+                      {editableRow && <TableCell>
+                        <IconButton className={editClassName}>
+                          <EditIcon/>
+                        </IconButton>
+                      </TableCell>}
                     </TableRow>
                   );
                 })}
