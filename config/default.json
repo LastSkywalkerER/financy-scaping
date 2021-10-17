@@ -1,4 +1,5 @@
 {
   "port": 5000,
+  "jwtSecret": "lyolik financy-scraping",
   "mongoUri": "mongodb+srv://financy-scraping:Mnago052@cluster0.pmu38.mongodb.net/app?retryWrites=true&w=majority"
 }
