@@ -6,7 +6,7 @@ import style from './style.module.sass';
 import useHttp from '../../hooks/http.hook';
 
 export default function AuthPage() {
-  const SERVERURL = 'http://127.0.0.1:5000/api/auth/register';
+  const SERVERURL = 'http://127.0.0.1:5000';
 
   const {loading, request, error} = useHttp();
   const [form, setForm] = useState({
@@ -22,7 +22,7 @@ export default function AuthPage() {
 
   const registerHamdler = async () => {
     try {
-      const data = await request(SERVERURL, 'POST', {...form});
+      const data = await request(`${SERVERURL}/api/auth/register`, 'POST', {...form});
 
       console.log(data);
 

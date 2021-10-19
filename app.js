@@ -7,8 +7,10 @@ const cors = require('cors');
 
 const app = express();
 
+// говорим экспрессу, что можно принимать запросы с чужих доменов
 app.use(cors());
 
+// говорим экспрессу, что ему надо работать с json
 app.use(express.json({
   extended: true
 }));
