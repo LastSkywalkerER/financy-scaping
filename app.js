@@ -11,9 +11,11 @@ const app = express();
 app.use(cors());
 
 // говорим экспрессу, что ему надо работать с json
-app.use(express.json({
-  extended: true
-}));
+app.use(
+  express.json({
+    extended: true,
+  }),
+);
 
 app.use('/api/auth', require('./routes/auth.routes'));
 
