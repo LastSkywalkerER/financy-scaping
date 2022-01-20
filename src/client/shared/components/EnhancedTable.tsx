@@ -52,7 +52,7 @@ export default function EnhancedTable({
   const [orderBy, setOrderBy] = React.useState('id');
   const [selected, setSelected] = useSelection;
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
+  const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dataTable, updateDataTable] = React.useState(data);
 
