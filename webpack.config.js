@@ -1,12 +1,20 @@
-const path = require('path');
-const {
-  CleanWebpackPlugin
-} = require('clean-webpack-plugin');
-const HTMLwebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCssAssetWebpackPlugin = require('optimize-css-assets-webpack-plugin');
-const TerserWebpackPlugin = require('terser-webpack-plugin');
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import HTMLwebpackPlugin from 'html-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import OptimizeCssAssetWebpackPlugin from 'optimize-css-assets-webpack-plugin';
+import TerserWebpackPlugin from 'terser-webpack-plugin';
+
+import webpack from 'webpack';
+// import Dotenv from 'dotenv';
+
+// const dotenv = Dotenv.config({ path: __dirname + '/.env' });
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -22,59 +30,65 @@ const optimization = () => {
     config.minimizer = [
       new OptimizeCssAssetWebpackPlugin(),
       new TerserWebpackPlugin(),
-    ]
+    ];
   }
 
   return config;
 };
 
-const fileName = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`;
+const fileName = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
 
-module.exports = {
-  context: path.resolve(__dirname, 'src'),
+export default {
+  context: path.resolve(__dirname, 'src/client'),
   entry: {
-    main: './index.jsx'
+    main: './index.tsx',
   },
   output: {
     filename: fileName('js'),
-    path: path.resolve(__dirname, './dist')
+    path: path.resolve(__dirname, './dist'),
   },
   resolve: {
-    extensions: ['.js', '.json', '.jsx'],
+    extensions: ['.js', '.json', '.jsx', '.ts', '.tsx'],
     alias: {
-      '@db': path.resolve(__dirname, 'db'),
-      '@fonts': path.resolve(__dirname, 'fonts'),
-      '@img': path.resolve(__dirname, 'img'),
-      '@sass': path.resolve(__dirname, 'sass'),
-    }
+      '@styles': path.resolve(__dirname, 'src/client/shared/styles'),
+      '@modules': path.resolve(__dirname, 'src/client/modules'),
+      '@components': path.resolve(__dirname, 'src/client/shared/components'),
+      '@assets': path.resolve(__dirname, 'src/client/assets'),
+      '@core': path.resolve(__dirname, 'src/client/shared/core'),
+    },
   },
   optimization: optimization(),
   mode: 'development',
   devServer: {
-    open: 'D:\\Program Files\\Mozilla Firefox\\firefox.exe',
+    open: '/',
     port: 8080,
     hot: true,
-    writeToDisk: false,
+    historyApiFallback: true,
   },
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.css$/,
-        use: [{
+        use: [
+          {
             loader: MiniCssExtractPlugin.loader,
-            options: {}
+            options: {},
           },
           'css-loader',
         ],
-      }, {
+      },
+      {
         test: /\.sass$/,
-        use: [{
+        use: [
+          {
             loader: MiniCssExtractPlugin.loader,
-            options: {}
+            options: {},
           },
           'css-loader',
-          'sass-loader'
+          'sass-loader',
         ],
-      }, {
+      },
+      {
         test: /\.(png|jpg|gif|svg)$/,
         use: ['file-loader'],
       },
@@ -87,7 +101,37 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/env']
+            presets: ['@babel/env'],
+          },
+        },
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.ts$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/env', '@babel/preset-typescript'],
+          },
+        },
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.tsx$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/env',
+              '@babel/preset-react',
+              [
+                '@babel/preset-typescript',
+                {
+                  isTSX: true,
+                  allExtensions: true,
+                },
+              ],
+            ],
           },
         },
         exclude: /node_modules/,
@@ -97,12 +141,12 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-react']
+            presets: ['@babel/env', '@babel/preset-react'],
           },
         },
         exclude: /node_modules/,
-      }
-    ]
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -110,16 +154,21 @@ module.exports = {
       template: './index.html',
       minify: {
         collapseWhitespace: isProd,
-      }
+      },
     }),
     new CopyWebpackPlugin({
-      patterns: [{
-        from: path.resolve(__dirname, 'src/static'),
-        to: path.resolve(__dirname, 'dist/static')
-      }]
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/client/assets'),
+          to: path.resolve(__dirname, 'dist/assets'),
+        },
+      ],
     }),
     new MiniCssExtractPlugin({
       filename: fileName('css'),
     }),
-  ]
+    // new webpack.DefinePlugin({
+    //   'process.env': JSON.stringify(dotenv.parsed),
+    // }),
+  ],
 };

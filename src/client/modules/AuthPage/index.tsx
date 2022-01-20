@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEventHandler } from 'react';
 import {
   Card,
   CardActions,
@@ -9,8 +9,7 @@ import {
   Button,
   TextField,
 } from '@mui/material';
-import style from './style.module.sass';
-import useHttp from '../../hooks/http.hook';
+import useHttp from '@core/hooks/http.hook';
 
 export default function AuthPage() {
   const SERVERURL = 'http://localhost:5000';
@@ -30,7 +29,7 @@ export default function AuthPage() {
     }
   }, [error, clearError]);
 
-  const chanheHandler = (event) => {
+  const chanheHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 

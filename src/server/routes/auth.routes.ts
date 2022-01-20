@@ -1,11 +1,10 @@
-'use strict';
+import { Router } from 'express';
+import bcrypt from 'bcrypt';
+import config from 'config';
+import jwt from 'jsonwebtoken';
+import { check, validationResult } from 'express-validator';
+import User from '../models/User';
 
-const { Router } = require('express');
-const bcrypt = require('bcryptjs');
-const config = require('config');
-const jwt = require('jsonwebtoken');
-const { check, validationResult } = require('express-validator');
-const User = require('../models/User');
 const router = Router();
 
 // /api/auth/register
@@ -21,9 +20,9 @@ router.post(
     }),
     // check('phone', 'Incorrect phone').isMobilePhone(),
   ],
-  async (req, res) => {
+  async (req: any, res: any) => {
     try {
-      console.log(req.headers, req.body);
+      // console.log(req.headers, req.body);
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
@@ -52,7 +51,7 @@ router.post(
         password: hashedPassword,
         phone,
       });
-
+      console.log(user);
       await user.save();
 
       res.status(201).json({
@@ -73,7 +72,7 @@ router.post(
     check('email', 'Your email').normalizeEmail().isEmail(),
     check('password', 'Your password').exists(),
   ],
-  async (req, res) => {
+  async (req: any, res: any) => {
     try {
       const errors = validationResult(req);
 

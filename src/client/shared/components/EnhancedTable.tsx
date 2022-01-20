@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
@@ -25,7 +27,27 @@ import { visuallyHidden } from '@mui/utils';
 import Filter from './Filter';
 import EditIcon from '@mui/icons-material/Edit';
 
-export default function EnhancedTable({name, useSelection, header, handleCustomClick, data, customClickPurpose, editableRow = false, editRow = () => {}}) {
+type Props = {
+  name: string;
+  useSelection: any;
+  header?: string;
+  handleCustomClick: any;
+  data: any;
+  customClickPurpose: any;
+  editableRow?: any;
+  editRow?: any;
+};
+
+export default function EnhancedTable({
+  name,
+  useSelection,
+  header,
+  handleCustomClick,
+  data,
+  customClickPurpose,
+  editableRow = false,
+  editRow = () => {},
+}: Props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('id');
   const [selected, setSelected] = useSelection;
@@ -41,33 +63,39 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
   let rows = dataTable;
   const headCells = Object.keys(data[0]).map((name, i) => ({
     id: name,
-    numeric: ((name !== 'symbol') && (name !== 'sector') && (i !== 0)) ? true : false,
+    numeric: name !== 'symbol' && name !== 'sector' && i !== 0 ? true : false,
     disablePadding: false,
     label: name.toUpperCase(),
   }));
   const editClassName = 'edit-row';
 
   const filterTable = (filteredTable) => {
-      updateDataTable(filteredTable(data));
+    updateDataTable(filteredTable(data));
   };
 
   function descendingComparator(a, b, orderBy) {
-    if (!isNaN(parseInt(a[orderBy])) && (parseInt(a[orderBy]) < parseInt(b[orderBy]))) {
+    if (
+      !isNaN(parseInt(a[orderBy])) &&
+      parseInt(a[orderBy]) < parseInt(b[orderBy])
+    ) {
       return -1;
     }
-    if (!isNaN(parseInt(b[orderBy])) && (parseInt(a[orderBy]) > parseInt(b[orderBy]))) {
+    if (
+      !isNaN(parseInt(b[orderBy])) &&
+      parseInt(a[orderBy]) > parseInt(b[orderBy])
+    ) {
       return 1;
     }
     // a должно быть равным b
     return 0;
   }
-  
+
   function getComparator(order, orderBy) {
     return order === 'desc'
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
-  
+
   // This method is created for cross-browser compatibility, if you don't
   // need to support IE11, you can use Array.prototype.sort() directly
   function stableSort(array, comparator) {
@@ -81,16 +109,20 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
     });
     return stabilizedThis.map((el) => el[0]);
   }
-  
-  
-  
+
   function EnhancedTableHead(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-      props;
+    const {
+      onSelectAllClick,
+      order,
+      orderBy,
+      numSelected,
+      rowCount,
+      onRequestSort,
+    } = props;
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
     };
-  
+
     return (
       <TableHead>
         <TableRow>
@@ -120,7 +152,9 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
                 {headCell.label}
                 {orderBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    {order === 'desc'
+                      ? 'sorted descending'
+                      : 'sorted ascending'}
                   </Box>
                 ) : null}
               </TableSortLabel>
@@ -130,7 +164,7 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
       </TableHead>
     );
   }
-  
+
   EnhancedTableHead.propTypes = {
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
@@ -139,20 +173,19 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
   };
-  
+
   const EnhancedTableToolbar = (props) => {
     const { numSelected } = props;
-  
+
     let CustomIcon = AddBoxIcon;
 
-    switch(customClickPurpose) {
-      case 'Buy': 
+    switch (customClickPurpose) {
+      case 'Buy':
         CustomIcon = AddBoxIcon;
         break;
-      case 'Delete': 
+      case 'Delete':
         CustomIcon = DeleteIcon;
         break;
-
     }
 
     return (
@@ -162,7 +195,10 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
           pr: { xs: 1, sm: 1 },
           ...(numSelected > 0 && {
             bgcolor: (theme) =>
-              alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity,
+              ),
           }),
         }}
       >
@@ -185,19 +221,18 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
             {name}
           </Typography>
         )}
-  
+
         {numSelected > 0 ? (
           <Tooltip title={customClickPurpose}>
             <IconButton onClick={handleCustomClick}>
-              <CustomIcon/>
+              <CustomIcon />
             </IconButton>
           </Tooltip>
-        ) : (null
-        )}
+        ) : null}
       </Toolbar>
     );
   };
-  
+
   EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
   };
@@ -262,7 +297,7 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2, overflow: 'hidden'  }}>
+      <Paper sx={{ width: '100%', mb: 2, overflow: 'hidden' }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer sx={{ maxHeight: '70vh' }}>
           <Table
@@ -315,14 +350,27 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
                       >
                         {row.id}
                       </TableCell>
-                      {Object.keys(row).map((key, i) => (
-                        i !== 0 ? <TableCell key={`${key}-${i}`} align={((key !== 'symbol') && (key !== 'sector') && (i !== 0)) ? 'right' : 'left'}>{row.[key]}</TableCell> : null
-                      ))}
-                      {editableRow && <TableCell>
-                        <IconButton className={editClassName}>
-                          <EditIcon/>
-                        </IconButton>
-                      </TableCell>}
+                      {Object.keys(row).map((key, i) =>
+                        i !== 0 ? (
+                          <TableCell
+                            key={`${key}-${i}`}
+                            align={
+                              key !== 'symbol' && key !== 'sector' && i !== 0
+                                ? 'right'
+                                : 'left'
+                            }
+                          >
+                            {row[key]}
+                          </TableCell>
+                        ) : null,
+                      )}
+                      {editableRow && (
+                        <TableCell>
+                          <IconButton className={editClassName}>
+                            <EditIcon />
+                          </IconButton>
+                        </TableCell>
+                      )}
                     </TableRow>
                   );
                 })}
@@ -338,8 +386,8 @@ export default function EnhancedTable({name, useSelection, header, handleCustomC
             </TableBody>
           </Table>
         </TableContainer>
-        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-          <Filter data={data} updateDataTable={filterTable}/>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Filter data={data} updateDataTable={filterTable} />
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, { value: -1, label: 'All' }]}
             component="div"

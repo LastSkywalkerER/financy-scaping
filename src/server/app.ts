@@ -1,9 +1,7 @@
-'use strict';
-
-const express = require('express');
-const config = require('config');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express from 'express';
+import config from 'config';
+import mongoose from 'mongoose';
+import cors from 'cors';
 
 const app = express();
 
@@ -11,11 +9,7 @@ const app = express();
 app.use(cors());
 
 // говорим экспрессу, что ему надо работать с json
-app.use(
-  express.json({
-    extended: true,
-  }),
-);
+app.use(express.json());
 
 app.use('/api/auth', require('./routes/auth.routes'));
 
@@ -23,15 +17,11 @@ const PORT = config.get('port') || 5000;
 
 async function start() {
   try {
-    await mongoose.connect(config.get('mongoUri'), {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      // useCreateIndex: true
-    });
+    await mongoose.connect(config.get('mongoUri'));
     app.listen(PORT, () => {
       console.log(`App started at ${PORT}`);
     });
-  } catch (e) {
+  } catch (e: any) {
     console.log('Server Error', e.message);
     process.exit(1);
   }

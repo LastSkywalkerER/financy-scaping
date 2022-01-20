@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "dist",
+    "target": "es6",
+    "lib": ["es6", "dom", "DOM.Iterable", "ESNext", "es2015"],
+    "allowJs": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "rootDir": "src",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "jsx": "react",
+    "paths": {
+      "@styles/*": ["src/client/shared/styles/*"],
+      "@modules/*": ["src/client/modules/*"],
+      "@components/*": ["src/client/shared/components/*"],
+      "@assets/*": ["src/client/assets/*"],
+      "@core/*": ["src/client/shared/core/*"],
+      "images/*": ["src/client/static/*"]
+      // "fonts/*": ["src/client/assets/fonts/*"]
+    }
+  },
+  "include": ["src", "index.d.ts", "index.ts"],
+  "exclude": ["node_modules", "jest"],
+  "types": ["typePatches"]
+}

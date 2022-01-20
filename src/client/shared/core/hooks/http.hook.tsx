@@ -1,5 +1,3 @@
-'use strict';
-
 import { useState, useCallback } from 'react';
 
 export default function useHttp() {
@@ -25,7 +23,7 @@ export default function useHttp() {
         setLoading(false);
 
         return data;
-      } catch (e) {
+      } catch (e: any) {
         setLoading(true);
         setError(e.message);
         throw e;
