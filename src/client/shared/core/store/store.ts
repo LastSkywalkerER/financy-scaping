@@ -7,7 +7,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   reducer: {
-    authUID: authReducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) => [
     ...getDefaultMiddleware(),

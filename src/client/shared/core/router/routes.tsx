@@ -9,9 +9,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@core/store/store';
 
 export default function useRoutes() {
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.authUID.value,
-  );
+  const isAuthenticated = useSelector((state: RootState) => state.auth.UID);
 
   if (isAuthenticated) {
     return (

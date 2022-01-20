@@ -51,7 +51,7 @@ export default function AuthPage() {
       });
 
       console.log(data);
-      dispatch(login(data.userID));
+      dispatch(login({ UID: data.userID, token: data.token }));
     } catch (e) {}
   };
 
