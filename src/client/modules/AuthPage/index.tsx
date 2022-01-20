@@ -1,6 +1,8 @@
 'use strict';
 
 import React, { useState, useEffect, ChangeEventHandler } from 'react';
+import { useDispatch } from 'react-redux';
+import { login } from '@core/store/authSlice';
 import {
   Card,
   CardActions,
@@ -12,8 +14,7 @@ import {
 import useHttp from '@core/hooks/http.hook';
 
 export default function AuthPage() {
-  const SERVERURL = 'http://localhost:5000';
-
+  const dispatch = useDispatch();
   const { loading, request, error, clearError } = useHttp();
   const [form, setForm] = useState({
     name: '',
@@ -35,11 +36,22 @@ export default function AuthPage() {
 
   const registerHamdler = async () => {
     try {
-      const data = await request(`${SERVERURL}/api/auth/register`, 'POST', {
+      const data = await request(`/api/auth/register`, 'POST', {
         ...form,
       });
 
       console.log(data);
+    } catch (e) {}
+  };
+
+  const loginHandler = async () => {
+    try {
+      const data = await request(`/api/auth/login`, 'POST', {
+        ...form,
+      });
+
+      console.log(data);
+      dispatch(login(data.userID));
     } catch (e) {}
   };
 
@@ -89,7 +101,7 @@ export default function AuthPage() {
       <CardActions
         sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
       >
-        <Button disabled={loading} variant="contained">
+        <Button disabled={loading} onClick={loginHandler} variant="contained">
           Log In
         </Button>
         <Button disabled={loading} onClick={registerHamdler} variant="outlined">

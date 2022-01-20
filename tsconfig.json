@@ -28,6 +28,7 @@
       "@components/*": ["src/client/shared/components/*"],
       "@assets/*": ["src/client/assets/*"],
       "@core/*": ["src/client/shared/core/*"],
+      "@config": ["src/client/config.ts"],
       "images/*": ["src/client/static/*"]
       // "fonts/*": ["src/client/assets/fonts/*"]
     }

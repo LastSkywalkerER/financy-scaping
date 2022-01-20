@@ -5,8 +5,14 @@ import { Routes, Route } from 'react-router';
 import { Navigate } from 'react-router-dom';
 import Analytics from '@modules/Analytics';
 import AuthPage from '@modules/AuthPage';
+import { useSelector } from 'react-redux';
+import { RootState } from '@core/store/store';
 
-export default function useRoutes(isAuthenticated: boolean) {
+export default function useRoutes() {
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.authUID.value,
+  );
+
   if (isAuthenticated) {
     return (
       <Routes>

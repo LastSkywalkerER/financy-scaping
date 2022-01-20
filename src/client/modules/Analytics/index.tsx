@@ -10,7 +10,7 @@ const Analytics = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('../static/db/table.json');
+      const response = await fetch('../../assets/db/table.json');
       const json = await response.json();
       updateData(json);
     };

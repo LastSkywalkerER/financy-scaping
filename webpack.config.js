@@ -55,6 +55,7 @@ export default {
       '@components': path.resolve(__dirname, 'src/client/shared/components'),
       '@assets': path.resolve(__dirname, 'src/client/assets'),
       '@core': path.resolve(__dirname, 'src/client/shared/core'),
+      '@config': path.resolve(__dirname, 'src/client/config.ts'),
     },
   },
   optimization: optimization(),
