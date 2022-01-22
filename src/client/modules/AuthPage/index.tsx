@@ -1,8 +1,6 @@
 'use strict';
 
 import React, { useState, useEffect, ChangeEventHandler } from 'react';
-import { useDispatch } from 'react-redux';
-import { login } from '@core/store/authSlice';
 import {
   Card,
   CardActions,
@@ -12,9 +10,9 @@ import {
   TextField,
 } from '@mui/material';
 import useHttp from '@core/hooks/http.hook';
+import { useAuth } from '@core/hooks/useAuth';
 
 export default function AuthPage() {
-  const dispatch = useDispatch();
   const { loading, request, error, clearError } = useHttp();
   const [form, setForm] = useState({
     name: '',
@@ -22,6 +20,7 @@ export default function AuthPage() {
     password: '',
     phone: '',
   });
+  const { login } = useAuth();
 
   useEffect(() => {
     if (error) {
@@ -39,8 +38,6 @@ export default function AuthPage() {
       const data = await request(`/api/auth/register`, 'POST', {
         ...form,
       });
-
-      console.log(data);
     } catch (e) {}
   };
 
@@ -50,8 +47,7 @@ export default function AuthPage() {
         ...form,
       });
 
-      console.log(data);
-      dispatch(login({ UID: data.userID, token: data.token }));
+      login(data.userID, data.token);
     } catch (e) {}
   };
 

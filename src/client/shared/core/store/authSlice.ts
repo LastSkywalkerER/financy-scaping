@@ -5,26 +5,22 @@ const name: string = 'auth';
 export const authSlice = createSlice({
   name,
   initialState: {
-    UID: localStorage.getItem(name)
-      ? JSON.parse(localStorage.getItem(name) || '')
-      : '',
+    userId: '',
     token: '',
   },
   reducers: {
-    login: (state, action) => {
-      state.UID = action.payload.UID;
+    loginStore: (state, action) => {
+      state.userId = action.payload.userId;
       state.token = action.payload.token;
-      localStorage.setItem(name, JSON.stringify(action.payload.UID));
     },
-    logout: (state) => {
-      state.UID = '';
+    logoutStore: (state) => {
+      state.userId = '';
       state.token = '';
-      localStorage.removeItem(name);
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { login, logout } = authSlice.actions;
+export const { loginStore, logoutStore } = authSlice.actions;
 
 export default authSlice.reducer;

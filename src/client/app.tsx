@@ -3,15 +3,16 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Container } from '@mui/material';
-import useRoutes from '@core/router/routes';
+import AppRoutes from '@core/router/routes';
+import AuthProvider from '@core/hooks/useAuth';
 
 const Greetings = () => {
-  const routes = useRoutes(false);
-
   return (
-    <Router>
-      <Container maxWidth="lg">{routes}</Container>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Container maxWidth="lg">{<AppRoutes />}</Container>
+      </Router>
+    </AuthProvider>
   );
 };
 

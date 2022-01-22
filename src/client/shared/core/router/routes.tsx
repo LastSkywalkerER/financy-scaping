@@ -5,13 +5,12 @@ import { Routes, Route } from 'react-router';
 import { Navigate } from 'react-router-dom';
 import Analytics from '@modules/Analytics';
 import AuthPage from '@modules/AuthPage';
-import { useSelector } from 'react-redux';
-import { RootState } from '@core/store/store';
+import { useAuth } from '@core/hooks/useAuth';
 
-export default function useRoutes() {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.UID);
+export default function AppRoutes() {
+  const { userId } = useAuth();
 
-  if (isAuthenticated) {
+  if (userId && userId != '') {
     return (
       <Routes>
         <Route path="/analytics" element={<Analytics />} />
