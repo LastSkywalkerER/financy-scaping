@@ -1,11 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
+import themeReducer from './themeSlice';
+import userNameReducer from './userNameSlice';
 import sagas from '@core/sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    themeName: themeReducer,
+    userName: userNameReducer,
+  },
   middleware: (getDefaultMiddleware) => [
     ...getDefaultMiddleware(),
     sagaMiddleware,
