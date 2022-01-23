@@ -24,10 +24,10 @@ router.post('/saved', auth, async (req, res) => {
         stringifyTicker[key] = String(value);
       });
       const savedTickers = new tickerSchema({
-        // ...stringifyTicker,
-        // expectedPrice: 0,
-        // owner: req.user.userId,
-        // date,
+        ...stringifyTicker,
+        expectedPrice: 0,
+        owner: req.user.userId,
+        date,
       });
       console.log(savedTickers);
 
@@ -54,7 +54,7 @@ router.patch('/saved', auth, async (req, res) => {
 router.get('/saved', auth, async (req, res) => {
   try {
     const tickers = await tickerSchema.find({ owner: req.user.userId });
-    res.json(tickers);
+    res.json({ tickers });
   } catch (e) {
     res.status(500).json({
       message: 'Something wrong :(',

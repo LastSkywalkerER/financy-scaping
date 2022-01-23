@@ -21,7 +21,16 @@ const Analytics = () => {
     getData();
   }, []);
 
-  const handleBuyClick = () => {
+  useEffect(() => {
+    const getSavedTickers = async () => {
+      const response = await request('/api/tickers/saved', 'GET');
+      console.log(response);
+      updatePurchasedToken(response.tickers);
+    };
+    getSavedTickers();
+  }, []);
+
+  const handleBuyClick = async () => {
     let savedTokens: Token[] = [];
     updatePurchasedToken((tokens: Token[]) => {
       let newTokens = tokens.map((obj: Token) => obj.id);
@@ -40,7 +49,7 @@ const Analytics = () => {
       return savedTokens;
     });
 
-    const response = request('/api/tickers/saved', 'POST', {
+    const response = await request('/api/tickers/saved', 'POST', {
       tickers: savedTokens,
     });
     console.log(response);
