@@ -8,7 +8,7 @@ const router = Router();
 router.post('/saved', auth, async (req, res) => {
   try {
     const { tickers } = req.body;
-
+    const date = new Date();
     const existing = await tickerSchema.find({ owner: req.user.userId });
     if (existing) {
       res.json(existing);
@@ -27,6 +27,7 @@ router.post('/saved', auth, async (req, res) => {
         ...stringifyTicker,
         expectedPrice: 0,
         owner: req.user.userId,
+        date,
       });
       console.log(savedTickers);
 

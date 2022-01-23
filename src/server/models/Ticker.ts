@@ -5,8 +5,8 @@ export const tickerSchema = new Schema({
   owner: { type: String, default: 'common' },
   symbol: {
     type: String,
-    required: true,
-    unique: true,
+    // required: true,
+    // unique: true,
   },
   sector: {
     type: String,
