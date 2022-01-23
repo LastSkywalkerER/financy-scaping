@@ -1,15 +1,19 @@
 import { Schema, model, Types } from 'mongoose';
 
-export const tickerSchema = new Schema({
-  date: { type: Date, default: Date.now },
-  owner: { type: String, default: 'common' },
+export const stocksSchema = new Schema({
+  date: { type: Date, default: Date.now, required: true },
+  owner: { type: String, default: 'common', required: true },
   symbol: {
     type: String,
     required: true,
-    unique: true,
   },
   sector: {
     type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
   },
   price: {
     type: String,
@@ -43,4 +47,4 @@ export const tickerSchema = new Schema({
   },
 });
 
-export default model('Tickers', tickerSchema);
+export default model('Stocks-Table', stocksSchema);

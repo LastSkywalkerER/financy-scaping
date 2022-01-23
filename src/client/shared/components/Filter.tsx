@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler } from 'react';
 import FilledInput from '@mui/material/FilledInput';
-import Token from '@core/models/Token';
+import Token from 'src/types/Token';
 
 type Props = {
   data: any;

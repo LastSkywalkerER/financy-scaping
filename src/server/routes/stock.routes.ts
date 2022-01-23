@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import tickerSchema from '../models/Ticker';
+import stocksSchema from '../models/StocksUsers';
 import auth from '../middleware/auth.middleware';
 import config from 'config';
 
@@ -9,7 +9,7 @@ router.post('/saved', auth, async (req, res) => {
   try {
     const { tickers } = req.body;
     const date = new Date();
-    // const existing = await tickerSchema.find({ owner: req.user.userId });
+    // const existing = await stocksSchema.find({ owner: req.user.userId });
     // if (existing) {
     //   res.json(existing);
     // }
@@ -23,7 +23,7 @@ router.post('/saved', auth, async (req, res) => {
       map.forEach((value, key) => {
         stringifyTicker[key] = String(value);
       });
-      const savedTickers = new tickerSchema({
+      const savedTickers = new stocksSchema({
         ...stringifyTicker,
         expectedPrice: 0,
         owner: req.user.userId,
@@ -53,7 +53,7 @@ router.patch('/saved', auth, async (req, res) => {
 
 router.get('/saved', auth, async (req, res) => {
   try {
-    const tickers = await tickerSchema.find({ owner: req.user.userId });
+    const tickers = await stocksSchema.find({ owner: req.user.userId });
     res.json({ tickers });
   } catch (e) {
     res.status(500).json({

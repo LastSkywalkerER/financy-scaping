@@ -1,7 +1,9 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import EnhancedTable from '@components/EnhancedTable';
-import Token from '@core/models/Token';
+import Token from 'src/types/Token';
 import useHttp from '@core/hooks/http.hook';
+import { Box } from '@mui/system';
+import Button from '@mui/material/Button';
 
 const Analytics = () => {
   const [data, updateData] = useState([]);
@@ -89,37 +91,45 @@ const Analytics = () => {
     console.log(purchasedToken);
   };
 
+  const handleUpdateTable = async () => {
+    const data = await request('/api/table/update', 'GET');
+    console.log(data);
+  };
+
   return (
-    <div>
-      <div>
-        <Suspense fallback={<h1>Loading...</h1>}>
-          {!!data.length && (
-            <EnhancedTable
-              name="Stock Market"
-              useSelection={[selectedToBuy, setSelectedToBuy]}
-              handleCustomClick={handleBuyClick}
-              data={data}
-              customClickPurpose="Buy"
-            />
-          )}
-        </Suspense>
-      </div>
-      <div>
-        <Suspense fallback={<h1>Loading...</h1>}>
-          {!!purchasedToken.length && (
-            <EnhancedTable
-              name="Purchaised Tokens"
-              useSelection={[selectedToDelete, setSelectedToDelete]}
-              handleCustomClick={handleDeleteClick}
-              data={purchasedToken}
-              customClickPurpose="Delete"
-              editableRow
-              editRow={editRow}
-            />
-          )}
-        </Suspense>
-      </div>
-    </div>
+    <Box>
+      <Button onClick={handleUpdateTable} variant="contained">
+        Update table
+      </Button>
+      <Box>
+        {!!data.length ? (
+          <EnhancedTable
+            name="Stock Market"
+            useSelection={[selectedToBuy, setSelectedToBuy]}
+            handleCustomClick={handleBuyClick}
+            data={data}
+            customClickPurpose="Buy"
+          />
+        ) : (
+          <h1>Loading...</h1>
+        )}
+      </Box>
+      <Box>
+        {!!purchasedToken.length ? (
+          <EnhancedTable
+            name="Purchaised Tokens"
+            useSelection={[selectedToDelete, setSelectedToDelete]}
+            handleCustomClick={handleDeleteClick}
+            data={purchasedToken}
+            customClickPurpose="Delete"
+            editableRow
+            editRow={editRow}
+          />
+        ) : (
+          <h1>Loading...</h1>
+        )}
+      </Box>
+    </Box>
   );
 };
 
