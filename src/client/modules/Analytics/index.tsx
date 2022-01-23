@@ -1,12 +1,15 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import EnhancedTable from '@components/EnhancedTable';
 import Token from '@core/models/Token';
+import useHttp from '@core/hooks/http.hook';
 
 const Analytics = () => {
   const [data, updateData] = useState([]);
   const [selectedToBuy, setSelectedToBuy] = useState([]);
   const [selectedToDelete, setSelectedToDelete] = useState([] as number[]);
   const [purchasedToken, updatePurchasedToken] = useState([] as Token[]);
+
+  const { request } = useHttp();
 
   useEffect(() => {
     const getData = async () => {
@@ -19,6 +22,7 @@ const Analytics = () => {
   }, []);
 
   const handleBuyClick = () => {
+    let savedTokens: Token[] = [];
     updatePurchasedToken((tokens: Token[]) => {
       let newTokens = tokens.map((obj: Token) => obj.id);
       selectedToBuy.forEach((id) => {
@@ -27,25 +31,34 @@ const Analytics = () => {
         }
       });
 
-      return [
+      savedTokens = [
         ...data
           .filter((obj: Token) => newTokens.indexOf(obj.id) !== -1)
           .map((obj: Token) => ({ ...obj, buyPrice: null })),
       ];
+
+      return savedTokens;
     });
+
+    const response = request('/api/tickers/saved', 'POST', {
+      tickers: savedTokens,
+    });
+    console.log(response);
 
     setSelectedToBuy([]);
   };
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = async () => {
     updatePurchasedToken((tokens: Token[]) => {
       const currentTokens = tokens
         .map((obj: Token) => obj.id)
         .filter((id: number) => selectedToDelete.indexOf(id) === -1);
 
-      return [
+      savedTokens = [
         ...data.filter((obj: Token) => currentTokens.indexOf(obj.id) !== -1),
       ];
+
+      return savedTokens;
     });
 
     setSelectedToDelete([]);
@@ -92,7 +105,7 @@ const Analytics = () => {
               data={purchasedToken}
               customClickPurpose="Delete"
               editableRow
-              // editRow={editRow}
+              editRow={editRow}
             />
           )}
         </Suspense>

@@ -15,10 +15,20 @@ router.post('/saved', auth, async (req, res) => {
     }
 
     tickers.forEach(async (ticker) => {
+      const stringifyTicker = {};
+      const map = new Map();
+      Object.keys(ticker).forEach((key) => {
+        map.set(key, ticker[key]);
+      });
+      map.forEach((value, key) => {
+        stringifyTicker[key] = String(value);
+      });
       const savedTickers = new tickerSchema({
-        ...ticker,
+        ...stringifyTicker,
+        expectedPrice: 0,
         owner: req.user.userId,
       });
+      console.log(savedTickers);
 
       await savedTickers.save();
     });

@@ -3,7 +3,7 @@ import { Schema, model, Types } from 'mongoose';
 export const tickerSchema = new Schema({
   date: { type: Date, default: Date.now },
   owner: { type: String, default: 'common' },
-  ticker: {
+  symbol: {
     type: String,
     required: true,
     unique: true,
@@ -39,7 +39,7 @@ export const tickerSchema = new Schema({
     type: String,
   },
   expectedPrice: {
-    type: String,
+    type: Number,
   },
 });
 

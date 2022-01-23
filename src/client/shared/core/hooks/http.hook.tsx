@@ -1,14 +1,17 @@
 import { useState, useCallback } from 'react';
 import { config } from '@config';
+import { useAuth } from './useAuth';
 
 export default function useHttp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { token } = useAuth();
 
   const request = useCallback(
     async (url, method = 'GET', body = null, headers = {}) => {
       setLoading(true);
       try {
+        headers['auth'] = token;
         if (body) {
           body = JSON.stringify(body);
           headers['Content-Type'] = 'application/json';
