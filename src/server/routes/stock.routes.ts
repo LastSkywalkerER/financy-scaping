@@ -9,10 +9,10 @@ router.post('/saved', auth, async (req, res) => {
   try {
     const { tickers } = req.body;
     const date = new Date();
-    const existing = await tickerSchema.find({ owner: req.user.userId });
-    if (existing) {
-      res.json(existing);
-    }
+    // const existing = await tickerSchema.find({ owner: req.user.userId });
+    // if (existing) {
+    //   res.json(existing);
+    // }
 
     tickers.forEach(async (ticker) => {
       const stringifyTicker = {};
@@ -24,10 +24,10 @@ router.post('/saved', auth, async (req, res) => {
         stringifyTicker[key] = String(value);
       });
       const savedTickers = new tickerSchema({
-        ...stringifyTicker,
-        expectedPrice: 0,
-        owner: req.user.userId,
-        date,
+        // ...stringifyTicker,
+        // expectedPrice: 0,
+        // owner: req.user.userId,
+        // date,
       });
       console.log(savedTickers);
 
