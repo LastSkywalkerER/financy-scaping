@@ -3,6 +3,8 @@ import stocksSchema from '../models/StocksUsers';
 import auth from '../middleware/auth.middleware';
 import config from 'config';
 
+import changeStockArray from '../utils/changeStockArray';
+
 const router = Router();
 
 router.post('/saved', auth, async (req, res) => {
@@ -29,7 +31,6 @@ router.post('/saved', auth, async (req, res) => {
         owner: req.user.userId,
         date,
       });
-      console.log(savedTickers);
 
       await savedTickers.save();
     });
@@ -44,6 +45,9 @@ router.post('/saved', auth, async (req, res) => {
 
 router.patch('/saved', auth, async (req, res) => {
   try {
+    const { symbol, expectedPrice } = req.body;
+    await stocksSchema.updateOne({ symbol }, { expectedPrice });
+    res.status(201).json({ message: 'bought' });
   } catch (e) {
     res.status(500).json({
       message: 'Something wrong :(',
@@ -54,7 +58,7 @@ router.patch('/saved', auth, async (req, res) => {
 router.get('/saved', auth, async (req, res) => {
   try {
     const tickers = await stocksSchema.find({ owner: req.user.userId });
-    res.json({ tickers });
+    res.json({ tickers: changeStockArray(tickers) });
   } catch (e) {
     res.status(500).json({
       message: 'Something wrong :(',
@@ -64,9 +68,17 @@ router.get('/saved', auth, async (req, res) => {
 
 router.delete('/saved', auth, async (req, res) => {
   try {
+    const { tickers } = req.body;
+
+    tickers.forEach(async (ticker) => {
+      console.log(ticker);
+      await stocksSchema.deleteOne({ symbol: ticker.symbol });
+    });
+
+    res.status(201).json({ message: 'deleted' });
   } catch (e) {
     res.status(500).json({
-      message: 'Something wrong :(',
+      message: 'Something wrong with deleting :(',
     });
   }
 });

@@ -15,9 +15,10 @@ const Analytics = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('../../assets/db/table.json');
-      const json = await response.json();
-      updateData(json);
+      const response = await request('/api/table/data', 'GET');
+      console.log(response.stocks);
+
+      updateData(response.stocks);
     };
 
     getData();
@@ -54,46 +55,57 @@ const Analytics = () => {
     const response = await request('/api/tickers/saved', 'POST', {
       tickers: savedTokens,
     });
-    console.log(response);
 
     setSelectedToBuy([]);
   };
 
   const handleDeleteClick = async () => {
+    let deletedTokens;
     updatePurchasedToken((tokens: Token[]) => {
       const currentTokens = tokens
         .map((obj: Token) => obj.id)
         .filter((id: number) => selectedToDelete.indexOf(id) === -1);
 
-      savedTokens = [
-        ...data.filter((obj: Token) => currentTokens.indexOf(obj.id) !== -1),
+      deletedTokens = [
+        ...tokens.filter((obj: Token) => currentTokens.indexOf(obj.id) === -1),
       ];
 
-      return savedTokens;
+      return [
+        ...tokens.filter((obj: Token) => currentTokens.indexOf(obj.id) !== -1),
+      ];
     });
+
+    const response = await request('/api/tickers/saved', 'DELETE', {
+      tickers: deletedTokens,
+    });
+    console.log(response);
 
     setSelectedToDelete([]);
   };
 
   const editRow = (id: number) => {
-    let buyPrice = prompt('Цена покупки');
-    while (buyPrice && isNaN(Number(buyPrice))) {
-      buyPrice = prompt('Цена покупки - число');
+    let expectedPrice = prompt('Цена покупки');
+    while (expectedPrice && isNaN(Number(expectedPrice))) {
+      expectedPrice = prompt('Цена покупки - число');
     }
     updatePurchasedToken((tokens) =>
       tokens.map((Token) => {
         if (Token.id === id) {
-          return { ...Token, buyPrice };
+          request('/api/tickers/saved', 'PATCH', {
+            symbol: Token.symbol,
+            expectedPrice,
+          }).then((response) => console.log(response));
+
+          return { ...Token, expectedPrice };
         }
         return Token;
       }),
     );
-    console.log(purchasedToken);
   };
 
   const handleUpdateTable = async () => {
-    const data = await request('/api/table/update', 'GET');
-    console.log(data);
+    const response = await request('/api/table/update', 'GET');
+    console.log(response);
   };
 
   return (

@@ -30,7 +30,6 @@ import EditIcon from '@mui/icons-material/Edit';
 type Props = {
   name: string;
   useSelection: any;
-  header?: string;
   handleCustomClick: any;
   data: any;
   customClickPurpose: any;
@@ -41,30 +40,48 @@ type Props = {
 export default function EnhancedTable({
   name,
   useSelection,
-  header,
   handleCustomClick,
   data,
   customClickPurpose,
   editableRow = false,
-  editRow = () => {},
+  editRow,
 }: Props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('id');
   const [selected, setSelected] = useSelection;
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dataTable, updateDataTable] = React.useState(data);
+
+  const head = [
+    'name',
+    'symbol',
+    'sector',
+    'price',
+    'market-cap',
+    'pe',
+    'lt',
+    'eps',
+    'roa',
+    'roe',
+    'roi',
+    'payout',
+    'volatility',
+    'date',
+  ];
+
+  if (editRow) {
+    head.push('expectedPrice');
+  }
 
   React.useEffect(() => {
     updateDataTable([...data]);
   }, [data]);
 
   let rows = dataTable;
-  const headCells = Object.keys(data[0]).map((name, i) => ({
+  const headCells = head.map((name, i) => ({
     id: name,
     numeric: name !== 'symbol' && name !== 'sector' && i !== 0 ? true : false,
-    disablePadding: false,
     label: name.toUpperCase(),
   }));
   const editClassName = 'edit-row';
@@ -126,7 +143,7 @@ export default function EnhancedTable({
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
+          <TableCell padding="none">
             <Checkbox
               color="primary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -141,7 +158,7 @@ export default function EnhancedTable({
             <TableCell
               key={headCell.id}
               align={headCell.numeric ? 'right' : 'left'}
-              padding={headCell.disablePadding ? 'none' : 'normal'}
+              padding={'none'}
               sortDirection={orderBy === headCell.id ? order : false}
             >
               <TableSortLabel
@@ -257,7 +274,9 @@ export default function EnhancedTable({
     let newSelected = [];
 
     if (editableRow && !!event.target.closest('.' + editClassName)) {
-      editRow(name);
+      if (editRow) {
+        editRow(name);
+      }
       return;
     }
     if (selectedIndex === -1) {
@@ -302,9 +321,9 @@ export default function EnhancedTable({
         <TableContainer sx={{ maxHeight: '70vh' }}>
           <Table
             stickyHeader
-            sx={{ minWidth: 750 }}
+            sx={{ minWidth: 500 }}
             aria-labelledby="sticky table"
-            size={dense ? 'small' : 'medium'}
+            size={'small'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -333,7 +352,7 @@ export default function EnhancedTable({
                       key={row.id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell padding="none">
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -342,30 +361,29 @@ export default function EnhancedTable({
                           }}
                         />
                       </TableCell>
-                      <TableCell
+                      {/* <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
                       >
                         {row.id}
-                      </TableCell>
-                      {Object.keys(row).map((key, i) =>
-                        i !== 0 ? (
-                          <TableCell
-                            key={`${key}-${i}`}
-                            align={
-                              key !== 'symbol' && key !== 'sector' && i !== 0
-                                ? 'right'
-                                : 'left'
-                            }
-                          >
-                            {row[key]}
-                          </TableCell>
-                        ) : null,
-                      )}
+                      </TableCell> */}
+                      {head.map((key, i) => (
+                        <TableCell
+                          key={`${key}-${i}`}
+                          align={
+                            key !== 'symbol' && key !== 'sector' && i !== 0
+                              ? 'right'
+                              : 'left'
+                          }
+                          padding="none"
+                        >
+                          {row[key]}
+                        </TableCell>
+                      ))}
                       {editableRow && (
-                        <TableCell>
+                        <TableCell padding="none">
                           <IconButton className={editClassName}>
                             <EditIcon />
                           </IconButton>
@@ -377,7 +395,7 @@ export default function EnhancedTable({
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: 33 * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -399,10 +417,6 @@ export default function EnhancedTable({
           />
         </div>
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }
