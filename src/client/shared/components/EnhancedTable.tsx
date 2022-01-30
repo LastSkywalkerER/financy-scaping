@@ -19,13 +19,12 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { visuallyHidden } from '@mui/utils';
 import Filter from './Filter';
-import EditIcon from '@mui/icons-material/Edit';
+import EnchancedTableRow from './EnchancedTableRow';
 
 type Props = {
   name: string;
@@ -34,7 +33,6 @@ type Props = {
   data: any;
   customClickPurpose: any;
   editableRow?: any;
-  editRow?: any;
 };
 
 export default function EnhancedTable({
@@ -44,7 +42,6 @@ export default function EnhancedTable({
   data,
   customClickPurpose,
   editableRow = false,
-  editRow,
 }: Props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('id');
@@ -52,6 +49,7 @@ export default function EnhancedTable({
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dataTable, updateDataTable] = React.useState(data);
+  const [selectedEdit, setSelectedEdit] = React.useState([]);
 
   const head = [
     'name',
@@ -70,7 +68,7 @@ export default function EnhancedTable({
     'date',
   ];
 
-  if (editRow) {
+  if (editableRow) {
     head.push('expectedPrice');
   }
 
@@ -84,7 +82,6 @@ export default function EnhancedTable({
     numeric: name !== 'symbol' && name !== 'sector' && i !== 0 ? true : false,
     label: name.toUpperCase(),
   }));
-  const editClassName = 'edit-row';
 
   const filterTable = (filteredTable) => {
     updateDataTable(filteredTable(data));
@@ -111,20 +108,6 @@ export default function EnhancedTable({
     return order === 'desc'
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-
-  // This method is created for cross-browser compatibility, if you don't
-  // need to support IE11, you can use Array.prototype.sort() directly
-  function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) {
-        return order;
-      }
-      return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
   }
 
   function EnhancedTableHead(props) {
@@ -269,32 +252,6 @@ export default function EnhancedTable({
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (editableRow && !!event.target.closest('.' + editClassName)) {
-      if (editRow) {
-        editRow(name);
-      }
-      return;
-    }
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -302,10 +259,6 @@ export default function EnhancedTable({
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
   };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
@@ -334,64 +287,21 @@ export default function EnhancedTable({
               rowCount={rows.length}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {rows
+                .slice()
+                .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.symbol);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.symbol)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="none">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      {/* <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
-                      </TableCell> */}
-                      {head.map((key, i) => (
-                        <TableCell
-                          key={`${key}-${i}`}
-                          align={
-                            key !== 'symbol' && key !== 'sector' && i !== 0
-                              ? 'right'
-                              : 'left'
-                          }
-                          padding="none"
-                        >
-                          {row[key]}
-                        </TableCell>
-                      ))}
-                      {editableRow && (
-                        <TableCell padding="none">
-                          <IconButton className={editClassName}>
-                            <EditIcon />
-                          </IconButton>
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  );
-                })}
+                .map((row, index) => (
+                  <EnchancedTableRow
+                    key={row.id}
+                    row={row}
+                    index={index}
+                    isItemSelected={isSelected(row.symbol)}
+                    head={head}
+                    editableRow={editableRow}
+                    useSelection={useSelection}
+                  />
+                ))}
               {emptyRows > 0 && (
                 <TableRow
                   style={{

@@ -34,26 +34,6 @@ const Analytics = () => {
     setSelectedToDelete([]);
   };
 
-  const editRow = (id: number) => {
-    let expectedPrice = prompt('Цена покупки');
-    while (expectedPrice && isNaN(Number(expectedPrice))) {
-      expectedPrice = prompt('Цена покупки - число');
-    }
-    updatePurchasedToken((tokens) =>
-      tokens.map((Token) => {
-        if (Token.id === id) {
-          request('/api/tickers/saved', 'PATCH', {
-            symbol: Token.symbol,
-            expectedPrice,
-          }).then((response) => console.log(response));
-
-          return { ...Token, expectedPrice };
-        }
-        return Token;
-      }),
-    );
-  };
-
   const handleUpdateTable = async () => {
     const response = await request('/api/table/update', 'GET');
     console.log(response);
@@ -86,7 +66,6 @@ const Analytics = () => {
             data={savedTickers.list}
             customClickPurpose="Delete"
             editableRow
-            editRow={editRow}
           />
         ) : (
           <h1>Loading...</h1>

@@ -1,4 +1,5 @@
 export default interface Token {
+  [key: string]: any;
   id: string;
   name: string;
   symbol: string;
@@ -14,5 +15,5 @@ export default interface Token {
   payout: string;
   volatility: string;
   date: string;
-  expectedPrice?: string;
+  expectedPrice?: number;
 }

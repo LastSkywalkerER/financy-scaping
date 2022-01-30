@@ -75,5 +75,23 @@ export default function tickerManager() {
     });
   };
 
-  return { getData, getSavedTickers, saveTickers, deleteTickers };
+  const updateTicker = async (ticker: Token, expectedPrice: number = 0) => {
+    dispatch(
+      setSavedTickers({
+        dataTable: savedTickers.list.map((savedTicker) => {
+          if (savedTicker.symbol === ticker.symbol) {
+            return { ...savedTicker, expectedPrice };
+          }
+          return savedTicker;
+        }),
+      }),
+    );
+
+    request('/api/tickers/saved', 'PATCH', {
+      symbol: ticker.symbol,
+      expectedPrice,
+    }).then((response) => console.log(response));
+  };
+
+  return { getData, getSavedTickers, saveTickers, deleteTickers, updateTicker };
 }
