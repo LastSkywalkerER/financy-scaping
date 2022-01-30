@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import themeReducer from './themeSlice';
 import userNameReducer from './userNameSlice';
+import dataTableReducer from './dataTableSlice';
+import savedTickersReducer from './savedTickersSlice';
 import sagas from '@core/sagas';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -10,6 +12,8 @@ const store = configureStore({
   reducer: {
     themeName: themeReducer,
     userName: userNameReducer,
+    dataTable: dataTableReducer,
+    savedTickers: savedTickersReducer,
   },
   middleware: (getDefaultMiddleware) => [
     ...getDefaultMiddleware(),

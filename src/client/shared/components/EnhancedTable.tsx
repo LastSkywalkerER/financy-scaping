@@ -58,7 +58,7 @@ export default function EnhancedTable({
     'symbol',
     'sector',
     'price',
-    'market-cap',
+    'marketCap',
     'pe',
     'lt',
     'eps',
@@ -262,7 +262,7 @@ export default function EnhancedTable({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = rows.map((n) => n.symbol);
       setSelected(newSelecteds);
       return;
     }
@@ -339,13 +339,13 @@ export default function EnhancedTable({
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  const isItemSelected = isSelected(row.symbol);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={(event) => handleClick(event, row.symbol)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
