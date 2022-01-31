@@ -1,11 +1,14 @@
 import { useState, useCallback } from 'react';
 import { config } from '@config';
 import { useAuth } from './useAuth';
+import { useDispatch } from 'react-redux';
+import { messageOccurred } from '@core/store/userMessageSlice';
 
 export default function useHttp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useAuth();
+  const dispatch = useDispatch();
 
   const request = useCallback(
     async (url, method = 'GET', body = null, headers = {}) => {
@@ -33,7 +36,7 @@ export default function useHttp() {
         return data;
       } catch (e: any) {
         setLoading(true);
-        setError(e.message);
+        dispatch(messageOccurred({ message: e.message, type: 'error' }));
         throw e;
       }
     },

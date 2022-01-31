@@ -12,6 +12,7 @@ import modals from '@components/modals';
 import { RootState } from '@core/store/store';
 import { useSelector } from 'react-redux';
 import Header from '@components/header/header';
+import UserMessage from '@components/userMessage';
 
 const Greetings = () => {
   const themeName = useSelector((state: RootState) => state.themeName.value);
@@ -24,6 +25,7 @@ const Greetings = () => {
             <Router>
               <Header />
               <Container maxWidth="lg">{<AppRoutes />}</Container>
+              <UserMessage />
             </Router>
           </AuthProvider>
         </ModalsProvider>

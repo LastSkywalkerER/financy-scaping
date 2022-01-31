@@ -4,6 +4,7 @@ import themeReducer from './themeSlice';
 import userNameReducer from './userNameSlice';
 import dataTableReducer from './dataTableSlice';
 import savedTickersReducer from './savedTickersSlice';
+import userMessageReducer from './userMessageSlice';
 import sagas from '@core/sagas';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -14,6 +15,7 @@ const store = configureStore({
     userName: userNameReducer,
     dataTable: dataTableReducer,
     savedTickers: savedTickersReducer,
+    userMessage: userMessageReducer,
   },
   middleware: (getDefaultMiddleware) => [
     ...getDefaultMiddleware(),

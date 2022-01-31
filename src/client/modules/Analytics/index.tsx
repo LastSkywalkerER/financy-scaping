@@ -7,12 +7,15 @@ import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
 import { RootState } from '@core/store/store';
 import TickerManager from '@core/utilities/tickerManager';
+import useStyles from './index.style';
 
 const Analytics = () => {
   const data = useSelector((state: RootState) => state.dataTable);
   const savedTickers = useSelector((state: RootState) => state.savedTickers);
   const { getData, getSavedTickers, saveTickers, deleteTickers } =
     TickerManager();
+
+  const { container } = useStyles();
 
   const [selectedToBuy, setSelectedToBuy] = useState([] as string[]);
   const [selectedToDelete, setSelectedToDelete] = useState([] as string[]);
@@ -40,7 +43,7 @@ const Analytics = () => {
   };
 
   return (
-    <Box>
+    <Box sx={container}>
       <Button onClick={handleUpdateTable} variant="contained">
         Update table
       </Button>

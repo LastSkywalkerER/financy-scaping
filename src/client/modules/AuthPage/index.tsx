@@ -10,97 +10,63 @@ import {
   TextField,
 } from '@mui/material';
 import useHttp from '@core/hooks/http.hook';
-import { useAuth } from '@core/hooks/useAuth';
+import authManager from '@core/utilities/authManager';
+import useStyles from './index.style';
 
 export default function AuthPage() {
-  const { loading, request, error, clearError } = useHttp();
+  const { loading } = useHttp();
   const [form, setForm] = useState({
     name: '',
     email: '',
     password: '',
     phone: '',
   });
-  const { login } = useAuth();
+  const { fetchLogin, fetchRegister } = authManager();
+  const { card, cardContent, title, textField, cardActions } = useStyles();
 
-  useEffect(() => {
-    if (error) {
-      alert(error);
-      clearError();
-    }
-  }, [error, clearError]);
-
-  const chanheHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const changeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  const registerHamdler = async () => {
-    try {
-      const data = await request(`/api/auth/register`, 'POST', {
-        ...form,
-      });
-    } catch (e) {}
+  const registerHandler = async () => {
+    fetchRegister(form);
   };
 
   const loginHandler = async () => {
-    try {
-      const data = await request(`/api/auth/login`, 'POST', {
-        ...form,
-      });
-
-      login(data.userID, data.token);
-    } catch (e) {}
+    fetchLogin(form);
   };
 
   return (
-    <Card
-      sx={{
-        m: 'auto',
-        mt: 10,
-        width: 1 / 2,
-        p: 3,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <CardContent
-        sx={{
-          width: '80%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h5" sx={{ textAlign: 'center' }}>
+    <Card sx={card}>
+      <CardContent sx={cardContent}>
+        <Typography variant="h5" sx={title}>
           Stock Market Analytics
         </Typography>
         <TextField
-          sx={{ width: '100%', m: 3 }}
+          sx={textField}
           required
           id="email"
           type="email"
           label="Email"
           name="email"
-          onChange={chanheHandler}
+          onChange={changeHandler}
         />
         <TextField
-          sx={{ width: '100%', m: 3 }}
+          sx={textField}
           required
           id="password"
           label="Password"
           type="password"
           autoComplete="current-password"
           name="password"
-          onChange={chanheHandler}
+          onChange={changeHandler}
         />
       </CardContent>
-      <CardActions
-        sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
-      >
+      <CardActions sx={cardActions}>
         <Button disabled={loading} onClick={loginHandler} variant="contained">
           Log In
         </Button>
-        <Button disabled={loading} onClick={registerHamdler} variant="outlined">
+        <Button disabled={loading} onClick={registerHandler} variant="outlined">
           Register
         </Button>
       </CardActions>
