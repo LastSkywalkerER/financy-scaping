@@ -4,7 +4,7 @@ import auth from '../middleware/auth.middleware';
 import config from 'config';
 
 import changeStockArray from '../utils/changeStockArray';
-import runScrap from '../scrap';
+import runScrap from '../utils/scrap';
 
 const router = Router();
 

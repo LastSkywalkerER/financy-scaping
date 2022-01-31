@@ -1,10 +1,10 @@
 import Nightmare from 'nightmare';
 import cheerio from 'cheerio';
 import fs from 'fs';
-import Snp500Schema from './models/Snp500';
-import StocksSchema from './models/StocksTable';
+import Snp500Schema from '../models/Snp500';
+import StocksSchema from '../models/StocksTable';
 
-import Token from '../types/Token';
+import Token from '../../types/Token';
 
 const url500 = 'https://illiakyselov.com/kompanii-s-p500';
 const urlTrade = 'https://finviz.com/quote.ashx?t=';

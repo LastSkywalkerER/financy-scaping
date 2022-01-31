@@ -11,11 +11,6 @@ router.post('/saved', auth, async (req, res) => {
   try {
     const { tickers } = req.body;
     const date = new Date();
-    // const existing = await stocksSchema.find({ owner: req.user.userId });
-    // if (existing) {
-    //   res.json(existing);
-    // }
-
     tickers.forEach(async (ticker) => {
       const stringifyTicker = {};
       const map = new Map();

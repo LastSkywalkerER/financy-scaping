@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@core/store/store';
 import TickerManager from '@core/utilities/tickerManager';
 import useStyles from './index.style';
+import useWebSocket from '@core/hooks/useWebSocket';
 
 const Analytics = () => {
   const data = useSelector((state: RootState) => state.dataTable);
@@ -21,6 +22,8 @@ const Analytics = () => {
   const [selectedToDelete, setSelectedToDelete] = useState([] as string[]);
 
   const { request } = useHttp();
+
+  const { sendMessage } = useWebSocket();
 
   useEffect(() => {
     getData();
@@ -38,8 +41,9 @@ const Analytics = () => {
   };
 
   const handleUpdateTable = async () => {
-    const response = await request('/api/table/update', 'GET');
-    console.log(response);
+    // const response = await request('/api/table/update', 'GET');
+    // console.log(response);
+    sendMessage('want to update');
   };
 
   return (
