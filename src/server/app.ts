@@ -1,8 +1,9 @@
 import express from 'express';
-import expressWs from 'express-ws';
 import config from 'config';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import WebSocket from 'ws';
+import http from 'http';
 
 import authRoutes from './routes/auth.routes';
 import tickersRoutes from './routes/stock.routes';
@@ -10,7 +11,8 @@ import tableRoutes from './routes/table.routes';
 
 const app = express();
 const PORT = config.get('port') || 5000;
-expressWs(app);
+const server = http.createServer(app);
+const webSocketServer = new WebSocket.Server({ server });
 
 // говорим экспрессу, что можно принимать запросы с чужих доменов
 app.use(cors());
@@ -22,18 +24,20 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tickers', tickersRoutes);
 app.use('/api/table', tableRoutes);
 
-app.ws('/', function (ws, req) {
+webSocketServer.on('connection', (ws) => {
   ws.on('message', function (msg) {
     console.log(msg);
   });
   console.log('socket', ws);
-  app.clients.forEach((client) => client.send('Somebody connected')); // ???
+  webSocketServer.clients.forEach((client) =>
+    client.send('Somebody connected'),
+  );
 });
 
 async function start() {
   try {
     await mongoose.connect(config.get('mongoUri'));
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`App started at ${PORT}`);
     });
   } catch (e: any) {
