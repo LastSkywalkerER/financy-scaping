@@ -11,7 +11,13 @@ const urlTrade = 'https://finviz.com/quote.ashx?t=';
 
 let date = new Date();
 
-let table500: Token[] = [];
+let table500: Token[];
+
+export const tableUpdating = {
+  status: false,
+  tickerCount: 505,
+  tickerUpdated: 0,
+};
 
 let getData500 = (html) => {
   const $ = cheerio.load(html);
@@ -143,7 +149,10 @@ async function getPrices(url, i) {
 
 export default async function runScrap() {
   console.log('Scrap started');
+  tableUpdating.status = true;
   date = new Date();
+
+  // await get500();
 
   table500 = await (
     await Snp500Schema.find({})
@@ -153,7 +162,7 @@ export default async function runScrap() {
     sector: ticker.sector,
   }));
 
-  // await get500();
+  tableUpdating.tickerCount = table500.length;
 
   const threads = 2;
 
@@ -182,7 +191,7 @@ export default async function runScrap() {
   //   './src/client/static/db/table.json',
   //   JSON.stringify(table500),
   // );
-
-  await console.log('Info scraped succesfully!');
+  tableUpdating.status = false;
+  console.log('Info scraped succesfully!');
   return { message: 'Success' };
 }

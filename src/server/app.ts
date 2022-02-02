@@ -9,6 +9,9 @@ import authRoutes from './routes/auth.routes';
 import tickersRoutes from './routes/stock.routes';
 import tableRoutes from './routes/table.routes';
 
+import onMessage from './webSocket/on.message';
+import { wsPackageTypes } from '../types/wsPackageTypes';
+
 const app = express();
 const PORT = config.get('port') || 5000;
 const server = http.createServer(app);
@@ -25,12 +28,16 @@ app.use('/api/tickers', tickersRoutes);
 app.use('/api/table', tableRoutes);
 
 webSocketServer.on('connection', (ws) => {
-  ws.on('message', function (msg) {
-    console.log(msg);
+  ws.on('message', (msg) => {
+    onMessage(msg, webSocketServer, ws);
   });
-  console.log('socket', ws);
   webSocketServer.clients.forEach((client) =>
-    client.send('Somebody connected'),
+    client.send(
+      JSON.stringify({
+        type: wsPackageTypes.WEBSOСKET_INFO,
+        data: 'Somebody connected',
+      }),
+    ),
   );
 });
 

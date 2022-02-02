@@ -1,14 +1,11 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EnhancedTable from '@components/EnhancedTable';
-import Token from 'src/types/Token';
-import useHttp from '@core/hooks/http.hook';
 import { Box } from '@mui/system';
-import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
 import { RootState } from '@core/store/store';
 import TickerManager from '@core/utilities/tickerManager';
 import useStyles from './index.style';
-import useWebSocket from '@core/hooks/useWebSocket';
+import TableUpdatingStatus from '@components/tableUpdatingStatus';
 
 const Analytics = () => {
   const data = useSelector((state: RootState) => state.dataTable);
@@ -20,10 +17,6 @@ const Analytics = () => {
 
   const [selectedToBuy, setSelectedToBuy] = useState([] as string[]);
   const [selectedToDelete, setSelectedToDelete] = useState([] as string[]);
-
-  const { request } = useHttp();
-
-  const { sendMessage } = useWebSocket();
 
   useEffect(() => {
     getData();
@@ -40,17 +33,9 @@ const Analytics = () => {
     setSelectedToDelete([]);
   };
 
-  const handleUpdateTable = async () => {
-    // const response = await request('/api/table/update', 'GET');
-    // console.log(response);
-    sendMessage('want to update');
-  };
-
   return (
     <Box sx={container}>
-      <Button onClick={handleUpdateTable} variant="contained">
-        Update table
-      </Button>
+      <TableUpdatingStatus />
       <Box>
         {!!data.list.length ? (
           <EnhancedTable
