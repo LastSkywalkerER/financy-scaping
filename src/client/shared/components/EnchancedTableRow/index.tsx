@@ -47,7 +47,6 @@ export default function EnchancedTableRow({
       if (!isNaN(Number(expectedPrice))) {
         updateTicker(row, expectedPrice);
       }
-      setExpectedPrice(row.expectedPrice);
       setEditable(false);
       return;
     }
@@ -99,6 +98,8 @@ export default function EnchancedTableRow({
               value={expectedPrice}
               onChange={changeHandler}
             />
+          ) : key === 'expectedPrice' ? (
+            expectedPrice
           ) : (
             row[key]
           )}
