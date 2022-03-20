@@ -98,8 +98,6 @@ export default function EnchancedTableRow({
               value={expectedPrice}
               onChange={changeHandler}
             />
-          ) : key === 'expectedPrice' ? (
-            expectedPrice
           ) : (
             row[key]
           )}

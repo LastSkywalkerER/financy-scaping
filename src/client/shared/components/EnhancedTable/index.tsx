@@ -10,10 +10,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { IconButton } from '@mui/material';
 import EnhancedTableHead from '@components/enhancedTableHead';
 import EnhancedTableToolbar from '@components/EnhancedTableToolbar';
 import Filter from '../Filter';
 import EnchancedTableRow from '../EnchancedTableRow';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 type Props = {
   name: string;
@@ -59,6 +61,10 @@ export default function EnhancedTable({
   if (editableRow) {
     headList.push('expectedPrice');
   }
+
+  const handleRefresh = () => {
+    updateDataTable(data);
+  };
 
   const filterTable = (filteredTable) => {
     updateDataTable(filteredTable(data));
@@ -172,6 +178,9 @@ export default function EnhancedTable({
         </TableContainer>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Filter data={data} updateDataTable={filterTable} />
+          <IconButton onClick={handleRefresh}>
+            <RefreshIcon />
+          </IconButton>
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, { value: -1, label: 'All' }]}
             component="div"
