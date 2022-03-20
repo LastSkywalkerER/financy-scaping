@@ -22,7 +22,6 @@ router.post(
   ],
   async (req: any, res: any) => {
     try {
-      // console.log(req.headers, req.body);
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
@@ -32,13 +31,13 @@ router.post(
         });
       }
 
-      const { name, email, password, phone } = req.body;
+      const { email, password } = req.body;
 
-      const candidate = await User.findOne({
+      const candidateEmail = await User.findOne({
         email,
       });
 
-      if (candidate) {
+      if (candidateEmail) {
         return res.status(400).json({
           message: 'User exist',
         });
@@ -46,18 +45,20 @@ router.post(
 
       const hashedPassword = await bcrypt.hash(password, 12);
       const user = new User({
-        name,
+        name: new Date().toString(),
         email,
         password: hashedPassword,
-        phone,
+        phone: new Date().toString(),
       });
       console.log(user);
+
       await user.save();
 
       res.status(201).json({
         message: 'User created',
       });
     } catch (e) {
+      console.log(e);
       res.status(500).json({
         message: 'Something wrong :(',
       });

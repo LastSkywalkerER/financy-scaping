@@ -33,6 +33,10 @@ export default function useHttp() {
 
         setLoading(false);
 
+        if (data.message) {
+          dispatch(messageOccurred({ message: data.message, type: 'success' }));
+        }
+
         return data;
       } catch (e: any) {
         setLoading(true);
