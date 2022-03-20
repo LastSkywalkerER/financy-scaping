@@ -1,3 +1,3 @@
 export enum config {
-  SERVERURL = 'http://localhost:5000',
+  SERVERURL = 'http://localhost',
 }

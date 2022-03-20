@@ -1,6 +1,6 @@
 {
-  "port": 5000,
+  "port": 80,
   "jwtSecret": "lyolik financy-scraping",
   "mongoUri": "mongodb+srv://financy-scraping:Mnago052@cluster0.pmu38.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  "baseUrl": "http://localhost:5000"
+  "baseUrl": "http://localhost"
 }
