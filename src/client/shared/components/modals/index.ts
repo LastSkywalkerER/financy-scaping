@@ -1,4 +1,4 @@
-import EditDialog from './EditDialog';
+import EditDialog from './editDialog';
 
 export enum modalsNames {
   EDIT_DIALOG = 'EDIT_DIALOG',
