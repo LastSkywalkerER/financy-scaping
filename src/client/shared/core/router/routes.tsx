@@ -8,9 +8,9 @@ import AuthPage from '@modules/AuthPage';
 import { useAuth } from '@core/hooks/useAuth';
 
 export default function AppRoutes() {
-  const { userId } = useAuth();
+  const { token } = useAuth();
 
-  if (userId && userId != '') {
+  if (token) {
     return (
       <Routes>
         <Route path="/analytics" element={<Analytics />} />

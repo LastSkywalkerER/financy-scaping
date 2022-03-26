@@ -6,8 +6,9 @@ import { RootState } from '@core/store/store';
 import TickerManager from '@core/utilities/tickerManager';
 import useStyles from './index.style';
 import TableUpdatingStatus from '@components/tableUpdatingStatus';
+import { useAuth } from '@core/hooks/useAuth';
 
-const Analytics = () => {
+const Analytics: React.FC = React.memo(() => {
   const data = useSelector((state: RootState) => state.dataTable);
   const savedTickers = useSelector((state: RootState) => state.savedTickers);
   const { getData, getSavedTickers, saveTickers, deleteTickers } =
@@ -65,6 +66,6 @@ const Analytics = () => {
       </Box>
     </Box>
   );
-};
+});
 
 export default Analytics;

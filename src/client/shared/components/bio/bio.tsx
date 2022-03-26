@@ -18,7 +18,7 @@ export default function Bio() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   );
-  const userName = useSelector((state: RootStateOrAny) => state.userName.value);
+  const userName = useSelector((state: RootStateOrAny) => state.user.name);
   const { wrapper, textMargin, menu, text } = useStyles();
   const { logout } = useAuth();
   const settings = [

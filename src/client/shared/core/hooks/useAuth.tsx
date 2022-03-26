@@ -5,6 +5,8 @@ import React, {
   useState,
   useContext,
 } from 'react';
+import { setUserCredential } from '@core/store/userSlice';
+import { useDispatch } from 'react-redux';
 
 interface InitialAuth {
   userId: string;
@@ -27,10 +29,14 @@ export default React.memo(function AuthProvider({ children }: Props) {
   const [userId, setUserId] = useState('');
   const [token, setToken] = useState('');
 
+  const dispatch = useDispatch();
+
   const login = useCallback(
     (newUserId: string, newToken: string) => {
-      setUserId(newUserId);
       setToken(newToken);
+      setUserId(newUserId);
+
+      dispatch(setUserCredential({ userId: newUserId, token: newToken }));
 
       localStorage.setItem(storageName, JSON.stringify(newToken));
     },

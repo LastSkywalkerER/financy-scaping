@@ -11,11 +11,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Token from 'src/types/Token';
 import { RootState } from '@core/store/store';
+import { useAuth } from '@core/hooks/useAuth';
 
 export default function tickerManager() {
   const { request } = useHttp();
   const dispatch = useDispatch();
-
   const data = useSelector((state: RootState) => state.dataTable);
   const savedTickers = useSelector((state: RootState) => state.savedTickers);
 

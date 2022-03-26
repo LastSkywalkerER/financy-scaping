@@ -19,10 +19,10 @@ const Greetings = () => {
   const themeName = useSelector((state: RootState) => state.themeName.value);
 
   return (
-    <ThemeProvider theme={themes[themeName]}>
-      <StylesProvider theme={themes[themeName]}>
-        <ModalsProvider initialModals={modals}>
-          <AuthProvider>
+    <AuthProvider>
+      <ThemeProvider theme={themes[themeName]}>
+        <StylesProvider theme={themes[themeName]}>
+          <ModalsProvider initialModals={modals}>
             <WebSocketProvider>
               <Router>
                 <Header />
@@ -30,10 +30,10 @@ const Greetings = () => {
                 <UserMessage />
               </Router>
             </WebSocketProvider>
-          </AuthProvider>
-        </ModalsProvider>
-      </StylesProvider>
-    </ThemeProvider>
+          </ModalsProvider>
+        </StylesProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 };
 

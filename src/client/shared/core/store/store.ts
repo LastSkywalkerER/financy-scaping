@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import themeReducer from './themeSlice';
-import userNameReducer from './userNameSlice';
+import userNameReducer from './userSlice';
 import dataTableReducer from './dataTableSlice';
 import savedTickersReducer from './savedTickersSlice';
 import userMessageReducer from './userMessageSlice';
@@ -12,7 +12,7 @@ const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
   reducer: {
     themeName: themeReducer,
-    userName: userNameReducer,
+    user: userNameReducer,
     dataTable: dataTableReducer,
     savedTickers: savedTickersReducer,
     userMessage: userMessageReducer,

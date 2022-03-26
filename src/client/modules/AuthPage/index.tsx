@@ -13,13 +13,10 @@ import useHttp from '@core/hooks/http.hook';
 import authManager from '@core/utilities/authManager';
 import useStyles from './index.style';
 
-export default function AuthPage() {
-  const { loading } = useHttp();
+const AuthPage = React.memo(() => {
   const [form, setForm] = useState({
-    name: '',
     email: '',
     password: '',
-    phone: '',
   });
   const { fetchLogin, fetchRegister } = authManager();
   const { card, cardContent, title, textField, cardActions } = useStyles();
@@ -63,13 +60,15 @@ export default function AuthPage() {
         />
       </CardContent>
       <CardActions sx={cardActions}>
-        <Button disabled={loading} onClick={loginHandler} variant="contained">
+        <Button onClick={loginHandler} variant="contained">
           Log In
         </Button>
-        <Button disabled={loading} onClick={registerHandler} variant="outlined">
+        <Button onClick={registerHandler} variant="outlined">
           Register
         </Button>
       </CardActions>
     </Card>
   );
-}
+});
+
+export default AuthPage;

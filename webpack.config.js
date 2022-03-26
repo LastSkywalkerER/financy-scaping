@@ -62,7 +62,7 @@ export default {
   mode: 'development',
   devServer: {
     open: '/',
-    port: 8080,
+    port: 5500,
     hot: true,
     historyApiFallback: true,
   },
