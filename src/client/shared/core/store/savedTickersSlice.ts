@@ -6,21 +6,33 @@ const name: string = 'savedTickers';
 
 export const savedTickers = createSlice({
   name,
-  initialState: { list: [] as Token[], isLoaded: false },
+  initialState: {
+    list: [] as Token[],
+    filteredList: [] as Token[],
+    isLoaded: false,
+  },
   reducers: {
-    setSavedTickers: (state, action) => {
-      state.list = action.payload.dataTable;
+    setSavedTickers: (state, { payload }) => {
+      state.filteredList = payload.dataTable;
+      state.list = payload.dataTable;
     },
-    setSavedTickersIsLoaded: (state, action) => {
-      state.isLoaded = action.payload.isLoaded;
+    setSavedTickersIsLoaded: (state, { payload }) => {
+      state.isLoaded = payload.isLoaded;
     },
-    addSavedTickers: (state, action) => {
-      state.list = [...state.list, ...action.payload.dataTable];
+    addSavedTickers: (state, { payload }) => {
+      state.filteredList = [...state.list, ...payload.dataTable];
+      state.list = [...state.list, ...payload.dataTable];
     },
-    deleteSavedTickers: (state, action) => {
-      state.list = state.list.filter(
-        (ticker) => action.payload.deleteIds.indexOf(ticker.symbol) === -1,
+    deleteSavedTickers: (state, { payload }) => {
+      state.filteredList = state.list.filter(
+        (ticker) => payload.deleteIds.indexOf(ticker.symbol) === -1,
       );
+      state.list = state.list.filter(
+        (ticker) => payload.deleteIds.indexOf(ticker.symbol) === -1,
+      );
+    },
+    setFilteredSavedTickers: (state, { payload }) => {
+      state.filteredList = payload.filteredList;
     },
   },
 });
@@ -31,6 +43,7 @@ export const {
   setSavedTickersIsLoaded,
   addSavedTickers,
   deleteSavedTickers,
+  setFilteredSavedTickers,
 } = savedTickers.actions;
 
 export default savedTickers.reducer;

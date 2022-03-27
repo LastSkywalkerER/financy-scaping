@@ -15,7 +15,6 @@ import EnhancedTableHead from '@components/enhancedTableHead';
 import EnhancedTableToolbar from '@components/EnhancedTableToolbar';
 import Filter from '../Filter';
 import EnchancedTableRow from '../EnchancedTableRow';
-import RefreshIcon from '@mui/icons-material/Refresh';
 
 type Props = {
   name: string;
@@ -24,6 +23,7 @@ type Props = {
   data: any;
   customClickPurpose: any;
   editableRow?: any;
+  handleFilter: any;
 };
 
 export default function EnhancedTable({
@@ -33,13 +33,13 @@ export default function EnhancedTable({
   data,
   customClickPurpose,
   editableRow = false,
+  handleFilter,
 }: Props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('id');
   const [selected, setSelected] = useSelection;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [dataTable, updateDataTable] = React.useState(data);
 
   const headList = [
     'name',
@@ -61,14 +61,6 @@ export default function EnhancedTable({
   if (editableRow) {
     headList.push('expectedPrice');
   }
-
-  const handleRefresh = () => {
-    updateDataTable(data);
-  };
-
-  const filterTable = (filteredTable) => {
-    updateDataTable(filteredTable(data));
-  };
 
   function descendingComparator(a, b, orderBy) {
     if (
@@ -101,7 +93,7 @@ export default function EnhancedTable({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = dataTable.map((n) => n.symbol);
+      const newSelecteds = data.map((n) => n.symbol);
       setSelected(newSelecteds);
       return;
     }
@@ -121,7 +113,7 @@ export default function EnhancedTable({
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataTable.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -145,11 +137,11 @@ export default function EnhancedTable({
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={dataTable.length}
+              rowCount={data.length}
               headList={headList}
             />
             <TableBody>
-              {dataTable
+              {data
                 .slice()
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -177,14 +169,11 @@ export default function EnhancedTable({
           </Table>
         </TableContainer>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Filter data={data} updateDataTable={filterTable} />
-          <IconButton onClick={handleRefresh}>
-            <RefreshIcon />
-          </IconButton>
+          <Filter data={data} updateDataTable={handleFilter} />
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, { value: -1, label: 'All' }]}
             component="div"
-            count={dataTable.length}
+            count={data.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

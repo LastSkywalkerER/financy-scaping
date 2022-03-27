@@ -26,7 +26,7 @@ const Greetings = () => {
             <WebSocketProvider>
               <Router>
                 <Header />
-                <Container maxWidth="lg">{<AppRoutes />}</Container>
+                <Container maxWidth="xl">{<AppRoutes />}</Container>
                 <UserMessage />
               </Router>
             </WebSocketProvider>

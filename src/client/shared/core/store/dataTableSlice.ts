@@ -6,18 +6,27 @@ const name: string = 'dataTable';
 
 export const dataTable = createSlice({
   name,
-  initialState: { list: [] as Token[], isLoaded: false },
+  initialState: {
+    list: [] as Token[],
+    filteredList: [] as Token[],
+    isLoaded: false,
+  },
   reducers: {
-    setDataTable: (state, action) => {
-      state.list = action.payload.dataTable;
+    setDataTable: (state, { payload }) => {
+      state.list = payload.dataTable;
+      state.filteredList = payload.dataTable;
     },
-    setDataTableIsLoaded: (state, action) => {
-      state.isLoaded = action.payload.isLoaded;
+    setDataTableIsLoaded: (state, { payload }) => {
+      state.isLoaded = payload.isLoaded;
+    },
+    setFilteredDataTable: (state, { payload }) => {
+      state.filteredList = payload.filteredList;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setDataTable, setDataTableIsLoaded } = dataTable.actions;
+export const { setDataTable, setDataTableIsLoaded, setFilteredDataTable } =
+  dataTable.actions;
 
 export default dataTable.reducer;
