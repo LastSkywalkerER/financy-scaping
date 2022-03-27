@@ -50,13 +50,17 @@ export default React.memo(function AuthProvider({ children }: Props) {
     localStorage.removeItem(storageName);
   }, [setUserId, setToken]);
 
+  const check = useCallback((storageToken) => {
+    logout();
+  }, []);
+
   useEffect(() => {
     const storageToken = localStorage.getItem(storageName)
       ? JSON.parse(localStorage.getItem(storageName) || '')
       : '';
 
     if (storageToken && storageToken != '') {
-      login('', storageToken);
+      check(storageToken);
     }
   }, [login]);
 

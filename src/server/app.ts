@@ -29,9 +29,6 @@ app.use('/api/tickers', tickersRoutes);
 app.use('/api/table', tableRoutes);
 
 webSocketServer.on('connection', (ws) => {
-  ws.on('message', (msg) => {
-    onMessage(msg, webSocketServer, ws);
-  });
   webSocketServer.clients.forEach((client) =>
     client.send(
       JSON.stringify({
@@ -40,6 +37,9 @@ webSocketServer.on('connection', (ws) => {
       }),
     ),
   );
+  ws.on('message', (msg) => {
+    onMessage(msg, webSocketServer, ws);
+  });
 });
 
 if (process.env.NODE_ENV === 'production') {
