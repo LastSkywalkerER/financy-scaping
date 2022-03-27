@@ -7,7 +7,7 @@ import { messageOccurred } from '@core/store/userMessageSlice';
 const useHttp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const dispatch = useDispatch();
 
   const request = useCallback(
@@ -33,10 +33,11 @@ const useHttp = () => {
         const data = await response.json();
 
         if (!response.ok) {
+          if (response.status === 401) {
+            logout();
+          }
           throw new Error(data.message || `Can't connect to server`);
         }
-
-        setLoading(false);
 
         if (data.message) {
           dispatch(messageOccurred({ message: data.message, type: 'success' }));
@@ -44,9 +45,11 @@ const useHttp = () => {
 
         return data;
       } catch (e: any) {
-        setLoading(true);
         dispatch(messageOccurred({ message: e.message, type: 'error' }));
+
         throw e;
+      } finally {
+        setLoading(false);
       }
     },
     [setLoading, token, dispatch],
