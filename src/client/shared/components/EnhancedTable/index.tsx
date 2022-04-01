@@ -63,17 +63,20 @@ export default function EnhancedTable({
   }
 
   function descendingComparator(a, b, orderBy) {
-    if (
-      !isNaN(parseInt(a[orderBy])) &&
-      parseInt(a[orderBy]) < parseInt(b[orderBy])
-    ) {
-      return -1;
-    }
-    if (
-      !isNaN(parseInt(b[orderBy])) &&
-      parseInt(a[orderBy]) > parseInt(b[orderBy])
-    ) {
-      return 1;
+    if (!isNaN(parseInt(a[orderBy])) && !isNaN(parseInt(b[orderBy]))) {
+      if (parseInt(a[orderBy]) < parseInt(b[orderBy])) {
+        return -1;
+      }
+      if (parseInt(a[orderBy]) > parseInt(b[orderBy])) {
+        return 1;
+      }
+    } else {
+      if (a[orderBy] < b[orderBy]) {
+        return -1;
+      }
+      if (a[orderBy] > b[orderBy]) {
+        return 1;
+      }
     }
     // a должно быть равным b
     return 0;

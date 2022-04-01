@@ -68,9 +68,9 @@ export default function TableUpdatingStatus() {
       )}
       <Typography>
         {tableUpdating.status
-          ? `Updating ${
-              (tableUpdating.tickerUpdated / tableUpdating.tickerCount) * 100
-            }%`
+          ? `Updating ${Math.round(
+              (tableUpdating.tickerUpdated / tableUpdating.tickerCount) * 100,
+            )}%`
           : `Latest ${tableUpdating.tickerCount} tickers`}
       </Typography>
     </Box>

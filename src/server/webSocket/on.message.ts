@@ -1,5 +1,5 @@
 import { wsPackageTypes } from '../../types/wsPackageTypes';
-import runScrap, { tableUpdating } from '../utils/scrap';
+import { Scrap, tableUpdating } from '../utils/scrap';
 
 const broadcast = (wss, message) =>
   wss.clients.forEach((client) => client.send(message));
@@ -10,18 +10,15 @@ export default async (msg, webSocketServer, ws) => {
 
     switch (type) {
       case wsPackageTypes.TABLE_UPDATE_REQUEST:
-        // runScrap();
-        broadcast(
-          webSocketServer,
-          JSON.stringify({
-            type: wsPackageTypes.TABLE_UPDATE_REQUEST,
-            data: {
-              status: true,
-              tickerCount: 505,
-              tickerUpdated: 0,
-            },
-          }),
-        );
+        Scrap.run((data) => {
+          broadcast(
+            webSocketServer,
+            JSON.stringify({
+              type: wsPackageTypes.TABLE_UPDATE_REQUEST,
+              data,
+            }),
+          );
+        });
 
         break;
       case wsPackageTypes.TABLE_UPDATE_STATUS:

@@ -1,7 +1,7 @@
 import { Schema, model, Types } from 'mongoose';
 
 export const stocksSchema = new Schema({
-  date: { type: Date, default: Date.now, required: true },
+  date: { type: Date, required: true },
   owner: { type: String, default: 'common', required: true },
   symbol: {
     type: String,
