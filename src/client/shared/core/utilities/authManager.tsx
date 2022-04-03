@@ -3,7 +3,7 @@ import useHttp from '@core/hooks/http.hook';
 import { useAuth } from '@core/hooks/useAuth';
 
 export default function authManager() {
-  const { login } = useAuth();
+  const { login, setLoading } = useAuth();
   const { request } = useHttp();
 
   const fetchRegister = useCallback(
@@ -35,7 +35,10 @@ export default function authManager() {
       const data = await request(`/api/auth/status`);
 
       login(data.userID, data.token);
-    } catch (e) {}
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
   }, [login, request]);
 
   return { fetchRegister, fetchLogin, fetchStatus };

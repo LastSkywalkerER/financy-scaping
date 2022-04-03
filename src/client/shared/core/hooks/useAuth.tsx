@@ -42,7 +42,6 @@ export default React.memo(function AuthProvider({ children }: Props) {
       setUserId(newUserId);
 
       dispatch(setUserCredential({ userId: newUserId, token: newToken }));
-      setLoading(false);
     },
     [setUserId, setToken],
   );
@@ -68,6 +67,7 @@ export default React.memo(function AuthProvider({ children }: Props) {
         login,
         logout,
         loading,
+        setLoading,
         getStorageToken,
       }}
     >
