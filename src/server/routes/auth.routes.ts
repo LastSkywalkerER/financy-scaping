@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
 import config from 'config';
 import jwt from 'jsonwebtoken';
@@ -133,9 +132,7 @@ router.get('/status', auth, async (req: any, res: any) => {
   try {
     const { userId } = req.user;
 
-    const user = await User.findOne({ _id: new ObjectId(userId) });
-    const user2 = await User.findOne({ id: userId });
-    console.log(user, user2);
+    const user = await User.findOne({ id: userId });
 
     if (!user) {
       return res.status(400).json({
