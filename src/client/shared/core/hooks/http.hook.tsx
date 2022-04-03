@@ -7,7 +7,7 @@ import { messageOccurred } from '@core/store/userMessageSlice';
 const useHttp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { token, logout } = useAuth();
+  const { getStorageToken, logout } = useAuth();
   const dispatch = useDispatch();
 
   const request = useCallback(
@@ -19,7 +19,7 @@ const useHttp = () => {
     ) => {
       setLoading(true);
       try {
-        headers['auth'] = token;
+        headers['auth'] = getStorageToken();
         if (body) {
           body = JSON.stringify(body);
           headers['Content-Type'] = 'application/json';
@@ -52,7 +52,7 @@ const useHttp = () => {
         setLoading(false);
       }
     },
-    [setLoading, token, dispatch],
+    [setLoading, getStorageToken, dispatch],
   );
 
   const clearError = () => setError(null);

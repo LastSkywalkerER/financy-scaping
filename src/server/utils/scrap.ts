@@ -68,8 +68,6 @@ export class Scrap {
         ...scrapedData,
       };
 
-      console.log(Scrap.table500[i]);
-
       const stock = new StocksSchema({
         ...Scrap.table500[i],
         ...scrapedData,
@@ -93,7 +91,7 @@ export class Scrap {
           Scrap.getTradingData(response, i);
         })
         .catch((err) => {
-          console.log(err);
+          console.warn(err);
         });
     } catch (error) {}
   }

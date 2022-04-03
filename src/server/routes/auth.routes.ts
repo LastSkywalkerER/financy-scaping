@@ -1,9 +1,11 @@
 import { Router } from 'express';
+import { ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
 import config from 'config';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
 import User from '../models/User';
+import auth from '../middleware/auth.middleware';
 
 const router = Router();
 
@@ -125,5 +127,41 @@ router.post(
     }
   },
 );
+
+// /api/auth/status
+router.get('/status', auth, async (req: any, res: any) => {
+  try {
+    const { userId } = req.user;
+
+    const user = await User.findOne({ _id: new ObjectId(userId) });
+    const user2 = await User.findOne({ id: userId });
+    console.log(user, user2);
+
+    if (!user) {
+      return res.status(400).json({
+        message: 'User not find',
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        userId: user.id,
+      },
+      config.get('jwtSecret'),
+      {
+        expiresIn: '1h',
+      },
+    );
+
+    res.json({
+      token,
+      userID: user.id,
+    });
+  } catch (e) {
+    res.status(500).json({
+      message: 'Something wrong :(',
+    });
+  }
+});
 
 export default router;

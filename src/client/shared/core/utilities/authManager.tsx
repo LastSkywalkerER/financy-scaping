@@ -30,5 +30,13 @@ export default function authManager() {
     [login, request],
   );
 
-  return { fetchRegister, fetchLogin };
+  const fetchStatus = useCallback(async () => {
+    try {
+      const data = await request(`/api/auth/status`);
+
+      login(data.userID, data.token);
+    } catch (e) {}
+  }, [login, request]);
+
+  return { fetchRegister, fetchLogin, fetchStatus };
 }

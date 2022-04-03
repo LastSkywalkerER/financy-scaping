@@ -16,6 +16,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     const decoded = jwt.verify(token, config.get('jwtSecret'));
     req.user = decoded;
+
     return next();
   } catch (e) {
     return res.status(401).json({ message: 'Not authorized' });

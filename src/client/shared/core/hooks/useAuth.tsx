@@ -11,8 +11,10 @@ import { useDispatch } from 'react-redux';
 interface InitialAuth {
   userId: string;
   token: string;
+  loading: boolean;
   login: (newUserId: string, newToken: string) => void;
   logout: () => void;
+  getStorageToken: () => string;
 }
 
 const AuthContext = createContext({} as InitialAuth);
@@ -28,17 +30,19 @@ interface Props {
 export default React.memo(function AuthProvider({ children }: Props) {
   const [userId, setUserId] = useState('');
   const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const dispatch = useDispatch();
 
   const login = useCallback(
     (newUserId: string, newToken: string) => {
+      localStorage.setItem(storageName, JSON.stringify(newToken));
+
       setToken(newToken);
       setUserId(newUserId);
 
       dispatch(setUserCredential({ userId: newUserId, token: newToken }));
-
-      localStorage.setItem(storageName, JSON.stringify(newToken));
+      setLoading(false);
     },
     [setUserId, setToken],
   );
@@ -50,19 +54,11 @@ export default React.memo(function AuthProvider({ children }: Props) {
     localStorage.removeItem(storageName);
   }, [setUserId, setToken]);
 
-  const check = useCallback((storageToken) => {
-    logout();
-  }, []);
-
-  useEffect(() => {
-    const storageToken = localStorage.getItem(storageName)
+  const getStorageToken = useCallback(() => {
+    return localStorage.getItem(storageName)
       ? JSON.parse(localStorage.getItem(storageName) || '')
       : '';
-
-    if (storageToken && storageToken != '') {
-      check(storageToken);
-    }
-  }, [login]);
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -71,6 +67,8 @@ export default React.memo(function AuthProvider({ children }: Props) {
         token,
         login,
         logout,
+        loading,
+        getStorageToken,
       }}
     >
       {children}
