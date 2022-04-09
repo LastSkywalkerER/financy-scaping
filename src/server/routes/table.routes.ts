@@ -10,7 +10,7 @@ const router = Router();
 
 router.get('/data', auth, async (req, res) => {
   try {
-    const date = await scrapDatesSchema.aggregate([
+    const dates = await scrapDatesSchema.aggregate([
       { $group: { _id: '$date', date: { $last: '$date' } } },
     ]);
 
@@ -18,7 +18,17 @@ router.get('/data', auth, async (req, res) => {
 
     res.json({
       stocks: changeStockArray(
-        stocks.filter((item) => String(item.date) === String(date[0].date)),
+        stocks.filter(
+          (item) =>
+            String(item.date) ===
+            String(
+              dates.reduce((accumulator, item) =>
+                new Date(item.date) > new Date(accumulator.date)
+                  ? item
+                  : accumulator,
+              ).date,
+            ),
+        ),
       ),
     });
   } catch (e) {
