@@ -16,10 +16,14 @@ export const tableUpdating = {
   tickerUpdated: 0,
 };
 export class Scrap {
-  private static table500: Token[] = [];
-  private static date = new Date();
+  private table500: Token[] = [];
+  private date: Date;
 
-  private static async getTradingData(html, i): Promise<void> {
+  constructor() {
+    this.date = new Date();
+  }
+
+  private async getTradingData(html, i): Promise<void> {
     try {
       const $ = cheerio.load(html);
 
@@ -63,21 +67,21 @@ export class Scrap {
         volatility,
       };
 
-      Scrap.table500[i] = {
-        ...Scrap.table500[i],
+      this.table500[i] = {
+        ...this.table500[i],
         ...scrapedData,
       };
 
       const stock = new StocksSchema({
-        ...Scrap.table500[i],
+        ...this.table500[i],
         ...scrapedData,
-        date: Scrap.date,
+        date: this.date,
       });
       await stock.save();
     } catch (error) {}
   }
 
-  private static async getPrices(url, i): Promise<void> {
+  private async getPrices(url, i): Promise<void> {
     try {
       const nightmare = Nightmare();
 
@@ -88,7 +92,7 @@ export class Scrap {
         .evaluate(() => document.querySelector('body').innerHTML)
         .end()
         .then((response) => {
-          Scrap.getTradingData(response, i);
+          this.getTradingData(response, i);
         })
         .catch((err) => {
           console.warn(err);
@@ -96,16 +100,16 @@ export class Scrap {
     } catch (error) {}
   }
 
-  public static async run(sendStatus): Promise<{ message: string }> {
-    console.log('Scrap started');
+  public async run(sendStatus): Promise<{ message: string }> {
+    console.log('this started');
     tableUpdating.status = true;
 
     const dbDate = new ScrapDatesSchema({
-      date: Scrap.date,
+      date: this.date,
     });
     await dbDate.save();
 
-    Scrap.table500 = await (
+    this.table500 = await (
       await Snp500Schema.find({})
     ).map((ticker) => ({
       name: ticker.name,
@@ -113,18 +117,18 @@ export class Scrap {
       sector: ticker.sector,
     }));
 
-    tableUpdating.tickerCount = Scrap.table500.length;
+    tableUpdating.tickerCount = this.table500.length;
 
     const threads = 2;
 
-    for (let i = 0; i < Scrap.table500.length; i += threads) {
+    for (let i = 0; i < this.table500.length; i += threads) {
       sendStatus(tableUpdating);
 
       await Promise.all(
         Array(threads)
           .fill(null)
           .map(async (value, j) => {
-            await Scrap.getPrices(urlTrade + Scrap.table500[i].symbol, i + j);
+            await this.getPrices(urlTrade + this.table500[i].symbol, i + j);
             tableUpdating.tickerUpdated++;
           }),
       );
@@ -151,7 +155,7 @@ export class Scrap {
 //           symbol,
 //           sector,
 //         };
-//         Scrap.table500.push(ticker);
+//         this.table500.push(ticker);
 //         const tickerDb = new Snp500Schema(ticker);
 //         tickerDb.save();
 //       }
@@ -180,13 +184,13 @@ export class Scrap {
 //get price from trading view
 
 // export default async function runScrap(sendStatus) {
-//   console.log('Scrap started');
+//   console.log('this started');
 //   tableUpdating.status = true;
-//   Scrap.date = new Date();
+//   this.date = new Date();
 
 //   // await get500();
 
-//   Scrap.table500 = await (
+//   this.table500 = await (
 //     await Snp500Schema.find({})
 //   ).map((ticker) => ({
 //     name: ticker.name,
@@ -194,19 +198,19 @@ export class Scrap {
 //     sector: ticker.sector,
 //   }));
 
-//   tableUpdating.tickerCount = Scrap.table500.length;
+//   tableUpdating.tickerCount = this.table500.length;
 
 //   const threads = 2;
 
-//   for (let i = 0; i < Scrap.table500.length; i += threads) {
-//     // await getPrices(urlTrade + Scrap.table500[i].symbol, i);
+//   for (let i = 0; i < this.table500.length; i += threads) {
+//     // await getPrices(urlTrade + this.table500[i].symbol, i);
 //     sendStatus(tableUpdating);
 
 //     await Promise.all(
 //       Array(threads)
 //         .fill(null)
 //         .map(async (value, j) => {
-//           await getPrices(urlTrade + Scrap.table500[i].symbol, i + j);
+//           await getPrices(urlTrade + this.table500[i].symbol, i + j);
 //           tableUpdating.tickerUpdated++;
 //           // console.log(i + j);
 //         }),
@@ -217,14 +221,14 @@ export class Scrap {
 //     //     .map(() => '0'),
 //     // );
 
-//     // console.log(Scrap.table500[i], Scrap.table500[i + 1]);
+//     // console.log(this.table500[i], this.table500[i + 1]);
 //   }
 
-//   // await console.log(Scrap.table500);
+//   // await console.log(this.table500);
 
 //   // await fs.writeFileSync(
 //   //   './src/client/static/db/table.json',
-//   //   JSON.stringify(Scrap.table500),
+//   //   JSON.stringify(this.table500),
 //   // );
 //   tableUpdating.status = false;
 //   console.log('Info scraped succesfully!');

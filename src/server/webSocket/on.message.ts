@@ -10,15 +10,19 @@ export default async (msg, webSocketServer, ws) => {
 
     switch (type) {
       case wsPackageTypes.TABLE_UPDATE_REQUEST:
-        Scrap.run((data) => {
-          broadcast(
-            webSocketServer,
-            JSON.stringify({
-              type: wsPackageTypes.TABLE_UPDATE_REQUEST,
-              data,
-            }),
-          );
-        });
+        {
+          const scrap = new Scrap();
+
+          scrap.run((data) => {
+            broadcast(
+              webSocketServer,
+              JSON.stringify({
+                type: wsPackageTypes.TABLE_UPDATE_REQUEST,
+                data,
+              }),
+            );
+          });
+        }
 
         break;
       case wsPackageTypes.TABLE_UPDATE_STATUS:
