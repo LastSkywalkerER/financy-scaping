@@ -21,8 +21,6 @@ export const SavedTable: React.FC = React.memo(() => {
   }, []);
 
   const filterTable = (actionCreator, data) => (filteredTable) => {
-    console.log(filteredTable(data));
-
     dispatch(actionCreator({ filteredList: filteredTable(data) }));
   };
 

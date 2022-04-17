@@ -51,7 +51,6 @@ router.post(
         password: hashedPassword,
         phone: new Date().toString(),
       });
-      console.log(user);
 
       await user.save();
 
@@ -59,7 +58,6 @@ router.post(
         message: 'User created',
       });
     } catch (e) {
-      console.log(e);
       res.status(500).json({
         message: 'Something wrong :(',
       });

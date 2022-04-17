@@ -9,9 +9,11 @@ import path from 'path';
 import authRoutes from './routes/auth.routes';
 import tickersRoutes from './routes/stock.routes';
 import tableRoutes from './routes/table.routes';
+import './telegramBot';
 
-import onMessage from './webSocket/on.message';
+import onMessage, { broadcast } from './webSocket/on.message';
 import { wsPackageTypes } from '../types/wsPackageTypes';
+import { Scrap } from './utils/scrap';
 
 const app = express();
 const PORT = config.get('port') || 5000;
@@ -41,6 +43,24 @@ webSocketServer.on('connection', (ws) => {
     onMessage(msg, webSocketServer, ws);
   });
 });
+
+setInterval(() => {
+  const date = new Date();
+
+  if (date.getHours() === 10 && date.getMinutes() === 50) {
+    const scrap = new Scrap();
+
+    scrap.run((data) => {
+      broadcast(
+        webSocketServer,
+        JSON.stringify({
+          type: wsPackageTypes.TABLE_UPDATE_REQUEST,
+          data,
+        }),
+      );
+    });
+  }
+}, 60000);
 
 if (process.env.NODE_ENV === 'production') {
   app.use('/', express.static(path.join(__dirname, '..', '..', 'dist')));

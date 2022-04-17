@@ -53,7 +53,15 @@ router.patch('/saved', auth, async (req, res) => {
 router.get('/saved', auth, async (req, res) => {
   try {
     const tickers = await stocksSchema.find({ owner: req.user.userId });
-    res.json({ tickers: changeStockArray(tickers) });
+
+    const analysedTickers = changeStockArray(tickers).map((ticker) => {
+      if (ticker.price <= ticker.expectedPrice) {
+        ticker.status = 'ready';
+      }
+      return ticker;
+    });
+
+    res.json({ tickers: analysedTickers });
   } catch (e) {
     res.status(500).json({
       message: 'Something wrong :(',
@@ -66,7 +74,6 @@ router.delete('/saved', auth, async (req, res) => {
     const { tickers } = req.body;
 
     tickers.forEach(async (ticker) => {
-      console.log(ticker);
       await stocksSchema.deleteOne({ symbol: ticker.symbol });
     });
 

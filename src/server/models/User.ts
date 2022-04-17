@@ -20,12 +20,16 @@ const schema = new Schema({
     // required: true,
     unique: true,
   },
-  purchasedTokens: [
-    {
-      type: Types.ObjectId,
-      ref: 'purchasedToken',
-    },
-  ],
+  tgChatId: {
+    type: Number,
+    unique: true,
+  },
+  // purchasedTokens: [
+  //   {
+  //     type: Types.ObjectId,
+  //     ref: 'purchasedToken',
+  //   },
+  // ],
 });
 
 export default model('User', schema);

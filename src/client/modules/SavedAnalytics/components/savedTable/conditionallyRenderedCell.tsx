@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { EditableCell } from '@components/editableCell';
 import Token from 'src/types/Token';
 import tickerManager from '@core/utilities/tickerManager';
+import e from 'express';
 
 export const conditionallyRenderedCell = (
   column: string,
@@ -20,6 +21,13 @@ export const conditionallyRenderedCell = (
   switch (column) {
     case 'expectedPrice':
       return <EditableCell value={value} onApply={handleApply} />;
+
+    case 'price':
+      if (row.status === 'ready') {
+        return <div style={{ background: 'green' }}>{value}</div>;
+      } else {
+        value;
+      }
 
     default:
       return value;

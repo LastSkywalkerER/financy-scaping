@@ -90,7 +90,7 @@ export default function tickerManager() {
     request('/api/tickers/saved', 'PATCH', {
       symbol: ticker.symbol,
       expectedPrice,
-    }).then((response) => console.log(response));
+    });
   };
 
   return { getData, getSavedTickers, saveTickers, deleteTickers, updateTicker };

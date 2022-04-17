@@ -6,6 +6,7 @@ import StocksSchema from '../models/StocksTable';
 import ScrapDatesSchema from '../models/ScrapDates';
 
 import Token from '../../types/Token';
+import { sendTgResult } from '../telegramBot';
 
 const url500 = 'https://illiakyselov.com/kompanii-s-p500';
 const urlTrade = 'https://finviz.com/quote.ashx?t=';
@@ -101,7 +102,6 @@ export class Scrap {
   }
 
   public async run(sendStatus): Promise<{ message: string }> {
-    console.log('this started');
     tableUpdating.status = true;
 
     const dbDate = new ScrapDatesSchema({
@@ -135,6 +135,7 @@ export class Scrap {
     }
     tableUpdating.status = false;
     console.log('Info scraped succesfully!');
+    sendTgResult();
     return { message: 'Success' };
   }
 }

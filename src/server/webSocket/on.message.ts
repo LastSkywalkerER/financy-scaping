@@ -1,7 +1,7 @@
 import { wsPackageTypes } from '../../types/wsPackageTypes';
 import { Scrap, tableUpdating } from '../utils/scrap';
 
-const broadcast = (wss, message) =>
+export const broadcast = (wss, message) =>
   wss.clients.forEach((client) => client.send(message));
 
 export default async (msg, webSocketServer, ws) => {
@@ -26,8 +26,6 @@ export default async (msg, webSocketServer, ws) => {
 
         break;
       case wsPackageTypes.TABLE_UPDATE_STATUS:
-        console.log(tableUpdating);
-
         broadcast(
           webSocketServer,
           JSON.stringify({
