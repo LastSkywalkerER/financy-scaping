@@ -19,7 +19,7 @@ import useStyles from './headerStyle';
 import { RootStateOrAny, useSelector } from 'react-redux';
 import { useAuth } from '@core/hooks/useAuth';
 
-const pages = ['analytics'];
+const pages = ['mainAnalytics', 'savedAnalytics', 'updateSettings'];
 
 export default function Header(): JSX.Element {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -28,6 +28,7 @@ export default function Header(): JSX.Element {
   const isAuth = Boolean(useAuth().userId);
   const {
     appBar,
+    barWrapper,
     mobileLogo,
     mobileMenuWrapper,
     mobileMenu,
@@ -47,7 +48,7 @@ export default function Header(): JSX.Element {
   return (
     <AppBar position="static" sx={appBar}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={barWrapper}>
           <Typography variant="h6" noWrap component="div" sx={mobileLogo}>
             Stock Market Analytics
           </Typography>

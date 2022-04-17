@@ -11,10 +11,10 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { IconButton } from '@mui/material';
-import EnhancedTableHead from '@components/enhancedTableHead';
-import EnhancedTableToolbar from '@components/EnhancedTableToolbar';
+import EnhancedTableHead from '@components/EnhancedTable/components/enhancedTableHead';
+import EnhancedTableToolbar from '@components/EnhancedTable/components/EnhancedTableToolbar';
 import Filter from '../Filter';
-import EnchancedTableRow from '../EnchancedTableRow';
+import EnchancedTableRow from './components/EnchancedTableRow';
 
 type Props = {
   name: string;
@@ -24,6 +24,13 @@ type Props = {
   customClickPurpose: any;
   editableRow?: any;
   handleFilter: any;
+  headList: string[] | { [key: string]: string };
+  conditionallyRenderedCell?: (
+    column: string,
+    value: any,
+    index: number,
+    row: Token,
+  ) => React.ReactElement | string | number | null;
 };
 
 export default function EnhancedTable({
@@ -34,33 +41,14 @@ export default function EnhancedTable({
   customClickPurpose,
   editableRow = false,
   handleFilter,
+  headList,
+  conditionallyRenderedCell,
 }: Props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('id');
   const [selected, setSelected] = useSelection;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const headList = [
-    'name',
-    'symbol',
-    'sector',
-    'price',
-    'marketCap',
-    'pe',
-    'lt',
-    'eps',
-    'roa',
-    'roe',
-    'roi',
-    'payout',
-    'volatility',
-    'date',
-  ];
-
-  if (editableRow) {
-    headList.push('expectedPrice');
-  }
 
   function descendingComparator(a, b, orderBy) {
     if (!isNaN(parseInt(a[orderBy])) && !isNaN(parseInt(b[orderBy]))) {
@@ -96,8 +84,8 @@ export default function EnhancedTable({
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = data.map((n) => n.symbol);
-      setSelected(newSelecteds);
+      const newSelected = data.map((n) => n.symbol);
+      setSelected(newSelected);
       return;
     }
     setSelected([]);
@@ -157,6 +145,7 @@ export default function EnhancedTable({
                     head={headList}
                     editableRow={editableRow}
                     useSelection={useSelection}
+                    conditionallyRenderedCell={conditionallyRenderedCell}
                   />
                 ))}
               {emptyRows > 0 && (
