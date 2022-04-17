@@ -111,13 +111,7 @@ export default function EnchancedTableRow({
             row[key]
           )} */}
           {conditionallyRenderedCell
-            ? (() => {
-                console.log(
-                  '🚀 ~ file: index.tsx ~ line 116 ~ conditionallyRenderedCell(key, row[key], index, row)',
-                  conditionallyRenderedCell(key, row[key], index, row),
-                );
-                return conditionallyRenderedCell(key, row[key], index, row);
-              })()
+            ? conditionallyRenderedCell(key, row[key], index, row)
             : row[key]}
         </TableCell>
       ))}
