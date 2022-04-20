@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: ThemeOptions) => ({
         ? theme.palette.primary.main
         : 'white',
   },
+  barWrapper: { maxHeight: '65px' },
   mobileLogo: { mr: 2, display: { xs: 'none', md: 'flex' } },
   mobileMenuWrapper: { flexGrow: 1, display: { xs: 'flex', md: 'none' } },
   mobileMenu: {

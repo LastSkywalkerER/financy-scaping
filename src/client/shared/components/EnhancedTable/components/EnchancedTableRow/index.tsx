@@ -18,6 +18,12 @@ interface Props {
   head: string[];
   editableRow: boolean;
   useSelection: Array<any>;
+  conditionallyRenderedCell?: (
+    column: string,
+    value: any,
+    index: number,
+    row: Token,
+  ) => React.ReactElement | string | number | null;
 }
 
 const editClassName = 'edit-row';
@@ -30,6 +36,7 @@ export default function EnchancedTableRow({
   head,
   editableRow,
   useSelection,
+  conditionallyRenderedCell,
 }: Props) {
   const labelId = `enhanced-table-checkbox-${index}`;
   const [editable, setEditable] = React.useState(false);
@@ -91,19 +98,24 @@ export default function EnchancedTableRow({
           }
           padding="none"
         >
-          {editable && key === 'expectedPrice' ? (
+          {/* {editable && key === 'expectedPrice' ? (
             <TextField
               variant="outlined"
               key={`${key}-${i}`}
               value={expectedPrice}
               onChange={changeHandler}
             />
+          ) : conditionallyRenderedCell ? (
+            conditionallyRenderedCell(key, row[key], index, row)
           ) : (
             row[key]
-          )}
+          )} */}
+          {conditionallyRenderedCell
+            ? conditionallyRenderedCell(key, row[key], index, row)
+            : row[key]}
         </TableCell>
       ))}
-      {editableRow && (
+      {/* {editableRow && (
         <TableCell padding="none">
           {!editable ? (
             <IconButton className={editClassName}>
@@ -115,7 +127,7 @@ export default function EnchancedTableRow({
             </IconButton>
           )}
         </TableCell>
-      )}
+      )} */}
     </TableRow>
   );
 }

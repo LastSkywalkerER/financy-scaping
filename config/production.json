@@ -2,5 +2,6 @@
   "port": 80,
   "jwtSecret": "lyolik financy-scraping",
   "mongoUri": "mongodb+srv://financy-scraping:Mnago052@cluster0.pmu38.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  "baseUrl": "http://localhost"
+  "baseUrl": "http://localhost",
+  "tgToken": "5321577802:AAGEmRb8GXPAYQln6nCgF-FRdzU2c2NrX3Q"
 }

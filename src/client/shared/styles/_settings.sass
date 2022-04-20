@@ -30,12 +30,14 @@ body
   font-family: 'Montserrat', sans-serif
   background: $white
   overflow-x: hidden
+  height: 100vh
+  position: relative
 
-  *, *::before, *::after
-    box-sizing: border-box
-
-#root
+#greetings
   height: 100%
+
+*, *::before, *::after
+  box-sizing: border-box
 
 select
   -webkit-appearance: none
@@ -94,7 +96,3 @@ a
   display: flex
   align-items: center
   justify-content: center
-
-.container
-  width: 94.5%
-  margin: auto

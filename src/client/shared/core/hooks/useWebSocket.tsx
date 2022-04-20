@@ -67,7 +67,6 @@ export default function WebSocketProvider({ children }) {
     ws.current.onmessage = (e) => {
       const subscribers = wsSubscribers.getSubscribers();
       const { type, data } = JSON.parse(e.data);
-      console.log({ type, data });
 
       subscribers.forEach((subscriber) => subscriber({ type, data }));
     };

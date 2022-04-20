@@ -9,6 +9,9 @@ import Analytics from '@modules/Analytics';
 import AuthPage from '@modules/AuthPage';
 import { useAuth } from '@core/hooks/useAuth';
 import authManager from '@core/utilities/authManager';
+import { MainAnalytics } from '@modules/MainAnalytics';
+import { SavedAnalytics } from '@modules/SavedAnalytics';
+import UpdateSettings from '@modules/UpdateSettings';
 
 export default function AppRoutes() {
   const { token, loading } = useAuth();
@@ -38,8 +41,10 @@ export default function AppRoutes() {
   if (token) {
     return (
       <Routes>
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="*" element={<Navigate to="/analytics" />} />
+        <Route path="/mainAnalytics" element={<MainAnalytics />} />
+        <Route path="/savedAnalytics" element={<SavedAnalytics />} />
+        <Route path="/updateSettings" element={<UpdateSettings />} />
+        <Route path="*" element={<Navigate to="/mainAnalytics" />} />
       </Routes>
     );
   }
