@@ -2,6 +2,16 @@ import config from 'config';
 import { NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+declare interface Request {
+  method: string;
+  headers: { [key: string]: string };
+  user: string | jwt.JwtPayload;
+}
+
+declare interface Response {
+  status: (payload: number) => { json: (payload: any) => void };
+}
+
 export default (req: Request, res: Response, next: NextFunction) => {
   if (req.method === 'OPTIONS') {
     return next();

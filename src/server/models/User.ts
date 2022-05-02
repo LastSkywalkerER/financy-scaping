@@ -24,12 +24,6 @@ const schema = new Schema({
     type: Number,
     unique: true,
   },
-  // purchasedTokens: [
-  //   {
-  //     type: Types.ObjectId,
-  //     ref: 'purchasedToken',
-  //   },
-  // ],
 });
 
 export default model('User', schema);

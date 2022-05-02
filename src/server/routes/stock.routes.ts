@@ -4,6 +4,7 @@ import auth from '../middleware/auth.middleware';
 import config from 'config';
 
 import changeStockArray from '../utils/changeStockArray';
+import Token from 'src/types/Token';
 
 const router = Router();
 
@@ -11,8 +12,8 @@ router.post('/saved', auth, async (req, res) => {
   try {
     const { tickers } = req.body;
     const date = new Date();
-    tickers.forEach(async (ticker) => {
-      const stringifyTicker = {};
+    tickers.forEach(async (ticker: Token) => {
+      const stringifyTicker = {} as { [key: string]: string };
       const map = new Map();
       Object.keys(ticker).forEach((key) => {
         map.set(key, ticker[key]);
