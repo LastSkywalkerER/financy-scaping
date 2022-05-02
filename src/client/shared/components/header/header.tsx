@@ -17,7 +17,7 @@ import { ThemeOptions } from '@mui/material/styles';
 import useStyles from './headerStyle';
 
 import { RootStateOrAny, useSelector } from 'react-redux';
-import { useAuth } from '@core/hooks/useAuth';
+import { RootState } from '@core/store/store';
 
 const pages = ['mainAnalytics', 'savedAnalytics', 'updateSettings'];
 
@@ -25,7 +25,8 @@ export default function Header(): JSX.Element {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
   );
-  const isAuth = Boolean(useAuth().userId);
+  const { userId } = useSelector((state: RootState) => state.auth);
+  const isAuth = Boolean(userId);
   const {
     appBar,
     barWrapper,

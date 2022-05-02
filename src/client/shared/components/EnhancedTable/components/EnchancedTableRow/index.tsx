@@ -9,7 +9,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import React from 'react';
 import Token from 'src/types/Token';
-import tickerManager from '@core/utilities/tickerManager';
 
 interface Props {
   row: Token;
@@ -39,25 +38,9 @@ export default function EnchancedTableRow({
   conditionallyRenderedCell,
 }: Props) {
   const labelId = `enhanced-table-checkbox-${index}`;
-  const [editable, setEditable] = React.useState(false);
   const [selected, setSelected] = useSelection;
-  const [expectedPrice, setExpectedPrice] = React.useState(row.expectedPrice);
-  const { updateTicker } = tickerManager();
 
   const handleClick = (event, name) => {
-    if (editableRow && !!event.target.closest('.' + editClassName)) {
-      setEditable(true);
-      return;
-    }
-
-    if (editableRow && !!event.target.closest('.' + confirmClassName)) {
-      if (!isNaN(Number(expectedPrice))) {
-        updateTicker(row, expectedPrice);
-      }
-      setEditable(false);
-      return;
-    }
-
     if (selected.indexOf(name) === -1) {
       setSelected((state) => [...state, name]);
     } else {
@@ -65,10 +48,6 @@ export default function EnchancedTableRow({
         state.filter((selectedName) => selectedName !== name),
       );
     }
-  };
-
-  const changeHandler = (event) => {
-    setExpectedPrice(event.target.value);
   };
 
   return (
@@ -98,36 +77,11 @@ export default function EnchancedTableRow({
           }
           padding="none"
         >
-          {/* {editable && key === 'expectedPrice' ? (
-            <TextField
-              variant="outlined"
-              key={`${key}-${i}`}
-              value={expectedPrice}
-              onChange={changeHandler}
-            />
-          ) : conditionallyRenderedCell ? (
-            conditionallyRenderedCell(key, row[key], index, row)
-          ) : (
-            row[key]
-          )} */}
           {conditionallyRenderedCell
             ? conditionallyRenderedCell(key, row[key], index, row)
             : row[key]}
         </TableCell>
       ))}
-      {/* {editableRow && (
-        <TableCell padding="none">
-          {!editable ? (
-            <IconButton className={editClassName}>
-              <EditIcon />
-            </IconButton>
-          ) : (
-            <IconButton className={confirmClassName}>
-              <CheckIcon />
-            </IconButton>
-          )}
-        </TableCell>
-      )} */}
     </TableRow>
   );
 }

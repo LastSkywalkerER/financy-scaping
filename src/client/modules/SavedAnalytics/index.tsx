@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { Box } from '@mui/system';
-import TickerManager from '@core/utilities/tickerManager';
 import useStyles from './index.style';
 import { SavedTable } from './components/savedTable';
+import { useDispatch } from 'react-redux';
+import { getSavedTickersRequest } from '@core/store/savedTickersSlice';
 
 export const SavedAnalytics: React.FC = React.memo(() => {
-  const { getSavedTickers } = TickerManager();
   const { container } = useStyles();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getSavedTickers();
+    dispatch(getSavedTickersRequest());
   }, []);
 
   return (

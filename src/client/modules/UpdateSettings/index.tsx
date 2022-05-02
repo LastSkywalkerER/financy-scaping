@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
 import useStyles from './index.style';
 import TableUpdatingStatus from '@components/tableUpdatingStatus';
-import { useAuth } from '@core/hooks/useAuth';
-import { encode, decode } from 'js-base64';
+import { useSelector } from 'react-redux';
+import { RootState } from '@core/store/store';
 
 const Analytics: React.FC = React.memo(() => {
   const { container } = useStyles();
-  const { userId } = useAuth();
+  const { userId } = useSelector((state: RootState) => state.auth);
 
   return (
     <Box sx={container}>

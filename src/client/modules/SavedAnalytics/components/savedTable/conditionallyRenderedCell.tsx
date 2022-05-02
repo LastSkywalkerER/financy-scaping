@@ -1,8 +1,9 @@
 import React, { ReactElement } from 'react';
 import { EditableCell } from '@components/editableCell';
 import Token from 'src/types/Token';
-import tickerManager from '@core/utilities/tickerManager';
 import e from 'express';
+import { useDispatch } from 'react-redux';
+import { updateSavedTickersRequest } from '@core/store/savedTickersSlice';
 
 export const conditionallyRenderedCell = (
   column: string,
@@ -10,11 +11,16 @@ export const conditionallyRenderedCell = (
   imdex: number,
   row: Token,
 ): ReactElement | string | null | number => {
-  const { updateTicker } = tickerManager();
+  const dispatch = useDispatch();
 
   const handleApply = (newValue: string | null | number) => {
     if (newValue && !isNaN(Number(newValue))) {
-      updateTicker(row, Number(newValue));
+      dispatch(
+        updateSavedTickersRequest({
+          ticker: row,
+          expectedPrice: Number(newValue),
+        }),
+      );
     }
   };
 

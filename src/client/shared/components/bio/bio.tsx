@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import useStyles from '@components/bio/bioStyle';
-import { useAuth } from '@core/hooks/useAuth';
+import { RootState } from '@core/store/store';
 
 const avatar = 'https://random.imagecdn.app/50/50';
 
@@ -18,15 +18,18 @@ export default function Bio() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   );
-  const userName = useSelector((state: RootStateOrAny) => state.user.name);
+  const userName = useSelector((state: RootState) => state.auth.name);
   const { wrapper, textMargin, menu, text } = useStyles();
-  const { logout } = useAuth();
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    dispatch(logout());
+  };
+
   const settings = [
     { name: 'Change Theme', onClick: () => dispatch(toggleTheme()) },
     { name: 'Logout', onClick: logout },
   ];
-
-  const dispatch = useDispatch();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -46,7 +49,7 @@ export default function Bio() {
       <Typography sx={textMargin}>Welcome, {userName}</Typography>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt="Remy Sharp" src={avatar} />
+          <Avatar alt="Avatar" src={avatar} />
         </IconButton>
       </Tooltip>
       <Menu
