@@ -1,4 +1,3 @@
-import useHttp from '@core/hooks/http.hook';
 import { useWebSocket } from '@core/hooks/useWebSocket';
 import { Box, Button, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -16,7 +15,7 @@ export default function TableUpdatingStatus() {
   const dispatch = useDispatch();
   const { sendMessage, subscribe, unsubscribe, status } = useWebSocket();
 
-  const wsSubscription = ({ type, data }) => {
+  const wsSubscription = ({ type, data }: { type: string; data: any }) => {
     switch (type) {
       case wsPackageTypes.TABLE_UPDATE_STATUS:
         setTableUpdating(data);

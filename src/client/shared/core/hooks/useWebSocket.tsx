@@ -10,13 +10,15 @@ import { config } from '@config';
 import { messageOccurred } from '@core/store/userMessageSlice';
 import { useDispatch } from 'react-redux';
 
+export type WSSubscriber = () => void;
+
 class WSSubscribers {
   subscribers = [] as Function[];
-  addSubscriber = (callback) => {
+  addSubscriber = (callback: WSSubscriber) => {
     this.subscribers = [...this.subscribers, callback];
     // console.log('addSubscriber', this.subscribers);
   };
-  removeSubscriber = (callback) => {
+  removeSubscriber = (callback: WSSubscriber) => {
     this.subscribers = this.subscribers.filter(
       (subscriber) => subscriber !== callback,
     );
@@ -29,16 +31,20 @@ class WSSubscribers {
 }
 
 interface WebSocketContextI {
-  sendMessage: Function;
-  subscribe: Function;
-  unsubscribe: Function;
+  sendMessage: (message: any) => void;
+  subscribe: (callback: WSSubscriber) => void;
+  unsubscribe: (callback: WSSubscriber) => void;
   status: boolean;
+}
+
+interface Props {
+  children: React.ReactElement;
 }
 
 const WebSocketContext = createContext({} as WebSocketContextI);
 export const useWebSocket = () => useContext(WebSocketContext);
 
-export default function WebSocketProvider({ children }) {
+export default function WebSocketProvider({ children }: Props) {
   const [status, setStatus] = useState(false);
   const [senderQueue, setSenderQueue] = useState([] as string[]);
   const dispatch = useDispatch();
@@ -76,7 +82,7 @@ export default function WebSocketProvider({ children }) {
     };
   }, []);
 
-  const sendMessage = (message) => {
+  const sendMessage = (message: any) => {
     const stringifyMessage = JSON.stringify(message);
 
     if (status) {
@@ -86,11 +92,11 @@ export default function WebSocketProvider({ children }) {
     }
   };
 
-  const unsubscribe = (callback) => {
+  const unsubscribe = (callback: WSSubscriber) => {
     wsSubscribers.removeSubscriber(callback);
   };
 
-  const subscribe = (callback) => {
+  const subscribe = (callback: WSSubscriber) => {
     wsSubscribers.addSubscriber(callback);
   };
   return (

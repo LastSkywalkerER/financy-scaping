@@ -5,6 +5,7 @@ import store from '@core/store/store';
 import { logout } from '@core/store/authSlice';
 import { messageOccurred } from '@core/store/userMessageSlice';
 import Token from 'src/types/Token';
+import { AuthCredentials } from 'src/types/uathData';
 
 export class MainApi {
   private static requestService = async (
@@ -41,20 +42,22 @@ export class MainApi {
       }
 
       return data;
-    } catch (e: any) {
-      store.dispatch(messageOccurred({ message: e.message, type: 'error' }));
+    } catch (error: any) {
+      store.dispatch(
+        messageOccurred({ message: error?.message, type: 'error' }),
+      );
 
-      throw e;
+      throw error;
     }
   };
 
-  public static registerRequest = (form) => {
+  public static registerRequest = (form: AuthCredentials) => {
     MainApi.requestService(`/api/auth/register`, 'POST', {
       ...form,
     });
   };
 
-  public static loginRequest = (form) => {
+  public static loginRequest = (form: AuthCredentials) => {
     return MainApi.requestService(`/api/auth/login`, 'POST', {
       ...form,
     });

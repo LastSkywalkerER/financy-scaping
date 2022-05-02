@@ -3,32 +3,37 @@ import FilledInput from '@mui/material/FilledInput';
 import Token from 'src/types/Token';
 
 type Props = {
-  data: any;
-  updateDataTable: Function;
+  data: Token[];
+  updateDataTable: (callback: (data: Token[]) => Token[]) => void;
+  filterKey?: keyof Token;
 };
 
-export default function Filter({ data, updateDataTable }: Props) {
-  let sectors = new Set();
-  data.forEach((obj: Token) => sectors.add(obj.sector));
+export default function Filter({
+  data,
+  updateDataTable,
+  filterKey = 'sector',
+}: Props) {
+  let filterList = new Set();
+  data.forEach((obj: Token) => filterList.add(obj[filterKey]));
 
-  const searchSector: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleSearch: ChangeEventHandler<HTMLInputElement> = (event) => {
     updateDataTable((data: Token[]) => [
-      ...data.filter((elem) => elem.sector.includes(event.target.value)),
+      ...data.filter((elem) => elem[filterKey].includes(event.target.value)),
     ]);
   };
 
   return (
     <div>
       <FilledInput
-        onChange={searchSector}
+        onChange={handleSearch}
         inputProps={{
           list: 'options',
-          placeholder: 'Search sector',
+          placeholder: `Search ${filterKey}`,
         }}
       />
       <datalist id="options">
-        {[...sectors].map((sector: any) => (
-          <option key={sector} value={sector}></option>
+        {[...filterList].map((filterItem: any) => (
+          <option key={filterItem} value={filterItem}></option>
         ))}
       </datalist>
     </div>

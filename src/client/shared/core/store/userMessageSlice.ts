@@ -1,9 +1,10 @@
+import { AlertColor } from '@mui/material';
 import { createSlice } from '@reduxjs/toolkit';
 
 const name: string = 'error';
 
 interface UserMessage {
-  type: string;
+  type: AlertColor;
   message: string;
 }
 

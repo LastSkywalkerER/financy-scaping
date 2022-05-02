@@ -5,6 +5,9 @@ import { RootState } from '@core/store/store';
 import { setFilteredDataTable } from '@core/store/dataTableSlice';
 import { headList } from './tableConfig';
 import { addSavedTickersRequest } from '@core/store/savedTickersSlice';
+import { ActionCreator } from '@reduxjs/toolkit';
+import Token from 'src/types/Token';
+import { TableFilter } from '@components/EnhancedTable/types';
 
 export const StockTable: React.FC = React.memo(() => {
   const { list, filteredList } = useSelector(
@@ -15,9 +18,11 @@ export const StockTable: React.FC = React.memo(() => {
 
   const [selectedToBuy, setSelectedToBuy] = useState([] as string[]);
 
-  const filterTable = (actionCreator, data) => (filteredTable) => {
-    dispatch(actionCreator({ filteredList: filteredTable(data) }));
-  };
+  const filterTable =
+    (actionCreator: ActionCreator<any>, data: Token[]) =>
+    (filteredTable: TableFilter) => {
+      dispatch(actionCreator({ filteredList: filteredTable(data) }));
+    };
 
   const handleBuyClick = async () => {
     dispatch(

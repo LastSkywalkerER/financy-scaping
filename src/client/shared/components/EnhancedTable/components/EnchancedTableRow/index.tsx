@@ -15,7 +15,6 @@ interface Props {
   index: number;
   isItemSelected: boolean;
   head: string[];
-  editableRow: boolean;
   useSelection: Array<any>;
   conditionallyRenderedCell?: (
     column: string,
@@ -25,22 +24,20 @@ interface Props {
   ) => React.ReactElement | string | number | null;
 }
 
-const editClassName = 'edit-row';
-const confirmClassName = 'confirm-row';
-
 export default function EnchancedTableRow({
   row,
   index,
   isItemSelected,
   head,
-  editableRow,
   useSelection,
   conditionallyRenderedCell,
 }: Props) {
   const labelId = `enhanced-table-checkbox-${index}`;
   const [selected, setSelected] = useSelection;
 
-  const handleClick = (event, name) => {
+  const handleClick = (event: React.MouseEvent) => {
+    const name = row.symbol;
+
     if (selected.indexOf(name) === -1) {
       setSelected((state) => [...state, name]);
     } else {
@@ -53,7 +50,7 @@ export default function EnchancedTableRow({
   return (
     <TableRow
       hover
-      onClick={(event) => handleClick(event, row.symbol)}
+      onClick={handleClick}
       role="checkbox"
       aria-checked={isItemSelected}
       tabIndex={-1}
