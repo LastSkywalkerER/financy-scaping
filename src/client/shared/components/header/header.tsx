@@ -25,8 +25,8 @@ export default function Header(): JSX.Element {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
   );
-  const { userId } = useSelector((state: RootState) => state.auth);
-  const isAuth = Boolean(userId);
+  const { token } = useSelector((state: RootState) => state.auth);
+  const isAuth = Boolean(token);
   const {
     appBar,
     barWrapper,
