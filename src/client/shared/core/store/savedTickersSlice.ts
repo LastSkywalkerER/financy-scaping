@@ -1,3 +1,4 @@
+import { isTickerListContainTicker } from '@core/utilities/operationsWithTickers';
 import { createSlice } from '@reduxjs/toolkit';
 import { themeNames } from '@styles/themes';
 import Token from 'src/types/Token';
@@ -12,26 +13,45 @@ export const savedTickers = createSlice({
     isLoaded: false,
   },
   reducers: {
-    setSavedTickers: (state, { payload }) => {
+    getSavedTickersRequest: (state) => {
+      state.isLoaded = false;
+    },
+    getSavedTickersResponse: (state, { payload }) => {
       state.filteredList = payload.dataTable;
       state.list = payload.dataTable;
+
+      state.isLoaded = true;
     },
-    setSavedTickersIsLoaded: (state, { payload }) => {
-      state.isLoaded = payload.isLoaded;
-    },
-    addSavedTickers: (state, { payload }) => {
-      state.filteredList = [...state.list, ...payload.dataTable];
-      state.list = [...state.list, ...payload.dataTable];
-    },
-    deleteSavedTickers: (state, { payload }) => {
-      state.filteredList = state.list.filter(
-        (ticker) => payload.deleteIds.indexOf(ticker.symbol) === -1,
+    addSavedTickersRequest: (state, { payload }) => {
+      const newList = payload.filter(
+        (ticker: Token) => !isTickerListContainTicker(state.list, ticker),
       );
-      state.list = state.list.filter(
-        (ticker) => payload.deleteIds.indexOf(ticker.symbol) === -1,
-      );
+
+      state.filteredList = [...state.list, ...newList];
+      state.list = [...state.list, ...newList];
     },
-    setFilteredSavedTickers: (state, { payload }) => {
+    removeSavedTickersRequest: (state, { payload }) => {
+      const newList = state.list.filter(
+        (ticker) => !isTickerListContainTicker(payload, ticker),
+      );
+
+      state.filteredList = newList;
+      state.list = newList;
+    },
+    updateSavedTickersRequest: (state, { payload }) => {
+      const { ticker, expectedPrice } = payload;
+
+      const newTickers = state.list.map((savedTicker) => {
+        if (savedTicker.symbol === ticker.symbol) {
+          return { ...savedTicker, expectedPrice };
+        }
+        return savedTicker;
+      });
+
+      state.filteredList = newTickers;
+      state.list = newTickers;
+    },
+    setFilteredSavedTickersRequest: (state, { payload }) => {
       state.filteredList = payload.filteredList;
     },
   },
@@ -39,11 +59,12 @@ export const savedTickers = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  setSavedTickers,
-  setSavedTickersIsLoaded,
-  addSavedTickers,
-  deleteSavedTickers,
-  setFilteredSavedTickers,
+  getSavedTickersRequest,
+  getSavedTickersResponse,
+  addSavedTickersRequest,
+  removeSavedTickersRequest,
+  updateSavedTickersRequest,
+  setFilteredSavedTickersRequest,
 } = savedTickers.actions;
 
 export default savedTickers.reducer;

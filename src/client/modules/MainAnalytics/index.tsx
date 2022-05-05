@@ -3,13 +3,15 @@ import { Box } from '@mui/system';
 import TickerManager from '@core/utilities/tickerManager';
 import useStyles from './index.style';
 import { StockTable } from './components/stockTable';
+import { useDispatch } from 'react-redux';
+import { getMainTableRequest } from '@core/store/dataTableSlice';
 
 export const MainAnalytics: React.FC = React.memo(() => {
-  const { getData } = TickerManager();
   const { container } = useStyles();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getData();
+    dispatch(getMainTableRequest());
   }, []);
 
   return (

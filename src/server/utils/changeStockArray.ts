@@ -1,3 +1,5 @@
+import Token from 'src/types/Token';
+
 export default (stocks) => {
   return stocks.map((stock) => {
     const id = stock.id;

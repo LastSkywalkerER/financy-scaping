@@ -20,10 +20,10 @@ type Props = {
   name: string;
   useSelection: any;
   handleCustomClick: any;
-  data: any;
+  data: { [key: string]: any }[];
   customClickPurpose: any;
   editableRow?: any;
-  handleFilter: any;
+  handleFilter: TableFilter;
   headList: string[] | { [key: string]: string };
   conditionallyRenderedCell?: (
     column: string,
@@ -37,7 +37,7 @@ export default function EnhancedTable({
   name,
   useSelection,
   handleCustomClick,
-  data,
+  data = [],
   customClickPurpose,
   editableRow = false,
   handleFilter,

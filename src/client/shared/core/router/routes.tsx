@@ -1,21 +1,19 @@
-'use strict';
-
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router';
 import { Navigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
-import Analytics from '@modules/Analytics';
 import AuthPage from '@modules/AuthPage';
-import { useAuth } from '@core/hooks/useAuth';
-import authManager from '@core/utilities/authManager';
 import { MainAnalytics } from '@modules/MainAnalytics';
 import { SavedAnalytics } from '@modules/SavedAnalytics';
 import UpdateSettings from '@modules/UpdateSettings';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@core/store/store';
+import { statusRequest } from '@core/store/authSlice';
 
 export default function AppRoutes() {
-  const { token, loading } = useAuth();
-  const { fetchStatus } = authManager();
+  const { token, loading } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
 
   const styles = {
     container: {
@@ -27,8 +25,8 @@ export default function AppRoutes() {
   };
 
   useEffect(() => {
-    fetchStatus();
-  }, [fetchStatus]);
+    dispatch(statusRequest());
+  }, []);
 
   if (loading) {
     return (

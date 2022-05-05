@@ -4,6 +4,7 @@ import { decode } from 'js-base64';
 import User from '../models/User';
 import stocksSchema from '../models/StocksUsers';
 import changeStockArray from '../utils/changeStockArray';
+import Token from 'src/types/Token';
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(config.get('tgToken'), { polling: true });
@@ -30,17 +31,21 @@ const getSavedInfo = async (chatId: number) => {
 
     const tickers = await stocksSchema.find({ owner: user.id });
 
-    const analysedTickers = changeStockArray(tickers).map((ticker) => {
-      if (ticker.price <= ticker.expectedPrice) {
-        ticker.status = 'ready';
-      }
-      return ticker;
-    });
+    const analysedTickers = changeStockArray(tickers).map(
+      (ticker: Token): Token => {
+        if (ticker?.expectedPrice) {
+          if (Number(ticker.price) <= ticker.expectedPrice) {
+            ticker.status = 'ready';
+          }
+        }
+        return ticker;
+      },
+    );
 
     await bot.sendMessage(
       chatId,
       analysedTickers.map(
-        (ticker) => `${ticker.symbol}, status: ${ticker.status}`,
+        (ticker: Token) => `${ticker.symbol}, status: ${ticker.status}`,
       ).join(`, 
     `) || 'Nothing found ;(',
     );
@@ -55,17 +60,21 @@ export const sendTgResult = async () => {
   users.forEach(async (user) => {
     const tickers = await stocksSchema.find({ owner: user.id });
 
-    const analysedTickers = changeStockArray(tickers).map((ticker) => {
-      if (ticker.price <= ticker.expectedPrice) {
-        ticker.status = 'ready';
-      }
-      return ticker;
-    });
+    const analysedTickers = changeStockArray(tickers).map(
+      (ticker: Token): Token => {
+        if (ticker?.expectedPrice) {
+          if (Number(ticker.price) <= ticker.expectedPrice) {
+            ticker.status = 'ready';
+          }
+        }
+        return ticker;
+      },
+    );
 
     await bot.sendMessage(
       user.tgChatId,
       analysedTickers.map(
-        (ticker) => `${ticker.symbol}, status: ${ticker.status}`,
+        (ticker: Token) => `${ticker.symbol}, status: ${ticker.status}`,
       ).join(`, 
     `) || 'Nothing found ;(',
     );

@@ -4,7 +4,6 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Container, ThemeProvider } from '@mui/material';
 import AppRoutes from '@core/router/routes';
-import AuthProvider from '@core/hooks/useAuth';
 import WebSocketProvider from '@core/hooks/useWebSocket';
 import { StylesProvider } from '@core/hooks/customStyles';
 import { ModalsProvider } from '@core/hooks/modalsController';
@@ -19,21 +18,19 @@ const Greetings = () => {
   const themeName = useSelector((state: RootState) => state.themeName.value);
 
   return (
-    <AuthProvider>
-      <ThemeProvider theme={themes[themeName]}>
-        <StylesProvider theme={themes[themeName]}>
-          <ModalsProvider initialModals={modals}>
-            <WebSocketProvider>
-              <Router>
-                <Header />
-                <AppRoutes />
-                <UserMessage />
-              </Router>
-            </WebSocketProvider>
-          </ModalsProvider>
-        </StylesProvider>
-      </ThemeProvider>
-    </AuthProvider>
+    <ThemeProvider theme={themes[themeName]}>
+      <StylesProvider theme={themes[themeName]}>
+        <ModalsProvider initialModals={modals}>
+          <WebSocketProvider>
+            <Router>
+              <Header />
+              <AppRoutes />
+              <UserMessage />
+            </Router>
+          </WebSocketProvider>
+        </ModalsProvider>
+      </StylesProvider>
+    </ThemeProvider>
   );
 };
 

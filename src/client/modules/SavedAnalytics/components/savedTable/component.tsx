@@ -2,30 +2,41 @@ import React, { useEffect, useState } from 'react';
 import EnhancedTable from '@components/EnhancedTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@core/store/store';
-import TickerManager from '@core/utilities/tickerManager';
-import { setFilteredSavedTickers } from '@core/store/savedTickersSlice';
+import {
+  removeSavedTickersRequest,
+  setFilteredSavedTickersRequest,
+} from '@core/store/savedTickersSlice';
 import { headList } from './tableConfig';
 import { conditionallyRenderedCell } from './conditionallyRenderedCell';
+import { ActionCreator, ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import Token from 'src/types/Token';
+import { TableFilter } from '@components/EnhancedTable/types';
 
 export const SavedTable: React.FC = React.memo(() => {
-  const savedTickers = useSelector((state: RootState) => state.savedTickers);
+  const { filteredList, list } = useSelector(
+    (state: RootState) => state.savedTickers,
+  );
 
-  const { getData, getSavedTickers, deleteTickers } = TickerManager();
   const dispatch = useDispatch();
 
   const [selectedToDelete, setSelectedToDelete] = useState([] as string[]);
 
-  useEffect(() => {
-    getData();
-    getSavedTickers();
-  }, []);
-
-  const filterTable = (actionCreator, data) => (filteredTable) => {
-    dispatch(actionCreator({ filteredList: filteredTable(data) }));
-  };
+  const filterTable =
+    (actionCreator: ActionCreator<any>, data: Token[]) =>
+    (filteredTable: TableFilter) => {
+      dispatch(actionCreator({ filteredList: filteredTable(data) }));
+    };
 
   const handleDeleteClick = async () => {
-    deleteTickers(selectedToDelete);
+    dispatch(
+      removeSavedTickersRequest(
+        filteredList.filter((ticker) =>
+          selectedToDelete.some(
+            (selectedTicker) => selectedTicker === ticker.symbol,
+          ),
+        ),
+      ),
+    );
     setSelectedToDelete([]);
   };
 
@@ -34,9 +45,9 @@ export const SavedTable: React.FC = React.memo(() => {
       name="Purchaised Tokens"
       useSelection={[selectedToDelete, setSelectedToDelete]}
       handleCustomClick={handleDeleteClick}
-      data={savedTickers.filteredList}
+      data={filteredList}
       customClickPurpose="Delete"
-      handleFilter={filterTable(setFilteredSavedTickers, savedTickers.list)}
+      handleFilter={filterTable(setFilteredSavedTickersRequest, list)}
       editableRow
       headList={headList}
       conditionallyRenderedCell={conditionallyRenderedCell}

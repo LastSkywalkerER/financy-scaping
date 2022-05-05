@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { useState, useEffect, ChangeEventHandler } from 'react';
 import {
   Card,
@@ -9,32 +7,38 @@ import {
   Button,
   TextField,
 } from '@mui/material';
-import useHttp from '@core/hooks/http.hook';
-import authManager from '@core/utilities/authManager';
 import useStyles from './index.style';
+import { useDispatch } from 'react-redux';
+import { loginRequest, registerRequest } from '@core/store/authSlice';
 
 const AuthPage = React.memo(() => {
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
-  const { fetchLogin, fetchRegister } = authManager();
   const { card, cardContent, title, textField, cardActions } = useStyles();
+  const dispatch = useDispatch();
 
   const changeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  const registerHandler = async () => {
-    fetchRegister(form);
+  const registerHandler = () => {
+    dispatch(registerRequest(form));
   };
 
-  const loginHandler = async () => {
-    fetchLogin(form);
+  const loginHandler = () => {
+    dispatch(loginRequest(form));
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLElement | null>) => {
+    if (event.key === 'enter') {
+      loginHandler();
+    }
   };
 
   return (
-    <Card sx={card}>
+    <Card sx={card} onKeyPress={handleKeyPress}>
       <CardContent sx={cardContent}>
         <Typography variant="h5" sx={title}>
           Stock Market Analytics
