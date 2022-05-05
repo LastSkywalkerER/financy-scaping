@@ -13,7 +13,7 @@ export const userSlice = createSlice({
     name: 'Test',
     userId: '',
     token: '',
-    loading: false,
+    loading: true,
   },
   reducers: {
     setUserName: (state, { payload }) => {

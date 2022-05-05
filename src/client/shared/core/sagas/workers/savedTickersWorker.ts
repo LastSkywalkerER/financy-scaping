@@ -10,21 +10,15 @@ import Token from 'src/types/Token';
 export function* getSavedTickers(): SagaIterator {
   const response = yield call(MainApi.getSavedTickers);
 
-  yield put(getSavedTickersResponse({ dataTable: response.stocks }));
+  yield put(getSavedTickersResponse({ dataTable: response.tickers }));
 }
 
 export function* addSavedTickers({ payload }: AnyAction): SagaIterator {
   try {
-    const savedTickers = yield select((state: RootState) => state.savedTickers);
-
-    const newSavedTickers = payload
-      .filter(
-        (newTicker) =>
-          !savedTickers.some(
-            (oldTicker) => newTicker.symbol === oldTicker.symbol,
-          ),
-      )
-      .map((obj: Token) => ({ ...obj, expectedPrice: 0 }));
+    const newSavedTickers = payload.map((obj: Token) => ({
+      ...obj,
+      expectedPrice: 0,
+    }));
 
     yield call(MainApi.setSavedTickers, newSavedTickers);
   } catch (error) {}

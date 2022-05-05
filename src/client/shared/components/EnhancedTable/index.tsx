@@ -37,7 +37,7 @@ export default function EnhancedTable({
   name,
   useSelection,
   handleCustomClick,
-  data,
+  data = [],
   customClickPurpose,
   editableRow = false,
   handleFilter,
