@@ -33,6 +33,7 @@ export const userSlice = createSlice({
     },
     loginResponse: (state, { payload }) => {
       const { token } = payload;
+      console.log('🚀 ~ file: authSlice.ts ~ line 36 ~ payload', payload);
 
       addToStorage(StorageNames.TOKEN, token);
 

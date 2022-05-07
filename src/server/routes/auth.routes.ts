@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import config from 'config';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
+import { ObjectId } from 'mongoDb';
 import User from '../models/User';
 import auth from '../middleware/auth.middleware';
 
@@ -139,7 +140,9 @@ router.get('/status', auth, async (req: any, res: any) => {
   try {
     const { userId } = req.user;
 
-    const user = await User.findOne({ id: userId });
+    const id = new ObjectId(userId);
+
+    const user = await User.findOne({ _id: id });
 
     if (!user) {
       return res.status(400).json({
