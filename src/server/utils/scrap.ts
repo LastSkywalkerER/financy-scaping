@@ -128,7 +128,7 @@ export class Scrap {
         Array(threads)
           .fill(null)
           .map(async (value, j) => {
-            await this.getPrices(urlTrade + this.table500[i].symbol, i + j);
+            await this.getPrices(urlTrade + this.table500[i + j].symbol, i + j);
             tableUpdating.tickerUpdated++;
           }),
       );
