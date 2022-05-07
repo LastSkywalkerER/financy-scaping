@@ -116,6 +116,7 @@ router.post(
       res.json({
         token,
         userID: user.id,
+        email,
       });
     } catch (e) {
       res.status(500).json({
@@ -151,6 +152,7 @@ router.get('/status', auth, async (req: any, res: any) => {
     res.json({
       token,
       userID: user.id,
+      email: user.email,
     });
   } catch (e) {
     res.status(500).json({

@@ -11,6 +11,7 @@ export const userSlice = createSlice({
   name,
   initialState: {
     name: 'Test',
+    email: '',
     userId: '',
     token: '',
     loading: true,
@@ -29,12 +30,13 @@ export const userSlice = createSlice({
       state.loading = true;
     },
     loginResponse: (state, { payload }) => {
-      const { userId, token } = payload;
+      const { userId, token, email } = payload;
 
       addToStorage(StorageNames.TOKEN, token);
 
       state.userId = userId;
       state.token = token;
+      state.email = email;
       state.loading = false;
     },
     statusRequest: (state) => {},
