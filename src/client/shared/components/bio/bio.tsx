@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import useStyles from '@components/bio/bioStyle';
 import { RootState } from '@core/store/store';
+import { logout } from '@core/store/authSlice';
 
 const avatar = 'https://random.imagecdn.app/50/50';
 
@@ -22,13 +23,13 @@ export default function Bio() {
   const { wrapper, textMargin, menu, text } = useStyles();
   const dispatch = useDispatch();
 
-  const logout = () => {
+  const handleLogout = () => {
     dispatch(logout());
   };
 
   const settings = [
     { name: 'Change Theme', onClick: () => dispatch(toggleTheme()) },
-    { name: 'Logout', onClick: logout },
+    { name: 'Logout', onClick: handleLogout },
   ];
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
