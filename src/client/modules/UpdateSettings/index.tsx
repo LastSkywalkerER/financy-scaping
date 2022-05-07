@@ -7,7 +7,7 @@ import { RootState } from '@core/store/store';
 
 const Analytics: React.FC = React.memo(() => {
   const { container } = useStyles();
-  const { userId } = useSelector((state: RootState) => state.auth);
+  const { userId } = useSelector((state: RootState) => state.auth.data);
 
   return (
     <Box sx={container}>

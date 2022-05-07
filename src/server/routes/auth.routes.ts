@@ -140,9 +140,7 @@ router.get('/status', auth, async (req: any, res: any) => {
   try {
     const { userId } = req.user;
 
-    const id = new ObjectId(userId);
-
-    const user = await User.findOne({ _id: id });
+    const user = await User.findOne({ _id: new ObjectId(userId) });
 
     if (!user) {
       return res.status(400).json({

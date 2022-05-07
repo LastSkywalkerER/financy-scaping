@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import config from 'config';
-import { decode } from 'js-base64';
+import { ObjectId } from 'mongoDb';
 import User from '../models/User';
 import stocksSchema from '../models/StocksUsers';
 import changeStockArray from '../utils/changeStockArray';
@@ -12,17 +12,21 @@ const bot = new TelegramBot(config.get('tgToken'), { polling: true });
 bot.setMyCommands([{ command: '/info', description: 'Get my saved tokens' }]);
 
 const startCommand = async (userId: string, chatId: number) => {
-  const user = await User.findOne({ id: userId });
+  const user = await User.findOne({ _id: new ObjectId(userId) });
 
   if (!user) {
     await bot.sendMessage(chatId, 'User not found!');
     return;
   }
 
-  await User.updateOne({ id: userId }, { $set: { tgChatId: chatId } });
+  await User.updateOne(
+    { _id: new ObjectId(userId) },
+    { $set: { tgChatId: chatId } },
+  );
 
   // send a message to the chat acknowledging receipt of their message
-  await bot.sendMessage(chatId, `Hi ${user.email}`);
+
+  await bot.sendMessage(chatId, `Hi ${user.name}`);
 };
 
 const getSavedInfo = async (chatId: number) => {
@@ -97,21 +101,25 @@ export const sendTgResult = async () => {
 // Listen for any kind of message. There are different kinds of
 // messages.
 bot.on('message', async (msg) => {
-  const msgArray = msg.text?.split(' ');
-  const command = (msgArray && /^\//.test(msgArray[0]) && msgArray[0]) || '';
-  const text =
-    (command ? msg.text?.replace(`${command} `, '') : msg.text) || '';
-  const chatId = msg.chat.id;
+  try {
+    const msgArray = msg.text?.split(' ');
+    const command = (msgArray && /^\//.test(msgArray[0]) && msgArray[0]) || '';
+    const text =
+      (command ? msg.text?.replace(`${command} `, '') : msg.text) || '';
+    const chatId = msg.chat.id;
 
-  switch (command) {
-    case '/start':
-      startCommand(text, chatId);
-      break;
-    case '/info':
-      getSavedInfo(chatId);
-      break;
-    case '/devCheck':
-      sendTgResult();
-      break;
+    switch (command) {
+      case '/start':
+        startCommand(text, chatId);
+        break;
+      case '/info':
+        getSavedInfo(chatId);
+        break;
+      case '/devCheck':
+        sendTgResult();
+        break;
+    }
+  } catch (error) {
+    console.error('TGbot Error: ', error);
   }
 });
