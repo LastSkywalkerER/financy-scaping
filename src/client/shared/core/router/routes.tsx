@@ -3,7 +3,8 @@ import { Routes, Route } from 'react-router';
 import { Navigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
-import AuthPage from '@modules/AuthPage';
+import { LoginPage } from '@modules/LoginPage';
+import { RegisterPage } from '@modules/RegisterPage';
 import { MainAnalytics } from '@modules/MainAnalytics';
 import { SavedAnalytics } from '@modules/SavedAnalytics';
 import UpdateSettings from '@modules/UpdateSettings';
@@ -12,7 +13,7 @@ import { RootState } from '@core/store/store';
 import { statusRequest } from '@core/store/authSlice';
 
 export default function AppRoutes() {
-  const { token, loading } = useSelector((state: RootState) => state.auth);
+  const { token, loading } = useSelector((state: RootState) => state.auth.data);
   const dispatch = useDispatch();
 
   const styles = {
@@ -49,8 +50,9 @@ export default function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={<AuthPage />} />
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="/loginPage" element={<LoginPage />} />
+      <Route path="/registerPage" element={<RegisterPage />} />
+      <Route path="*" element={<Navigate to="/loginPage" />} />
     </Routes>
   );
 }

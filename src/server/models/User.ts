@@ -22,7 +22,7 @@ const schema = new Schema({
   },
   tgChatId: {
     type: Number,
-    unique: true,
+    // unique: true,
   },
 });
 

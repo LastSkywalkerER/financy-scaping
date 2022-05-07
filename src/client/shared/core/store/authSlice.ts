@@ -10,39 +10,40 @@ const name: string = 'auth';
 export const userSlice = createSlice({
   name,
   initialState: {
-    name: 'Test',
-    email: '',
-    userId: '',
-    token: '',
-    loading: true,
+    data: {
+      name: 'Test',
+      email: '',
+      userId: '',
+      token: '',
+      loading: true,
+    },
   },
   reducers: {
     setUserName: (state, { payload }) => {
-      state.name = payload;
+      state.data.name = payload;
     },
     registerRequest: (state, { payload }) => {
-      state.loading = true;
+      state.data.loading = true;
     },
-    registerResponse: (state) => {
-      state.loading = false;
+    authFail: (state) => {
+      state.data.loading = false;
     },
     loginRequest: (state, { payload }) => {
-      state.loading = true;
+      state.data.loading = true;
     },
     loginResponse: (state, { payload }) => {
-      const { userId, token, email } = payload;
+      const { token } = payload;
 
       addToStorage(StorageNames.TOKEN, token);
 
-      state.userId = userId;
-      state.token = token;
-      state.email = email;
-      state.loading = false;
+      state.data = { ...state.data, ...payload, loading: false };
     },
-    statusRequest: (state) => {},
+    statusRequest: (state) => {
+      state.data.loading = true;
+    },
     logout: (state) => {
-      state.userId = '';
-      state.token = '';
+      state.data.userId = '';
+      state.data.token = '';
 
       removeFromStorage(StorageNames.TOKEN);
     },
@@ -53,7 +54,7 @@ export const userSlice = createSlice({
 export const {
   setUserName,
   registerRequest,
-  registerResponse,
+  authFail,
   loginRequest,
   loginResponse,
   statusRequest,

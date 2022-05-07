@@ -12,14 +12,14 @@ const router = Router();
 router.post(
   '/register',
   [
-    // check('name', 'Name must be more than 1 symbols').isLength({
-    //   min: 2,
-    // }),
+    check('name', 'Name must be more than 1 symbols').isLength({
+      min: 2,
+    }),
     check('email', 'Incorrect email').isEmail(),
     check('password', 'Password must be more than 6 symbols').isLength({
       min: 6,
     }),
-    // check('phone', 'Incorrect phone').isMobilePhone(),
+    check('phone', 'Incorrect phone').isMobilePhone('be-BY'),
   ],
   async (req: any, res: any) => {
     try {
@@ -27,12 +27,14 @@ router.post(
 
       if (!errors.isEmpty()) {
         return res.status(400).json({
-          errors: errors.array(),
-          message: 'Incorrect data',
+          message: errors
+            .array()
+            .map((error) => error.msg)
+            .join(', '),
         });
       }
 
-      const { email, password } = req.body;
+      const { name, email, password, phone } = req.body;
 
       const candidateEmail = await User.findOne({
         email,
@@ -46,10 +48,10 @@ router.post(
 
       const hashedPassword = await bcrypt.hash(password, 12);
       const user = new User({
-        name: new Date().toString(),
+        name,
         email,
         password: hashedPassword,
-        phone: new Date().toString(),
+        phone,
       });
 
       await user.save();
@@ -58,6 +60,7 @@ router.post(
         message: 'User created',
       });
     } catch (e) {
+      console.error('error in register: ', e);
       res.status(500).json({
         message: 'Something wrong :(',
       });
@@ -69,8 +72,10 @@ router.post(
 router.post(
   '/login',
   [
-    check('email', 'Your email').normalizeEmail().isEmail(),
-    check('password', 'Your password').exists(),
+    check('email', 'Incorrect email').isEmail(),
+    check('password', 'Password must be more than 6 symbols').isLength({
+      min: 6,
+    }),
   ],
   async (req: any, res: any) => {
     try {
@@ -78,8 +83,10 @@ router.post(
 
       if (!errors.isEmpty()) {
         return res.status(400).json({
-          errors: errors.array(),
-          message: 'Incorrect data',
+          message: errors
+            .array()
+            .map((error) => error.msg)
+            .join(', '),
         });
       }
 
@@ -114,8 +121,9 @@ router.post(
       );
 
       res.json({
+        name: user.name,
         token,
-        userID: user.id,
+        userId: user.id,
         email,
       });
     } catch (e) {
@@ -150,8 +158,9 @@ router.get('/status', auth, async (req: any, res: any) => {
     );
 
     res.json({
+      name: user.name,
       token,
-      userID: user.id,
+      userId: user.id,
       email: user.email,
     });
   } catch (e) {

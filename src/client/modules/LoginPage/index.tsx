@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEventHandler } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Card,
   CardActions,
@@ -9,26 +9,16 @@ import {
 } from '@mui/material';
 import useStyles from './index.style';
 import { useDispatch } from 'react-redux';
-import { loginRequest, registerRequest } from '@core/store/authSlice';
+import { loginRequest } from '@core/store/authSlice';
 
-const AuthPage = React.memo(() => {
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-  });
+export const LoginPage: React.FC = React.memo(() => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { card, cardContent, title, textField, cardActions } = useStyles();
   const dispatch = useDispatch();
 
-  const changeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setForm({ ...form, [event.target.name]: event.target.value });
-  };
-
-  const registerHandler = () => {
-    dispatch(registerRequest(form));
-  };
-
   const loginHandler = () => {
-    dispatch(loginRequest(form));
+    dispatch(loginRequest({ email, password }));
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLElement | null>) => {
@@ -37,11 +27,25 @@ const AuthPage = React.memo(() => {
     }
   };
 
+  const emailHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(event.target.value);
+    },
+    [],
+  );
+
+  const passwordHandler = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(event.target.value);
+    },
+    [],
+  );
+
   return (
     <Card sx={card} onKeyPress={handleKeyPress}>
       <CardContent sx={cardContent}>
         <Typography variant="h5" sx={title}>
-          Stock Market Analytics
+          Login
         </Typography>
         <TextField
           sx={textField}
@@ -50,7 +54,7 @@ const AuthPage = React.memo(() => {
           type="email"
           label="Email"
           name="email"
-          onChange={changeHandler}
+          onChange={emailHandler}
         />
         <TextField
           sx={textField}
@@ -60,19 +64,14 @@ const AuthPage = React.memo(() => {
           type="password"
           autoComplete="current-password"
           name="password"
-          onChange={changeHandler}
+          onChange={passwordHandler}
         />
       </CardContent>
       <CardActions sx={cardActions}>
         <Button onClick={loginHandler} variant="contained">
           Log In
         </Button>
-        <Button onClick={registerHandler} variant="outlined">
-          Register
-        </Button>
       </CardActions>
     </Card>
   );
 });
-
-export default AuthPage;

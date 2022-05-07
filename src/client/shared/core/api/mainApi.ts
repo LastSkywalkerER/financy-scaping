@@ -52,7 +52,7 @@ export class MainApi {
   };
 
   public static registerRequest = (form: AuthCredentials) => {
-    MainApi.requestService(`/api/auth/register`, 'POST', {
+    return MainApi.requestService(`/api/auth/register`, 'POST', {
       ...form,
     });
   };
@@ -76,19 +76,19 @@ export class MainApi {
   };
 
   public static setSavedTickers = (tickers: Token[] = []) => {
-    MainApi.requestService('/api/tickers/saved', 'POST', {
+    return MainApi.requestService('/api/tickers/saved', 'POST', {
       tickers,
     });
   };
 
   public static removeSavedTickers = (tickers: Token[] = []) => {
-    MainApi.requestService('/api/tickers/saved', 'DELETE', {
+    return MainApi.requestService('/api/tickers/saved', 'DELETE', {
       tickers,
     });
   };
 
   public static updateSavedTicker = (ticker: Token, expectedPrice: number) => {
-    MainApi.requestService('/api/tickers/saved', 'PATCH', {
+    return MainApi.requestService('/api/tickers/saved', 'PATCH', {
       symbol: ticker.symbol,
       expectedPrice,
     });
