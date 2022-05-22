@@ -10,7 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { IconButton } from '@mui/material';
+import { CircularProgress, IconButton } from '@mui/material';
 import { EnhancedTableHead } from '@components/EnhancedTable/components/enhancedTableHead';
 import { EnhancedTableToolbar } from '@components/EnhancedTable/components/EnhancedTableToolbar';
 import Filter from '../Filter';
@@ -18,6 +18,7 @@ import { EnchancedTableRow } from './components/EnchancedTableRow';
 import useStyles from './index.style';
 
 type Props = {
+  isLoading?: boolean;
   name: string;
   useSelection: any;
   handleCustomClick: any;
@@ -35,6 +36,7 @@ type Props = {
 };
 
 export const EnhancedTable: React.FC<Props> = ({
+  isLoading,
   name,
   useSelection,
   handleCustomClick,
@@ -119,49 +121,55 @@ export const EnhancedTable: React.FC<Props> = ({
         handleCustomClick={handleCustomClick}
       />
       <TableContainer sx={styles.tableContainer}>
-        <Table
-          stickyHeader
-          sx={{ minWidth: 500 }}
-          aria-labelledby="sticky table"
-          size={'small'}
-        >
-          <EnhancedTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={data.length}
-            headList={headList}
-          />
-          <TableBody>
-            {data
-              .slice()
-              .sort(getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => (
-                <EnchancedTableRow
-                  key={row.id}
-                  row={row}
-                  index={index}
-                  isItemSelected={isSelected(row.symbol)}
-                  head={headList}
-                  editableRow={editableRow}
-                  useSelection={useSelection}
-                  conditionallyRenderedCell={conditionallyRenderedCell}
-                />
-              ))}
-            {emptyRows > 0 && (
-              <TableRow
-                style={{
-                  height: 33 * emptyRows,
-                }}
-              >
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        {isLoading ? (
+          <Box sx={styles.loadingWrapper}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Table
+            stickyHeader
+            sx={{ minWidth: 500 }}
+            aria-labelledby="sticky table"
+            size={'small'}
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={data.length}
+              headList={headList}
+            />
+            <TableBody>
+              {data
+                .slice()
+                .sort(getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => (
+                  <EnchancedTableRow
+                    key={row.id}
+                    row={row}
+                    index={index}
+                    isItemSelected={isSelected(row.symbol)}
+                    head={headList}
+                    editableRow={editableRow}
+                    useSelection={useSelection}
+                    conditionallyRenderedCell={conditionallyRenderedCell}
+                  />
+                ))}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: 33 * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
       </TableContainer>
       <div style={styles.footer}>
         <Filter data={data} updateDataTable={handleFilter} />

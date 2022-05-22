@@ -15,6 +15,13 @@ const useStyles = makeStyles((theme: ThemeOptions) => ({
     justifyContent: 'space-between',
     borderTop: `1px solid ${theme.palette?.divider}`,
   },
+  loadingWrapper: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));
 
 export default useStyles;

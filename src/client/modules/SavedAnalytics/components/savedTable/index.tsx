@@ -13,7 +13,7 @@ import Token from 'src/types/Token';
 import { TableFilter } from '@components/EnhancedTable/types';
 
 export const SavedTable: React.FC = React.memo(() => {
-  const { filteredList, list } = useSelector(
+  const { filteredList, list, isLoaded } = useSelector(
     (state: RootState) => state.savedTickers,
   );
 
@@ -42,6 +42,7 @@ export const SavedTable: React.FC = React.memo(() => {
 
   return (
     <EnhancedTable
+      isLoading={!isLoaded}
       name="Purchaised Tokens"
       useSelection={[selectedToDelete, setSelectedToDelete]}
       handleCustomClick={handleDeleteClick}

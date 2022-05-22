@@ -10,7 +10,7 @@ import Token from 'src/types/Token';
 import { TableFilter } from '@components/EnhancedTable/types';
 
 export const StockTable: React.FC = React.memo(() => {
-  const { list, filteredList } = useSelector(
+  const { list, filteredList, isLoaded } = useSelector(
     (state: RootState) => state.dataTable,
   );
 
@@ -37,6 +37,7 @@ export const StockTable: React.FC = React.memo(() => {
 
   return (
     <EnhancedTable
+      isLoading={!isLoaded}
       name="Stock Market"
       useSelection={[selectedToBuy, setSelectedToBuy]}
       handleCustomClick={handleBuyClick}
