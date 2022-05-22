@@ -11,13 +11,13 @@ import { visuallyHidden } from '@mui/utils';
 import React from 'react';
 
 interface Props {
-  onSelectAllClick: (
+  onCheckedAllClick: (
     event: React.ChangeEvent<HTMLInputElement>,
     checked: boolean,
   ) => void;
   order: 'asc' | 'desc' | undefined;
   orderBy: string;
-  numSelected: number;
+  numChecked: number;
   rowCount: number;
   onRequestSort: (event: React.MouseEvent, property: string) => void;
   headList: string[];
@@ -25,10 +25,10 @@ interface Props {
 
 export const EnhancedTableHead: React.FC<Props> = (props) => {
   const {
-    onSelectAllClick,
+    onCheckedAllClick,
     order,
     orderBy,
-    numSelected,
+    numChecked,
     rowCount,
     onRequestSort,
     headList,
@@ -39,7 +39,6 @@ export const EnhancedTableHead: React.FC<Props> = (props) => {
 
   const headCells = headList.map((name: string, i: number) => ({
     id: name,
-    numeric: name !== 'symbol' && name !== 'sector' && i !== 0 ? true : false,
     label: name.toUpperCase(),
   }));
 
@@ -49,9 +48,9 @@ export const EnhancedTableHead: React.FC<Props> = (props) => {
         <TableCell padding="none">
           <Checkbox
             color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
+            indeterminate={numChecked > 0 && numChecked < rowCount}
+            checked={rowCount > 0 && numChecked === rowCount}
+            onChange={onCheckedAllClick}
             inputProps={{
               'aria-label': 'select all desserts',
             }}
@@ -60,7 +59,6 @@ export const EnhancedTableHead: React.FC<Props> = (props) => {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel

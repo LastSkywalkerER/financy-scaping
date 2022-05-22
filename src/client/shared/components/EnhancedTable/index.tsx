@@ -16,33 +16,17 @@ import { EnhancedTableToolbar } from '@components/EnhancedTable/components/Enhan
 import Filter from '../Filter';
 import { EnchancedTableRow } from './components/EnchancedTableRow';
 import { useStyles } from './styles';
+import { TableProps } from './types';
 
-type Props = {
-  isLoading?: boolean;
-  name: string;
-  useSelection: any;
-  handleCustomClick: any;
-  data: { [key: string]: any }[];
-  customClickPurpose: any;
-  editableRow?: any;
-  handleFilter: TableFilter;
-  headList: string[] | { [key: string]: string };
-  conditionallyRenderedCell?: (
-    column: string,
-    value: any,
-    index: number,
-    row: Token,
-  ) => React.ReactElement | string | number | null;
-};
-
-export const EnhancedTable: React.FC<Props> = ({
+export const EnhancedTable: React.FC<TableProps> = ({
   isLoading,
   name,
-  useSelection,
   handleCustomClick,
+  onRowClick,
+  checked,
+  setChecked,
   data = [],
   customClickPurpose,
-  editableRow = false,
   handleFilter,
   headList,
   conditionallyRenderedCell,
@@ -52,7 +36,7 @@ export const EnhancedTable: React.FC<Props> = ({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const [selected, setSelected] = useSelection;
+  const [selected, setSelected] = useState<Data>({});
 
   const { classes } = useStyles();
 
@@ -88,13 +72,22 @@ export const EnhancedTable: React.FC<Props> = ({
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
+  const handleCheckAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = data.map((n) => n.symbol);
-      setSelected(newSelected);
+      setChecked(data);
       return;
     }
-    setSelected([]);
+    setChecked([]);
+  };
+
+  const handleCheck = (row: Data, checked: boolean) => {
+    if (checked) {
+      setChecked((oldState) => [...oldState, row]);
+    } else {
+      setChecked((oldState) =>
+        oldState.filter((oldRow) => oldRow.id !== row.id),
+      );
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -106,7 +99,14 @@ export const EnhancedTable: React.FC<Props> = ({
     setPage(0);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const handleRowClick = (row: Data) => {
+    setSelected(row);
+    onRowClick && onRowClick(row);
+  };
+
+  const isSelected = (row: Data) => selected.id === row.id;
+  const isChecked = (row: Data) =>
+    checked.some((selectedRow) => selectedRow.id === row.id);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -115,7 +115,7 @@ export const EnhancedTable: React.FC<Props> = ({
   return (
     <Paper className={classes.container}>
       <EnhancedTableToolbar
-        numSelected={selected.length}
+        numChecked={checked.length}
         customClickPurpose={customClickPurpose}
         name={name}
         handleCustomClick={handleCustomClick}
@@ -133,10 +133,10 @@ export const EnhancedTable: React.FC<Props> = ({
             size={'small'}
           >
             <EnhancedTableHead
-              numSelected={selected.length}
+              numChecked={checked.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
+              onCheckAllClick={handleCheckAllClick}
               onRequestSort={handleRequestSort}
               rowCount={data.length}
               headList={headList}
@@ -151,10 +151,11 @@ export const EnhancedTable: React.FC<Props> = ({
                     key={row.id}
                     row={row}
                     index={index}
-                    isItemSelected={isSelected(row.symbol)}
+                    isItemSelected={isSelected(row)}
+                    isItemChecked={isChecked(row)}
                     head={headList}
-                    editableRow={editableRow}
-                    useSelection={useSelection}
+                    onRowClick={handleRowClick}
+                    onCheckBoxClick={handleCheck}
                     conditionallyRenderedCell={conditionallyRenderedCell}
                   />
                 ))}

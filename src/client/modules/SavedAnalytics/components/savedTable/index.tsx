@@ -28,15 +28,7 @@ export const SavedTable: React.FC = React.memo(() => {
     };
 
   const handleDeleteClick = async () => {
-    dispatch(
-      removeSavedTickersRequest(
-        filteredList.filter((ticker) =>
-          selectedToDelete.some(
-            (selectedTicker) => selectedTicker === ticker.symbol,
-          ),
-        ),
-      ),
-    );
+    dispatch(removeSavedTickersRequest(selectedToDelete));
     setSelectedToDelete([]);
   };
 
@@ -44,7 +36,8 @@ export const SavedTable: React.FC = React.memo(() => {
     <EnhancedTable
       isLoading={!isLoaded}
       name="Purchaised Tokens"
-      useSelection={[selectedToDelete, setSelectedToDelete]}
+      checked={selectedToDelete}
+      setChecked={setSelectedToDelete}
       handleCustomClick={handleDeleteClick}
       data={filteredList}
       customClickPurpose="Delete"

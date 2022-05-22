@@ -16,7 +16,7 @@ export const StockTable: React.FC = React.memo(() => {
 
   const dispatch = useDispatch();
 
-  const [selectedToBuy, setSelectedToBuy] = useState([] as string[]);
+  const [selectedToBuy, setSelectedToBuy] = useState<Token[]>([]);
 
   const filterTable =
     (actionCreator: ActionCreator<any>, data: Token[]) =>
@@ -25,13 +25,7 @@ export const StockTable: React.FC = React.memo(() => {
     };
 
   const handleBuyClick = async () => {
-    dispatch(
-      addSavedTickersRequest(
-        list.filter((ticker) =>
-          selectedToBuy.some((symbol) => symbol === ticker.symbol),
-        ),
-      ),
-    );
+    dispatch(addSavedTickersRequest(selectedToBuy));
     setSelectedToBuy([]);
   };
 
@@ -39,7 +33,8 @@ export const StockTable: React.FC = React.memo(() => {
     <EnhancedTable
       isLoading={!isLoaded}
       name="Stock Market"
-      useSelection={[selectedToBuy, setSelectedToBuy]}
+      checked={selectedToBuy}
+      setChecked={setSelectedToBuy}
       handleCustomClick={handleBuyClick}
       data={filteredList}
       customClickPurpose="Buy"

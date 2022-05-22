@@ -8,19 +8,21 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import React from 'react';
-import Token from 'src/types/Token';
+import { Data } from '../../types';
 
 interface Props {
-  row: Token;
+  row: Data;
   index: number;
   isItemSelected: boolean;
+  isItemChecked: boolean;
   head: string[];
-  useSelection: Array<any>;
+  onRowClick: (row: Data) => void;
+  onCheckBoxClick: (row: Data, checked: boolean) => void;
   conditionallyRenderedCell?: (
     column: string,
     value: any,
     index: number,
-    row: Token,
+    row: Data,
   ) => React.ReactElement | string | number | null;
 }
 
@@ -28,31 +30,28 @@ export const EnchancedTableRow: React.FC<Props> = ({
   row,
   index,
   isItemSelected,
+  isItemChecked,
   head,
-  useSelection,
+  onRowClick,
+  onCheckBoxClick,
   conditionallyRenderedCell,
 }) => {
   const labelId = `enhanced-table-checkbox-${index}`;
-  const [selected, setSelected] = useSelection;
 
-  const handleClick = (event: React.MouseEvent) => {
-    const name = row.symbol;
+  const handleRowClick = () => {
+    onRowClick(row);
+  };
 
-    if (selected.indexOf(name) === -1) {
-      setSelected((state) => [...state, name]);
-    } else {
-      setSelected((state) =>
-        state.filter((selectedName) => selectedName !== name),
-      );
-    }
+  const handleCheckBoxChange = () => {
+    onCheckBoxClick(row, !isItemChecked);
   };
 
   return (
     <TableRow
       hover
-      onClick={handleClick}
+      onClick={handleRowClick}
       role="checkbox"
-      aria-checked={isItemSelected}
+      aria-checked={isItemChecked}
       tabIndex={-1}
       key={row.id}
       selected={isItemSelected}
@@ -60,19 +59,15 @@ export const EnchancedTableRow: React.FC<Props> = ({
       <TableCell>
         <Checkbox
           color="primary"
-          checked={isItemSelected}
+          checked={isItemChecked}
+          onChange={handleCheckBoxChange}
           inputProps={{
             'aria-labelledby': labelId,
           }}
         />
       </TableCell>
       {head.map((key: string, i: number) => (
-        <TableCell
-          key={`${key}-${i}`}
-          align={
-            key !== 'symbol' && key !== 'sector' && i !== 0 ? 'right' : 'left'
-          }
-        >
+        <TableCell key={`${key}-${i}`}>
           {conditionallyRenderedCell
             ? conditionallyRenderedCell(key, row[key], index, row)
             : row[key]}
