@@ -45,6 +45,7 @@ export default function Header(): JSX.Element {
     desktopLogo,
     desktopMenuWrapper,
     desktopMenuItem,
+    linkStyle,
   } = useStyles();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -93,7 +94,9 @@ export default function Header(): JSX.Element {
               {(isAuth ? pages : authLinks).map((link) => (
                 <MenuItem key={link.name} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
-                    <Link to={link.route}>{link.name}</Link>
+                    <Link style={linkStyle} to={link.route}>
+                      {link.name}
+                    </Link>
                   </Typography>
                 </MenuItem>
               ))}
@@ -111,7 +114,9 @@ export default function Header(): JSX.Element {
                 onClick={handleCloseNavMenu}
                 sx={desktopMenuItem}
               >
-                <Link to={link.route}>{link.name}</Link>
+                <Link style={linkStyle} to={link.route}>
+                  {link.name}
+                </Link>
               </Button>
             ))}
           </Box>

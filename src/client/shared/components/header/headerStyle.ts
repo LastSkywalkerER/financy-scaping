@@ -2,6 +2,9 @@ import { makeStyles } from '@core/hooks/customStyles';
 import { ThemeOptions } from '@mui/material';
 
 const useStyles = makeStyles((theme: ThemeOptions) => ({
+  linkStyle: {
+    textTransform: 'none',
+  },
   appBar: {
     backgroundColor:
       theme.palette && theme.palette.primary
