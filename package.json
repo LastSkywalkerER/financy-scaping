@@ -61,6 +61,7 @@
     "nightmare": "^2.8.0",
     "nodemon": "^2.0.15",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "react-hook-form": "^7.31.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "sass": "^1.49.0",

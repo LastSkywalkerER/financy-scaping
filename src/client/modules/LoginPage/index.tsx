@@ -1,77 +1,59 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import {
   Card,
   CardActions,
   CardContent,
   Typography,
   Button,
-  TextField,
 } from '@mui/material';
 import useStyles from './index.style';
 import { useDispatch } from 'react-redux';
 import { loginRequest } from '@core/store/authSlice';
+import { TextFieldControl } from '@components/TextField';
+import { useForm } from 'react-hook-form';
+import { fieldLabels, FieldNames, FormValues } from './types';
 
-export const LoginPage: React.FC = React.memo(() => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export const LoginPage: React.FC = () => {
   const { card, cardContent, title, textField, cardActions } = useStyles();
   const dispatch = useDispatch();
 
-  const loginHandler = () => {
-    dispatch(loginRequest({ email, password }));
-  };
+  const { handleSubmit, control } = useForm<FormValues>({
+    mode: 'onChange',
+  });
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLElement | null>) => {
-    if (event.key === 'enter') {
-      loginHandler();
-    }
-  };
-
-  const emailHandler = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(event.target.value);
-    },
-    [],
-  );
-
-  const passwordHandler = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(event.target.value);
-    },
-    [],
-  );
+  const onSubmit = (data: FormValues) => dispatch(loginRequest(data));
 
   return (
-    <Card sx={card} onKeyPress={handleKeyPress}>
-      <CardContent sx={cardContent}>
-        <Typography variant="h5" sx={title}>
-          Login
-        </Typography>
-        <TextField
-          sx={textField}
-          required
-          id="email"
-          type="email"
-          label="Email"
-          name="email"
-          onChange={emailHandler}
-        />
-        <TextField
-          sx={textField}
-          required
-          id="password"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          name="password"
-          onChange={passwordHandler}
-        />
-      </CardContent>
-      <CardActions sx={cardActions}>
-        <Button onClick={loginHandler} variant="contained">
-          Log In
-        </Button>
-      </CardActions>
-    </Card>
+    <form noValidate onSubmit={handleSubmit(onSubmit)}>
+      <Card sx={card}>
+        <CardContent sx={cardContent}>
+          <Typography variant="h5" sx={title}>
+            Login
+          </Typography>
+          <TextFieldControl
+            control={control}
+            sx={textField}
+            required
+            type={FieldNames.Email}
+            label={fieldLabels[FieldNames.Email]}
+            name={FieldNames.Email}
+          />
+          <TextFieldControl
+            control={control}
+            sx={textField}
+            required
+            label={fieldLabels[FieldNames.Password]}
+            type={FieldNames.Password}
+            autoComplete="current-password"
+            name={FieldNames.Password}
+          />
+        </CardContent>
+        <CardActions sx={cardActions}>
+          <Button type="submit" variant="contained">
+            Log In
+          </Button>
+        </CardActions>
+      </Card>
+    </form>
   );
-});
+};
