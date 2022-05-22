@@ -7,7 +7,7 @@ import {
   Button,
   TextField,
 } from '@mui/material';
-import useStyles from './index.style';
+import { useStyles } from './styles';
 import { useDispatch } from 'react-redux';
 import { registerRequest } from '@core/store/authSlice';
 import { useForm } from 'react-hook-form';
@@ -15,7 +15,7 @@ import { fieldLabels, FieldNames, FormValues } from './types';
 import { TextFieldControl } from '@components/TextField';
 
 export const RegisterPage: React.FC = () => {
-  const { card, cardContent, title, textField, cardActions } = useStyles();
+  const { classes } = useStyles();
   const dispatch = useDispatch();
 
   const { handleSubmit, control } = useForm<FormValues>({
@@ -32,15 +32,15 @@ export const RegisterPage: React.FC = () => {
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
-      <Card sx={card}>
-        <CardContent sx={cardContent}>
-          <Typography variant="h5" sx={title}>
+      <Card className={classes.card}>
+        <CardContent className={classes.cardContent}>
+          <Typography variant="h5" className={classes.title}>
             Register
           </Typography>
 
           <TextFieldControl
             control={control}
-            sx={textField}
+            className={classes.textField}
             required
             type={FieldNames.Name}
             label={fieldLabels[FieldNames.Name]}
@@ -48,7 +48,7 @@ export const RegisterPage: React.FC = () => {
           />
           <TextFieldControl
             control={control}
-            sx={textField}
+            className={classes.textField}
             required
             type={FieldNames.Email}
             label={fieldLabels[FieldNames.Email]}
@@ -56,7 +56,7 @@ export const RegisterPage: React.FC = () => {
           />
           <TextFieldControl
             control={control}
-            sx={textField}
+            className={classes.textField}
             required
             type={FieldNames.Password}
             label={fieldLabels[FieldNames.Password]}
@@ -64,14 +64,14 @@ export const RegisterPage: React.FC = () => {
           />
           <TextFieldControl
             control={control}
-            sx={textField}
+            className={classes.textField}
             required
             type={FieldNames.Phone}
             label={fieldLabels[FieldNames.Phone]}
             name={FieldNames.Phone}
           />
         </CardContent>
-        <CardActions sx={cardActions}>
+        <CardActions className={classes.cardActions}>
           <Button type="submit" variant="contained">
             Register
           </Button>

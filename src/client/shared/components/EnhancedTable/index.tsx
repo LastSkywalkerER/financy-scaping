@@ -10,12 +10,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { CircularProgress, IconButton } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import { EnhancedTableHead } from '@components/EnhancedTable/components/enhancedTableHead';
 import { EnhancedTableToolbar } from '@components/EnhancedTable/components/EnhancedTableToolbar';
 import Filter from '../Filter';
 import { EnchancedTableRow } from './components/EnchancedTableRow';
-import useStyles from './index.style';
+import { useStyles } from './styles';
 
 type Props = {
   isLoading?: boolean;
@@ -54,7 +54,7 @@ export const EnhancedTable: React.FC<Props> = ({
 
   const [selected, setSelected] = useSelection;
 
-  const styles = useStyles();
+  const { classes } = useStyles();
 
   function descendingComparator(a, b, orderBy) {
     if (!isNaN(parseInt(a[orderBy])) && !isNaN(parseInt(b[orderBy]))) {
@@ -113,16 +113,16 @@ export const EnhancedTable: React.FC<Props> = ({
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   return (
-    <Paper sx={styles.container}>
+    <Paper className={classes.container}>
       <EnhancedTableToolbar
         numSelected={selected.length}
         customClickPurpose={customClickPurpose}
         name={name}
         handleCustomClick={handleCustomClick}
       />
-      <TableContainer sx={styles.tableContainer}>
+      <TableContainer className={classes.tableContainer}>
         {isLoading ? (
-          <Box sx={styles.loadingWrapper}>
+          <Box className={classes.loadingWrapper}>
             <CircularProgress />
           </Box>
         ) : (
@@ -171,7 +171,7 @@ export const EnhancedTable: React.FC<Props> = ({
           </Table>
         )}
       </TableContainer>
-      <div style={styles.footer}>
+      <div className={classes.footer}>
         <Filter data={data} updateDataTable={handleFilter} />
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, { value: -1, label: 'All' }]}

@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { Box } from '@mui/system';
-import TickerManager from '@core/utilities/tickerManager';
-import useStyles from './index.style';
+import { useStyles } from './styles';
 import { StockTable } from './components/stockTable';
 import { useDispatch } from 'react-redux';
 import { getMainTableRequest } from '@core/store/dataTableSlice';
 
 export const MainAnalytics: React.FC = React.memo(() => {
-  const { container } = useStyles();
+  const { classes } = useStyles();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -15,7 +14,7 @@ export const MainAnalytics: React.FC = React.memo(() => {
   }, []);
 
   return (
-    <Box sx={container}>
+    <Box className={classes.container}>
       <StockTable />
     </Box>
   );

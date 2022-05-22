@@ -1,13 +1,13 @@
-import { makeStyles } from '@core/hooks/customStyles';
-import { ThemeOptions } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 
-const useStyles = makeStyles((theme: ThemeOptions) => ({
+export const useStyles = makeStyles()(({ spacing }) => ({
   title: { textAlign: 'center' },
   card: {
-    m: 'auto',
-    mt: 10,
-    width: 1 / 2,
-    p: 3,
+    margin: 'auto',
+    marginTop: spacing(10),
+    width: '50%',
+    maxWidth: '600px',
+    padding: spacing(3),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -18,12 +18,10 @@ const useStyles = makeStyles((theme: ThemeOptions) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  textField: { width: '100%', m: 3 },
+  textField: { width: '100%', margin: `${spacing(2)} !important` },
   cardActions: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-around',
   },
 }));
-
-export default useStyles;

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '@core/store/themeSlice';
 
 import Box from '@mui/material/Box';
@@ -9,7 +9,7 @@ import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import useStyles from '@components/bio/bioStyle';
+import { useStyles } from '@components/bio/styles';
 import { RootState } from '@core/store/store';
 import { logout } from '@core/store/authSlice';
 
@@ -20,7 +20,7 @@ export default function Bio() {
     null,
   );
   const userName = useSelector((state: RootState) => state.auth.data.name);
-  const { wrapper, textMargin, menu, text } = useStyles();
+  const { classes } = useStyles();
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -46,15 +46,17 @@ export default function Bio() {
   };
 
   return (
-    <Box sx={wrapper}>
-      <Typography sx={textMargin}>Welcome, {userName}</Typography>
+    <Box className={classes.wrapper}>
+      <Typography className={classes.textMargin}>
+        Welcome, {userName}
+      </Typography>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar alt="Avatar" src={avatar} />
         </IconButton>
       </Tooltip>
       <Menu
-        sx={menu}
+        className={classes.menu}
         id="menu-appbar"
         anchorEl={anchorElUser}
         anchorOrigin={{
@@ -72,7 +74,7 @@ export default function Bio() {
         {settings.map((setting) => (
           <MenuItem key={setting.name}>
             <Typography
-              sx={text}
+              className={classes.text}
               onClick={handleClickUserMenuItem.bind(null, setting.onClick)}
               textAlign="center"
             >

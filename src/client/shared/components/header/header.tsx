@@ -12,11 +12,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import { useTheme } from '@emotion/react';
-import { ThemeOptions } from '@mui/material/styles';
-import useStyles from './headerStyle';
+import { useStyles } from './styles';
 
-import { RootStateOrAny, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@core/store/store';
 
 const pages = [
@@ -36,17 +34,7 @@ const Header = (props: {}, ref: ForwardedRef<HTMLDivElement>) => {
   );
   const { token } = useSelector((state: RootState) => state.auth.data);
   const isAuth = Boolean(token);
-  const {
-    appBar,
-    barWrapper,
-    mobileLogo,
-    mobileMenuWrapper,
-    mobileMenu,
-    desktopLogo,
-    desktopMenuWrapper,
-    desktopMenuItem,
-    linkStyle,
-  } = useStyles();
+  const { classes } = useStyles();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -57,14 +45,19 @@ const Header = (props: {}, ref: ForwardedRef<HTMLDivElement>) => {
   };
 
   return (
-    <AppBar ref={ref} position="static" sx={appBar}>
+    <AppBar ref={ref} position="static" className={classes.appBar}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters sx={barWrapper}>
-          <Typography variant="h6" noWrap component="div" sx={mobileLogo}>
+        <Toolbar disableGutters className={classes.barWrapper}>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            className={classes.mobileLogo}
+          >
             SMA app
           </Typography>
 
-          <Box sx={mobileMenuWrapper}>
+          <Box className={classes.mobileMenuWrapper}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -89,12 +82,12 @@ const Header = (props: {}, ref: ForwardedRef<HTMLDivElement>) => {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={mobileMenu}
+              className={classes.mobileMenu}
             >
               {(isAuth ? pages : authLinks).map((link) => (
                 <MenuItem key={link.name} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
-                    <Link style={linkStyle} to={link.route}>
+                    <Link className={classes.linkStyle} to={link.route}>
                       {link.name}
                     </Link>
                   </Typography>
@@ -103,18 +96,23 @@ const Header = (props: {}, ref: ForwardedRef<HTMLDivElement>) => {
             </Menu>
           </Box>
 
-          <Typography variant="h6" noWrap component="div" sx={desktopLogo}>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            className={classes.desktopLogo}
+          >
             SMA app
           </Typography>
 
-          <Box sx={desktopMenuWrapper}>
+          <Box className={classes.desktopMenuWrapper}>
             {(isAuth ? pages : authLinks).map((link) => (
               <Button
                 key={link.name}
                 onClick={handleCloseNavMenu}
-                sx={desktopMenuItem}
+                className={classes.desktopMenuItem}
               >
-                <Link style={linkStyle} to={link.route}>
+                <Link className={classes.linkStyle} to={link.route}>
                   {link.name}
                 </Link>
               </Button>

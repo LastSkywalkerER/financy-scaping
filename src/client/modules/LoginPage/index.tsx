@@ -6,7 +6,7 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import useStyles from './index.style';
+import { useStyles } from './styles';
 import { useDispatch } from 'react-redux';
 import { loginRequest } from '@core/store/authSlice';
 import { TextFieldControl } from '@components/TextField';
@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { fieldLabels, FieldNames, FormValues } from './types';
 
 export const LoginPage: React.FC = () => {
-  const { card, cardContent, title, textField, cardActions } = useStyles();
+  const { classes } = useStyles();
   const dispatch = useDispatch();
 
   const { handleSubmit, control } = useForm<FormValues>({
@@ -25,14 +25,14 @@ export const LoginPage: React.FC = () => {
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
-      <Card sx={card}>
-        <CardContent sx={cardContent}>
-          <Typography variant="h5" sx={title}>
+      <Card className={classes.card}>
+        <CardContent className={classes.cardContent}>
+          <Typography variant="h5" className={classes.title}>
             Login
           </Typography>
           <TextFieldControl
             control={control}
-            sx={textField}
+            className={classes.textField}
             required
             type={FieldNames.Email}
             label={fieldLabels[FieldNames.Email]}
@@ -40,7 +40,7 @@ export const LoginPage: React.FC = () => {
           />
           <TextFieldControl
             control={control}
-            sx={textField}
+            className={classes.textField}
             required
             label={fieldLabels[FieldNames.Password]}
             type={FieldNames.Password}
@@ -48,7 +48,7 @@ export const LoginPage: React.FC = () => {
             name={FieldNames.Password}
           />
         </CardContent>
-        <CardActions sx={cardActions}>
+        <CardActions className={classes.cardActions}>
           <Button type="submit" variant="contained">
             Log In
           </Button>

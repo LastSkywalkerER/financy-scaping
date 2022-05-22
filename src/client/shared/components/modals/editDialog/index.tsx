@@ -8,7 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import useStyles from './editDialogStyle';
+import { useStyles } from './styles';
 
 interface Props {
   extString: string;
@@ -18,7 +18,7 @@ interface Props {
 export default function EditDialog({ extString, action }: Props) {
   const [inputValue, setInputValue] = React.useState(extString);
   const { closeModal } = useModals();
-  const { button } = useStyles();
+  const { classes } = useStyles();
 
   const handleClose = () => {
     closeModal('EDIT_DIALOG');
@@ -55,10 +55,10 @@ export default function EditDialog({ extString, action }: Props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button sx={button} onClick={handleClose}>
+          <Button className={classes.button} onClick={handleClose}>
             Cancel
           </Button>
-          <Button sx={button} onClick={handleOk}>
+          <Button className={classes.button} onClick={handleOk}>
             OK
           </Button>
         </DialogActions>

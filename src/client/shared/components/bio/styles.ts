@@ -1,6 +1,6 @@
-import { makeStyles } from '@core/hooks/customStyles';
+import { makeStyles } from 'tss-react/mui';
 
-const useStyles = makeStyles({
+export const useStyles = makeStyles()({
   wrapper: {
     flexGrow: 0,
     display: 'flex',
@@ -11,5 +11,3 @@ const useStyles = makeStyles({
   menu: { mt: '50px' },
   text: { width: '100%' },
 });
-
-export default useStyles;
