@@ -4,7 +4,6 @@ import React from 'react';
 
 import { ThemeProvider } from '@mui/material';
 import WebSocketProvider from '@core/hooks/useWebSocket';
-import { StylesProvider } from '@core/hooks/customStyles';
 import { ModalsProvider } from '@core/hooks/modalsController';
 import themes from '@styles/themes';
 import modals from '@components/modals';
@@ -18,13 +17,11 @@ const Greetings = () => {
 
   return (
     <ThemeProvider theme={themes[themeName]}>
-      <StylesProvider theme={themes[themeName]}>
-        <ModalsProvider initialModals={modals}>
-          <WebSocketProvider>
-            <AppWrapper />
-          </WebSocketProvider>
-        </ModalsProvider>
-      </StylesProvider>
+      <ModalsProvider initialModals={modals}>
+        <WebSocketProvider>
+          <AppWrapper />
+        </WebSocketProvider>
+      </ModalsProvider>
     </ThemeProvider>
   );
 };
