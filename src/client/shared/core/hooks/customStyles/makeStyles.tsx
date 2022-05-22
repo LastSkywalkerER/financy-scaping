@@ -1,12 +1,18 @@
+import { SxProps, Theme, ThemeOptions } from '@mui/system';
 import React, { useCallback, useContext, useMemo } from 'react';
 import CustomStyles from './CustomStyles';
 import globalStyles from './globalStyles';
-import { DefaultStyle, FinishStyles, FunctionalStyle } from './types';
+import {
+  DefaultStyle,
+  FinishStyles,
+  FunctionalStyle,
+  GlobalStyles,
+} from './types';
 
-export default (styles: any) => {
+export default <T extends {}>(styles: any) => {
   globalStyles.push(styles);
   const index = globalStyles.length - 1;
-  return (props?: any) => {
+  return (props?: T) => {
     const currentStyle = useContext(CustomStyles)[index] || {};
     let newStyle: FinishStyles = {};
 

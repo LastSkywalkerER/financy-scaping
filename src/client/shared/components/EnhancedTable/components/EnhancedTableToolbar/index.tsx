@@ -2,9 +2,16 @@ import React from 'react';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
-import { alpha } from '@mui/material/styles';
+import { alpha, Theme } from '@mui/material/styles';
 
-export default function EnhancedTableToolbar(props) {
+interface Props {
+  numSelected: number;
+  customClickPurpose: string;
+  name: string;
+  handleCustomClick: any;
+}
+
+export const EnhancedTableToolbar: React.FC<Props> = (props) => {
   const { numSelected, customClickPurpose, name, handleCustomClick } = props;
 
   let CustomIcon = AddBoxIcon;
@@ -18,20 +25,20 @@ export default function EnhancedTableToolbar(props) {
       break;
   }
 
+  const style = {
+    pl: { sm: 2 },
+    pr: { xs: 1, sm: 1 },
+    ...(numSelected > 0 && {
+      bgcolor: (theme: Theme) =>
+        alpha(
+          theme.palette.primary.main,
+          theme.palette.action.activatedOpacity,
+        ),
+    }),
+  };
+
   return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity,
-            ),
-        }),
-      }}
-    >
+    <Toolbar sx={style}>
       {numSelected > 0 ? (
         <Typography
           sx={{ flex: '1 1 100%' }}
@@ -61,4 +68,4 @@ export default function EnhancedTableToolbar(props) {
       ) : null}
     </Toolbar>
   );
-}
+};

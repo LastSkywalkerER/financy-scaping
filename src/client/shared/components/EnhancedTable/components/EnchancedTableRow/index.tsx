@@ -24,14 +24,14 @@ interface Props {
   ) => React.ReactElement | string | number | null;
 }
 
-export default function EnchancedTableRow({
+export const EnchancedTableRow: React.FC<Props> = ({
   row,
   index,
   isItemSelected,
   head,
   useSelection,
   conditionallyRenderedCell,
-}: Props) {
+}) => {
   const labelId = `enhanced-table-checkbox-${index}`;
   const [selected, setSelected] = useSelection;
 
@@ -57,7 +57,7 @@ export default function EnchancedTableRow({
       key={row.id}
       selected={isItemSelected}
     >
-      <TableCell padding="none">
+      <TableCell>
         <Checkbox
           color="primary"
           checked={isItemSelected}
@@ -72,7 +72,6 @@ export default function EnchancedTableRow({
           align={
             key !== 'symbol' && key !== 'sector' && i !== 0 ? 'right' : 'left'
           }
-          padding="none"
         >
           {conditionallyRenderedCell
             ? conditionallyRenderedCell(key, row[key], index, row)
@@ -81,4 +80,4 @@ export default function EnchancedTableRow({
       ))}
     </TableRow>
   );
-}
+};

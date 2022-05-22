@@ -15,9 +15,7 @@ export const SavedAnalytics: React.FC = React.memo(() => {
 
   return (
     <Box sx={container}>
-      <Box sx={{ width: '100%' }}>
-        <SavedTable />
-      </Box>
+      <SavedTable />
     </Box>
   );
 });

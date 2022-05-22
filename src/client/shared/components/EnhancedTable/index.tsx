@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import * as React from 'react';
+import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -11,10 +11,11 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { IconButton } from '@mui/material';
-import EnhancedTableHead from '@components/EnhancedTable/components/enhancedTableHead';
-import EnhancedTableToolbar from '@components/EnhancedTable/components/EnhancedTableToolbar';
+import { EnhancedTableHead } from '@components/EnhancedTable/components/enhancedTableHead';
+import { EnhancedTableToolbar } from '@components/EnhancedTable/components/EnhancedTableToolbar';
 import Filter from '../Filter';
-import EnchancedTableRow from './components/EnchancedTableRow';
+import { EnchancedTableRow } from './components/EnchancedTableRow';
+import useStyles from './index.style';
 
 type Props = {
   name: string;
@@ -33,7 +34,7 @@ type Props = {
   ) => React.ReactElement | string | number | null;
 };
 
-export default function EnhancedTable({
+export const EnhancedTable: React.FC<Props> = ({
   name,
   useSelection,
   handleCustomClick,
@@ -43,12 +44,15 @@ export default function EnhancedTable({
   handleFilter,
   headList,
   conditionallyRenderedCell,
-}: Props) {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('id');
+}) => {
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('id');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const [selected, setSelected] = useSelection;
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const styles = useStyles();
 
   function descendingComparator(a, b, orderBy) {
     if (!isNaN(parseInt(a[orderBy])) && !isNaN(parseInt(b[orderBy]))) {
@@ -107,72 +111,70 @@ export default function EnhancedTable({
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2, overflow: 'hidden' }}>
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          customClickPurpose={customClickPurpose}
-          name={name}
-          handleCustomClick={handleCustomClick}
-        />
-        <TableContainer sx={{ maxHeight: '70vh' }}>
-          <Table
-            stickyHeader
-            sx={{ minWidth: 500 }}
-            aria-labelledby="sticky table"
-            size={'small'}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={data.length}
-              headList={headList}
-            />
-            <TableBody>
-              {data
-                .slice()
-                .sort(getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
-                  <EnchancedTableRow
-                    key={row.id}
-                    row={row}
-                    index={index}
-                    isItemSelected={isSelected(row.symbol)}
-                    head={headList}
-                    editableRow={editableRow}
-                    useSelection={useSelection}
-                    conditionallyRenderedCell={conditionallyRenderedCell}
-                  />
-                ))}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 33 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Filter data={data} updateDataTable={handleFilter} />
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25, { value: -1, label: 'All' }]}
-            component="div"
-            count={data.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+    <Paper sx={styles.container}>
+      <EnhancedTableToolbar
+        numSelected={selected.length}
+        customClickPurpose={customClickPurpose}
+        name={name}
+        handleCustomClick={handleCustomClick}
+      />
+      <TableContainer sx={styles.tableContainer}>
+        <Table
+          stickyHeader
+          sx={{ minWidth: 500 }}
+          aria-labelledby="sticky table"
+          size={'small'}
+        >
+          <EnhancedTableHead
+            numSelected={selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={data.length}
+            headList={headList}
           />
-        </div>
-      </Paper>
-    </Box>
+          <TableBody>
+            {data
+              .slice()
+              .sort(getComparator(order, orderBy))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => (
+                <EnchancedTableRow
+                  key={row.id}
+                  row={row}
+                  index={index}
+                  isItemSelected={isSelected(row.symbol)}
+                  head={headList}
+                  editableRow={editableRow}
+                  useSelection={useSelection}
+                  conditionallyRenderedCell={conditionallyRenderedCell}
+                />
+              ))}
+            {emptyRows > 0 && (
+              <TableRow
+                style={{
+                  height: 33 * emptyRows,
+                }}
+              >
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <div style={styles.footer}>
+        <Filter data={data} updateDataTable={handleFilter} />
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, { value: -1, label: 'All' }]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </div>
+    </Paper>
   );
-}
+};

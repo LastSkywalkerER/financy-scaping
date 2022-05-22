@@ -5,11 +5,25 @@ import {
   Checkbox,
   TableSortLabel,
   Box,
+  SortDirection,
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import React from 'react';
 
-export default function EnhancedTableHead(props) {
+interface Props {
+  onSelectAllClick: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean,
+  ) => void;
+  order: 'asc' | 'desc' | undefined;
+  orderBy: string;
+  numSelected: number;
+  rowCount: number;
+  onRequestSort: (event: React.MouseEvent, property: string) => void;
+  headList: string[];
+}
+
+export const EnhancedTableHead: React.FC<Props> = (props) => {
   const {
     onSelectAllClick,
     order,
@@ -19,7 +33,7 @@ export default function EnhancedTableHead(props) {
     onRequestSort,
     headList,
   } = props;
-  const createSortHandler = (property) => (event) => {
+  const createSortHandler = (property: string) => (event: React.MouseEvent) => {
     onRequestSort(event, property);
   };
 
@@ -47,7 +61,6 @@ export default function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
-            padding={'none'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -67,4 +80,4 @@ export default function EnhancedTableHead(props) {
       </TableRow>
     </TableHead>
   );
-}
+};

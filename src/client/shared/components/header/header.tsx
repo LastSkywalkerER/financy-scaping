@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ForwardedRef } from 'react';
 import { Link } from 'react-router-dom';
 import Bio from '../bio/bio';
 
@@ -30,7 +30,7 @@ const authLinks = [
   { name: 'Register', route: '/registerPage' },
 ];
 
-export default function Header(): JSX.Element {
+const Header = (props: {}, ref: ForwardedRef<HTMLDivElement>) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
   );
@@ -57,7 +57,7 @@ export default function Header(): JSX.Element {
   };
 
   return (
-    <AppBar position="static" sx={appBar}>
+    <AppBar ref={ref} position="static" sx={appBar}>
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={barWrapper}>
           <Typography variant="h6" noWrap component="div" sx={mobileLogo}>
@@ -126,4 +126,6 @@ export default function Header(): JSX.Element {
       </Container>
     </AppBar>
   );
-}
+};
+
+export default React.memo(React.forwardRef(Header));

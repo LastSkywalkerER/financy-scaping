@@ -27,6 +27,15 @@ const themes: { [key: string]: any } = {
       },
       loader: '#1976d2',
     },
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            padding: '0 8px',
+          },
+        },
+      },
+    },
   }),
   [themeNames.DARK]: createTheme({
     palette: {
@@ -38,6 +47,15 @@ const themes: { [key: string]: any } = {
         main: '#002572',
       },
       loader: 'white',
+    },
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            padding: '0 8px',
+          },
+        },
+      },
     },
   }),
 };

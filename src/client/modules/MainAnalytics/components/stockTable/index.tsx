@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import EnhancedTable from '@components/EnhancedTable';
+import { EnhancedTable } from '@components/EnhancedTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@core/store/store';
 import { setFilteredDataTable } from '@core/store/dataTableSlice';
