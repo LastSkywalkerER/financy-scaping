@@ -7,7 +7,6 @@ export const useStyles = makeStyles()({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  textMargin: { mr: 3 },
-  menu: { mt: '50px' },
-  text: { width: '100%' },
+  textMargin: { marginRight: 3 },
+  menu: { marginTop: '50px' },
 });

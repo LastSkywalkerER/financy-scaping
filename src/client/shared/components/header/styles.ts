@@ -6,7 +6,7 @@ export const useStyles = makeStyles()(({ palette, breakpoints, spacing }) => ({
     color: palette.primary.contrastText,
   },
   appBar: {
-    backgroundColor: palette.primary.main,
+    backgroundColor: `${palette.primary.main} !important`,
   },
   barWrapper: { maxHeight: '65px' },
   mobileLogo: {

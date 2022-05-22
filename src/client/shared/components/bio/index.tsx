@@ -15,7 +15,7 @@ import { logout } from '@core/store/authSlice';
 
 const avatar = 'https://random.imagecdn.app/50/50';
 
-export default function Bio() {
+export const Bio: React.FC = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   );
@@ -57,13 +57,11 @@ export default function Bio() {
       </Tooltip>
       <Menu
         className={classes.menu}
-        id="menu-appbar"
         anchorEl={anchorElUser}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
         }}
-        keepMounted
         transformOrigin={{
           vertical: 'top',
           horizontal: 'right',
@@ -74,7 +72,6 @@ export default function Bio() {
         {settings.map((setting) => (
           <MenuItem key={setting.name}>
             <Typography
-              className={classes.text}
               onClick={handleClickUserMenuItem.bind(null, setting.onClick)}
               textAlign="center"
             >
@@ -85,4 +82,4 @@ export default function Bio() {
       </Menu>
     </Box>
   );
-}
+};
