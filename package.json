@@ -83,9 +83,9 @@
   },
   "main": "dist/app.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "build": "webpack --mode production",
     "client": "cross-env NODE_ENV=development webpack serve --mode development",
-    "start": "cross-env NODE_ENV=production ts-node-dev --respawn --transpile-only src/server/app.ts",
+    "start": "ts-node-dev --respawn --transpile-only src/server/app.ts",
     "server": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/server/app.ts",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
