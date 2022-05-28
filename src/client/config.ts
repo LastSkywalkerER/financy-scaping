@@ -1,3 +1,3 @@
 export enum config {
-  SERVERURL = 'http://localhost',
+  SERVERURL = 'https://financy-scraping.herokuapp.com/',
 }
