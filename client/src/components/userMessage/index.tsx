@@ -1,0 +1,45 @@
+import Alert from '@mui/material/Alert'
+import Stack from '@mui/material/Stack'
+import clsx from 'clsx'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { RootState } from '@/core/store/store'
+import { shiftMessage } from '@/core/store/userMessageSlice'
+
+import { useStyles } from './styles'
+
+export default function UserMessage() {
+  const messages = useSelector((state: RootState) => state.userMessage.list)
+  const dispatch = useDispatch()
+  const { classes } = useStyles()
+  const [isShown, setIsShown] = useState(false)
+
+  const clearMessage = () => {
+    setIsShown(false)
+    setTimeout(() => {
+      dispatch(shiftMessage())
+    }, 200)
+  }
+
+  React.useEffect(() => {
+    if (messages.length) {
+      setTimeout(clearMessage, 10000)
+      setIsShown(true)
+    }
+  }, [messages])
+
+  return (
+    <Stack
+      onClick={clearMessage}
+      className={clsx(classes.position, { [classes.show]: isShown })}
+      spacing={2}
+    >
+      {messages.map(({ type, message }, i: number) => (
+        <Alert key={`${message}-${i}`} severity={type}>
+          {message}
+        </Alert>
+      ))}
+    </Stack>
+  )
+}

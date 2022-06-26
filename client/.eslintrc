@@ -1,0 +1,118 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "prettier",
+    "react-hooks",
+    "@typescript-eslint",
+    "simple-import-sort",
+    "import"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    // Import React
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+
+    "react/display-name": "off",
+
+    "import/export": "warn",
+
+    "standard/no-callback-literal": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+
+    "camelcase": [2, { "properties": "always" }],
+
+    "arrow-parens": ["error"],
+
+    "semi": "off",
+    "prefer-destructuring": "error",
+
+    "max-len": [
+      "warn",
+      {
+        "code": 100,
+        "ignoreUrls": true,
+        "ignorePattern": "import"
+      }
+    ],
+
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+
+    "operator-linebreak": "warn",
+
+    // React hooks
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "off",
+
+    // Sort imports
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+
+    "import/no-duplicates": ["error"],
+
+    "react/jsx-closing-tag-location": "error",
+    "react/jsx-closing-bracket-location": [
+      "error",
+      {
+        "nonEmpty": "line-aligned",
+        "selfClosing": "line-aligned"
+      }
+    ],
+
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [".jsx", ".tsx"]
+      }
+    ],
+
+    "jsx-quotes": ["error", "prefer-double"],
+    "comma-dangle": ["error", "only-multiline"],
+
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "any",
+        "ignoreReadBeforeAssign": false
+      }
+    ],
+
+    "react/prop-types": ["warn"]
+  },
+
+  "overrides": [
+    {
+      "files": ["src/index.js"],
+      "rules": {
+        "react/jsx-filename-extension": "off"
+      }
+    }
+  ]
+}

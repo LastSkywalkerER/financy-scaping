@@ -1,6 +1,9 @@
 {
-  "references": [{ "path": "client/" }],
+  "include": ["src"],
   "compilerOptions": {
+    "composite": true,
+    "jsx": "react-jsx",
+    "baseUrl": "src",
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -14,6 +17,9 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
   }
 }
