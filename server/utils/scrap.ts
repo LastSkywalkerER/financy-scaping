@@ -1,60 +1,60 @@
-import Nightmare from 'nightmare';
-import cheerio from 'cheerio';
-import fs from 'fs';
-import Snp500Schema from '../models/Snp500';
-import StocksSchema from '../models/StocksTable';
-import ScrapDatesSchema from '../models/ScrapDates';
+import Nightmare from 'nightmare'
+import cheerio from 'cheerio'
+import fs from 'fs'
+import Snp500Schema from '../models/Snp500'
+import StocksSchema from '../models/StocksTable'
+import ScrapDatesSchema from '../models/ScrapDates'
 
-import Token from '../../types/Token';
-import { sendTgResult } from '../telegramBot';
+import Token from '../types/Token'
+import { sendTgResult } from '../telegramBot'
 
-const url500 = 'https://illiakyselov.com/kompanii-s-p500';
-const urlTrade = 'https://finviz.com/quote.ashx?t=';
+const url500 = 'https://illiakyselov.com/kompanii-s-p500'
+const urlTrade = 'https://finviz.com/quote.ashx?t='
 
 export const tableUpdating = {
   status: false,
   tickerCount: 505,
   tickerUpdated: 0,
-};
+}
 export class Scrap {
-  private table500: Token[] = [];
-  private date: Date;
+  private table500: Token[] = []
+  private date: Date
 
   constructor() {
-    this.date = new Date();
+    this.date = new Date()
   }
 
   private async getTradingData(html, i): Promise<void> {
     try {
-      const $ = cheerio.load(html);
+      const $ = cheerio.load(html)
 
       let price = $('div.fv-container')
         .find('table:nth-child(2) tr:nth-child(11) td:last-child b')
-        .text();
+        .text()
       let pe = $('div.fv-container')
         .find('table:nth-child(2) tr:nth-child(1) td:nth-child(4) b')
-        .text();
+        .text()
       let lt = $('div.fv-container')
         .find('table:nth-child(2) tr:nth-child(11) td:nth-child(4) b')
-        .text();
+        .text()
       let eps = $('div.fv-container')
         .find('table:nth-child(2) tr:nth-child(1) td:nth-child(6) b')
-        .text();
+        .text()
       let roa = $('div.fv-container')
         .find('table:nth-child(2) tr:nth-child(5) td:nth-child(8) b')
-        .text();
+        .text()
       let roe = $('div.fv-container')
         .find('table:nth-child(2) tr:nth-child(6) td:nth-child(8) b')
-        .text();
+        .text()
       let roi = $('div.fv-container')
         .find('table:nth-child(2) tr:nth-child(7) td:nth-child(8) b')
-        .text();
+        .text()
       let payout = $('div.fv-container')
         .find('table:nth-child(2) tr:nth-child(11) td:nth-child(8) b')
-        .text();
+        .text()
       let volatility = $('div.fv-container')
         .find('table:nth-child(2) tr:nth-child(9) td:last-child small')
-        .text();
+        .text()
 
       const scrapedData = {
         price,
@@ -66,25 +66,25 @@ export class Scrap {
         roi,
         payout,
         volatility,
-      };
+      }
 
       this.table500[i] = {
         ...this.table500[i],
         ...scrapedData,
-      };
+      }
 
       const stock = new StocksSchema({
         ...this.table500[i],
         ...scrapedData,
         date: this.date,
-      });
-      await stock.save();
+      })
+      await stock.save()
     } catch (error) {}
   }
 
   private async getPrices(url, i): Promise<void> {
     try {
-      const nightmare = Nightmare();
+      const nightmare = Nightmare()
 
       await nightmare
         .goto(url)
@@ -93,21 +93,21 @@ export class Scrap {
         .evaluate(() => document.querySelector('body').innerHTML)
         .end()
         .then((response) => {
-          this.getTradingData(response, i);
+          this.getTradingData(response, i)
         })
         .catch((err) => {
-          console.warn(err);
-        });
+          console.warn(err)
+        })
     } catch (error) {}
   }
 
   public async run(sendStatus): Promise<{ message: string }> {
-    tableUpdating.status = true;
+    tableUpdating.status = true
 
     const dbDate = new ScrapDatesSchema({
       date: this.date,
-    });
-    await dbDate.save();
+    })
+    await dbDate.save()
 
     this.table500 = await (
       await Snp500Schema.find({})
@@ -115,28 +115,28 @@ export class Scrap {
       name: ticker.name,
       symbol: ticker.symbol,
       sector: ticker.sector,
-    }));
+    }))
 
-    tableUpdating.tickerCount = this.table500.length;
+    tableUpdating.tickerCount = this.table500.length
 
-    const threads = 2;
+    const threads = 2
 
     for (let i = 0; i < this.table500.length; i += threads) {
-      sendStatus(tableUpdating);
+      sendStatus(tableUpdating)
 
       await Promise.all(
         Array(threads)
           .fill(null)
           .map(async (value, j) => {
-            await this.getPrices(urlTrade + this.table500[i + j].symbol, i + j);
-            tableUpdating.tickerUpdated++;
+            await this.getPrices(urlTrade + this.table500[i + j].symbol, i + j)
+            tableUpdating.tickerUpdated++
           }),
-      );
+      )
     }
-    tableUpdating.status = false;
-    console.log('Info scraped succesfully!');
-    sendTgResult();
-    return { message: 'Success' };
+    tableUpdating.status = false
+    console.log('Info scraped succesfully!')
+    sendTgResult()
+    return { message: 'Success' }
   }
 }
 

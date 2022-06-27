@@ -5,6 +5,7 @@ import HTMLwebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCssAssetWebpackPlugin from 'optimize-css-assets-webpack-plugin'
 import path, { dirname } from 'path'
+import process from 'process'
 import TerserWebpackPlugin from 'terser-webpack-plugin'
 import { fileURLToPath } from 'url'
 import webpack from 'webpack'
@@ -42,7 +43,7 @@ export default {
   },
   output: {
     filename: fileName('js'),
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, '../dist'),
   },
   resolve: {
     extensions: ['.js', '.json', '.jsx', '.ts', '.tsx'],
@@ -153,7 +154,7 @@ export default {
       patterns: [
         {
           from: path.resolve(__dirname, 'src/assets'),
-          to: path.resolve(__dirname, 'dist/assets'),
+          to: path.resolve(__dirname, '../dist/assets'),
         },
       ],
     }),

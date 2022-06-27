@@ -1,3 +1,5 @@
+import 'normalize.css'
+
 import { ThemeProvider } from '@mui/material'
 import React, { FC } from 'react'
 import { Provider, useSelector } from 'react-redux'

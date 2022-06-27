@@ -1,17 +1,16 @@
-import { wsPackageTypes } from '../../types/wsPackageTypes';
-import { Scrap, tableUpdating } from '../utils/scrap';
+import { wsPackageTypes } from '../types/wsPackageTypes'
+import { Scrap, tableUpdating } from '../utils/scrap'
 
-export const broadcast = (wss, message) =>
-  wss.clients.forEach((client) => client.send(message));
+export const broadcast = (wss, message) => wss.clients.forEach((client) => client.send(message))
 
 export default async (msg, webSocketServer, ws) => {
   try {
-    const { type, data } = JSON.parse(msg.toString('utf8'));
+    const { type, data } = JSON.parse(msg.toString('utf8'))
 
     switch (type) {
       case wsPackageTypes.TABLE_UPDATE_REQUEST:
         {
-          const scrap = new Scrap();
+          const scrap = new Scrap()
 
           scrap.run((data) => {
             broadcast(
@@ -20,11 +19,11 @@ export default async (msg, webSocketServer, ws) => {
                 type: wsPackageTypes.TABLE_UPDATE_REQUEST,
                 data,
               }),
-            );
-          });
+            )
+          })
         }
 
-        break;
+        break
       case wsPackageTypes.TABLE_UPDATE_STATUS:
         broadcast(
           webSocketServer,
@@ -32,11 +31,11 @@ export default async (msg, webSocketServer, ws) => {
             type: wsPackageTypes.TABLE_UPDATE_STATUS,
             data: tableUpdating,
           }),
-        );
-        break;
+        )
+        break
 
       default:
-        break;
+        break
     }
   } catch (e) {
     ws.send(
@@ -44,6 +43,6 @@ export default async (msg, webSocketServer, ws) => {
         type: wsPackageTypes.WEBSOСKET_ERROR,
         data: 'Something wrong :(',
       }),
-    );
+    )
   }
-};
+}
