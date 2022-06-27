@@ -19,7 +19,7 @@ export const SavedTable: React.FC = React.memo(() => {
 
   const dispatch = useDispatch()
 
-  const [selectedToDelete, setSelectedToDelete] = useState([] as string[])
+  const [selectedToDelete, setSelectedToDelete] = useState([] as Token[])
 
   const filterTable =
     (actionCreator: ActionCreator<any>, data: Token[]) => (filteredTable: TableFilter) => {

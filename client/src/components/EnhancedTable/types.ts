@@ -10,7 +10,7 @@ export type TableProps = {
   handleCustomClick: any
   data: Data[]
   onRowClick?: any
-  checked?: string[]
+  checked?: Token[]
   setChecked?: any
   customClickPurpose: any
   editableRow?: any
