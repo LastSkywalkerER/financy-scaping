@@ -20,12 +20,14 @@ export const userSlice = createSlice({
     setUserName: (state, { payload }) => {
       state.data.name = payload
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     registerRequest: (state, { payload }) => {
       state.data.loading = true
     },
     authFail: (state) => {
       state.data.loading = false
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     loginRequest: (state, { payload }) => {
       state.data.loading = true
     },

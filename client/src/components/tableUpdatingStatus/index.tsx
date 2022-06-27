@@ -14,7 +14,7 @@ export const TableUpdatingStatus: FC = () => {
   })
 
   const dispatch = useDispatch()
-  const { sendMessage, subscribe, unsubscribe, status } = useWebSocket()
+  const { sendMessage, subscribe, unsubscribe } = useWebSocket()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const wsSubscription: WSSubscriber = ({ type, data }) => {

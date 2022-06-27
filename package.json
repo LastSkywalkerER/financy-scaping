@@ -39,7 +39,10 @@
   },
   "main": "dist/app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production ts-node-dev --respawn --transpile-only src/server/app.ts",
+    "install": "yarn install & cd client & yarn install",
+    "start": "cross-env NODE_ENV=production ts-node-dev --respawn --transpile-only server/app.ts",
+    "client": "cd client & yarn start",
+    "build": "cd client & yarn build",
     "server": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only server/app.ts",
     "dev": "concurrently \"yarn server\" \"yarn client\""
   },

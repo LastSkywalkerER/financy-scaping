@@ -4,11 +4,10 @@ import { call, put } from 'redux-saga/effects'
 
 import { MainApi } from '@/core/api/mainApi'
 import { authFail, loginRequest, loginResponse } from '@/core/store/authSlice'
-import { getMainTableResponse } from '@/core/store/dataTableSlice'
 
 export function* register({ payload }: AnyAction): SagaIterator {
   try {
-    const response = yield call(MainApi.registerRequest, payload)
+    yield call(MainApi.registerRequest, payload)
 
     yield put(loginRequest(payload))
   } catch (error) {

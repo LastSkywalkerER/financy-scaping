@@ -1,11 +1,9 @@
 import { AnyAction } from '@reduxjs/toolkit'
 import { SagaIterator } from 'redux-saga'
-import { call, put, select } from 'redux-saga/effects'
+import { call, put } from 'redux-saga/effects'
 
 import { MainApi } from '@/core/api/mainApi'
-import { getMainTableResponse } from '@/core/store/dataTableSlice'
 import { getSavedTickersResponse } from '@/core/store/savedTickersSlice'
-import { RootState } from '@/core/store/store'
 import Token from '@/types/Token'
 
 export function* getSavedTickers(): SagaIterator {

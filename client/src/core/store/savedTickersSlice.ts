@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import { isTickerListContainTicker } from '@/core/utilities/operationsWithTickers'
-import { themeNames } from '@/styles/themes'
 import Token from '@/types/Token'
 
 const name = 'savedTickers'

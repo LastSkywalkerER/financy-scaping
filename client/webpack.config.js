@@ -38,6 +38,7 @@ const fileName = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`)
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   context: path.resolve(__dirname, 'src'),
+  devtool: 'inline-source-map',
   entry: {
     main: './index.tsx',
   },
@@ -161,7 +162,7 @@ export default {
     new MiniCssExtractPlugin({
       filename: fileName('css'),
     }),
-    new ESLintPlugin({ extensions: ['js', 'jsx', 'ts', 'tsx'] }),
+    new ESLintPlugin({ extensions: ['js', 'jsx', 'ts', 'tsx'], emitWarning: false }),
     // new webpack.DefinePlugin({
     //   'process.env': JSON.stringify(dotenv.parsed),
     // }),

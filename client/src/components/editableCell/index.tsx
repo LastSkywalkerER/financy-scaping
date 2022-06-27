@@ -1,18 +1,20 @@
 import CheckIcon from '@mui/icons-material/Check'
 import EditIcon from '@mui/icons-material/Edit'
 import { IconButton, TextField } from '@mui/material'
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 
 interface Props {
   value: string | number | null
   onApply: (value: string | number | null) => void
 }
 
-export const EditableCell: React.FC<Props> = React.memo(({ value, onApply }) => {
+export const EditableCell: React.FC<Props> = React.memo((props: Props) => {
+  const { onApply, value } = props
+
   const [editable, setEditable] = React.useState(false)
   const [internalValue, setInternalValue] = React.useState(value)
 
-  const changeHandler = (event) => {
+  const changeHandler = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setInternalValue(event.target.value)
   }
 

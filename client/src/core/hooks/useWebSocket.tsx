@@ -33,8 +33,11 @@ interface WebSocketContextI {
 }
 
 const initialState: WebSocketContextI = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   sendMessage: (message: Message) => console.log('sendMessage not implemented!'),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   subscribe: (callback: WSSubscriber) => console.log('subscribe not implemented!'),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   unsubscribe: (callback: WSSubscriber) => console.log('unsubscribe not implemented!'),
   status: false,
 }

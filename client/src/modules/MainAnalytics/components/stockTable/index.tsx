@@ -1,5 +1,5 @@
 import { ActionCreator } from '@reduxjs/toolkit'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { EnhancedTable } from '@/components/EnhancedTable'

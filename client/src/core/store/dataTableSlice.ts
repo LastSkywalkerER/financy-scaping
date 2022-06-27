@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { themeNames } from '@/styles/themes'
 import Token from '@/types/Token'
 
 const name = 'dataTable'

@@ -1,12 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  SortDirection,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-} from '@mui/material'
+import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import React from 'react'
 
@@ -26,7 +18,7 @@ export const EnhancedTableHead: React.FC<Props> = (props) => {
     onRequestSort(event, property)
   }
 
-  const headCells = headList.map((name: string, i: number) => ({
+  const headCells = headList.map((name: string) => ({
     id: name,
     label: name.toUpperCase(),
   }))

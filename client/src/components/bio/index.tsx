@@ -5,7 +5,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import React, { useCallback, useMemo } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useStyles } from '@/components/bio/styles'

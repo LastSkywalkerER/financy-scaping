@@ -2,7 +2,7 @@ import Token from '@/types/Token'
 
 export type TableFilter = (data: Token[]) => Token[]
 
-export type Data = Record<string, unknown> & { id: string }
+export type Data = Record<string, any> & { id: string }
 
 export type TableProps = {
   isLoading?: boolean

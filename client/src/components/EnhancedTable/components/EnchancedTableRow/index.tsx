@@ -1,6 +1,4 @@
-import CheckIcon from '@mui/icons-material/Check'
-import EditIcon from '@mui/icons-material/Edit'
-import { Checkbox, IconButton, TableCell, TableRow, TextField } from '@mui/material'
+import { Checkbox, TableCell, TableRow } from '@mui/material'
 import React from 'react'
 
 import { Data } from '../../types'
