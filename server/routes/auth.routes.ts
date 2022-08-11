@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import config from 'config';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
-import { ObjectId } from 'mongoDb';
+import { ObjectId } from 'mongodb';
 import User from '../models/User';
 import auth from '../middleware/auth.middleware';
 
