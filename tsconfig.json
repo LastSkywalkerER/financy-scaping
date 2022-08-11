@@ -2,19 +2,32 @@
   "references": [{ "path": "client/" }],
   "compilerOptions": {
     "target": "es6",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true
-  }
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "importHelpers": true,
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "typeRoots": ["./typings", "@types", "./node_modules/@types"],
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "*": ["@types/*"],
+      "@application/*": ["application/*"],
+      "@libs/*": ["libs/*"],
+      "@typings/*": ["typings/*"]
+    },
+    "outDir": "./dist",
+    "baseUrl": "./"
+  },
+  "include": ["typings/*", "application/**/*", "libs/**/*", "migrations/*", "test/*"],
+  "exclude": ["node_modules", "dist"]
 }
+
