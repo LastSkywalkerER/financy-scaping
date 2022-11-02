@@ -1,0 +1,10 @@
+.git
+.vscode
+node_modules
+Dockerfile
+Makefile
+.env
+.env.example
+log-file.log
+yarn-error.log
+README.md
